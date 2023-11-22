@@ -8,7 +8,6 @@
     $: pageData = data.data?.policy?.data?.attributes    
     $isInverted = false
 
-    $:console.log(pageData)
 </script>
 
 <section class="p-5 py-32 flex flex-col items-center">

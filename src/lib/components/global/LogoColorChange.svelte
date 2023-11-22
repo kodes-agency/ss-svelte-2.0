@@ -2,7 +2,8 @@
     import { isInverted } from "$lib/store/store";
     import gsap from 'gsap/dist/gsap'
     import ScrollTrigger from 'gsap/dist/ScrollTrigger'
-  import { onMount } from "svelte";
+    import { onMount } from "svelte";
+    export let half = false
 
     let sectionEl: HTMLElement;
 
@@ -27,6 +28,5 @@
     })
 </script>
 
-<section bind:this={sectionEl} class="h-screen absolute w-full">
-
+<section bind:this={sectionEl} class="{half ? "h-[50vh]" : "h-screen"} absolute w-full">
 </section>

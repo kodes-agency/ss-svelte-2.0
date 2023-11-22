@@ -10,7 +10,8 @@ export default {
     colors: {
       gray: "#575756",
       brown: "#847748",
-      white: "#F5F3E4"
+      white: "#F5F3E4",
+      bgbrown: "#F5F3E4"
     }
   },
   plugins: [require('@tailwindcss/forms')],

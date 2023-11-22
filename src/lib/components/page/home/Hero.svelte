@@ -1,18 +1,14 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import type { Maybe } from "../../../../__generated__/graphql";
     export let src: Maybe<string> | undefined
     export let alt: Maybe<string> | undefined
     export let heading: Maybe<string> | undefined
     export let subHeading: Maybe<string> | undefined
-
 </script>
 
 
 <section class="relative h-screen flex items-center justify-center">
     <img {src} {alt} class="img h-screen absolute w-full object-cover">
-
-
     <div class="relative z-10 flex flex-col space-y-14 items-center justify-center p-5">
         <svg width="142" height="155" viewBox="0 0 142 155" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_219_171)">
@@ -25,11 +21,7 @@
             </clipPath>
             </defs>
         </svg>
-    
         <h1 class="font-serif text-white italic max-w-2xl text-center text-2xl md:text-4xl ">{heading}</h1>
         <p class="font-sansy uppercase text-sm text-white light">{subHeading}</p>
     </div>
 </section>
-
-<style>
-</style>
