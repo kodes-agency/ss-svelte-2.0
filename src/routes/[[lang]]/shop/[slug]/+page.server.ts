@@ -1,9 +1,9 @@
 import { getClient } from "$lib/functions/getClient";
-import query from "$lib/db/wineSinglePage";
+import query from "$lib/db/singleProductPage";
 
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({params, url}) => {
+export const load = async ({params}) => {
 
     const data = await getClient().query({
         query: query(),
