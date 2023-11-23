@@ -21,7 +21,7 @@
   $isInverted = false;
 </script>
 
-<div class="flex flex-col py-40 space-y-10 md:space-y-20 min-h-screen">
+<div class="flex flex-col py-40 space-y-10 min-h-screen">
   <Hero
     heading={pageData.heroHeading}
     name={wineData.name}
