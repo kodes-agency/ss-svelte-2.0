@@ -25,14 +25,14 @@
   $isInverted = false;
 </script>
 
-<div class="flex flex-col py-40 space-y-10 md:space-y-20 min-h-screen">
+<div class="flex flex-col py-20 md:py-40 space-y-0 md:space-y-20 min-h-screen">
   <Hero 
     pageData={pageData}
     wines={wines}
     product={product}
   />
-  <div class="flex w-full">
-    <section class="flex flex-col space-y-32 items-center w-3/4">
+  <div class="flex flex-col md:flex-row w-full">
+    <section class="flex flex-col space-y-12 md:space-y-20 lg:space-y-32 items-center md:w-3/4">
       {#each wines as el }
         <ProductInfo 
           winePageData={winePageData}
@@ -41,7 +41,7 @@
         />
       {/each}
     </section>
-    <section class="w-1/4">
+    <section class="md:w-1/4">
       <AddToCart 
         pageData={pageData}
         product={product}

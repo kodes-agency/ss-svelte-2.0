@@ -2,23 +2,40 @@
     import type { Maybe, ComponentProductProductName } from "../../../../__generated__/graphql";
     import { page } from "$app/stores";
     import { PUBLIC_IMG_URL } from "$env/static/public";
+    import { invalidateAll } from "$app/navigation";
     export let packageTitle: Maybe<string> | undefined;
+    export let productCode: Maybe<string> | undefined;
     export let category: Maybe<string> | undefined;
     export let regularPrice: number | undefined;
     export let salePrice: Maybe<number> | undefined;
     export let id: Maybe<string> | undefined;
     export let wine: ComponentProductProductName[]
     export let slug: Maybe<string> | undefined;
+
+    async function addToCart() {
+        const response = await fetch ('/api/cart/add-item', {
+            method: "POST",
+            body: JSON.stringify({
+                quantity: 1,
+                id: productCode
+            })
+        })
+        invalidateAll()
+    }
      
 </script>
 
 <article class="group relative">
-    <button class="absolute z-10 top-3 right-3 bg-brown h-8 w-8 rounded-full opacity-0 hover:scale-110 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center ">
+    <button
+        on:click={()=>{
+            addToCart()
+        }}
+        class="absolute z-10 top-3 right-3 bg-brown h-8 w-8 rounded-full opacity-0 md:hover:scale-110 md:group-hover:opacity-100 transition-all duration-300 flex items-center justify-center ">
         <div class="h-0.5 rounded-full w-4 absolute bg-white"></div>
         <div class="h-0.5 rounded-full w-4 absolute rotate-90 bg-white"></div>
     </button>
     <a class="" href="{$page.params.lang ? "/"+$page.params.lang+"/shop/"+slug : "/bg/shop/"+slug}">
-        <div class="w-full flex flex-col items-center pt-14 pb-10 px-5 relative h-full border border-brown group-hover:border-opacity-100 transition-all duration-300 border-opacity-40 rounded-lg">
+        <div class="w-full flex flex-col items-center pt-14 pb-10 px-5 relative h-full border border-brown md:group-hover:border-opacity-100 transition-all duration-300 border-opacity-40 rounded-lg">
             <p class="absolute -top-2 text-xs uppercase font-sansy text-brown bg-white px-3">{category}</p>
             {#if wine.length == 1 }
                 {#each wine as el }

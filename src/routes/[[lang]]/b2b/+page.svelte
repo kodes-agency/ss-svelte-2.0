@@ -19,9 +19,7 @@
 
 <LogoColorChange />
 <ImgHero
-  src={PUBLIC_IMG_URL +
-    pageData.heroImage?.data?.attributes?.url +
-    "?format=webp"}
+  src={PUBLIC_IMG_URL + pageData.heroImage?.data?.attributes?.url}
   alt={pageData.heroImage?.data?.attributes?.alternativeText}
 />
 <Layout layout={pageData.b2bPageLayout} />

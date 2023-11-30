@@ -22,7 +22,7 @@
 <LogoColorChange />
 <div class="flex flex-col space-y-20 md:space-y-32">
     <Hero 
-        src={PUBLIC_IMG_URL+pageData.heroImage?.data?.attributes?.url+"?format=webp"}
+        src={PUBLIC_IMG_URL+pageData.heroImage?.data?.attributes?.url}
         alt={pageData.heroImage?.data?.attributes?.alternativeText}
         heading={pageData.heroHeading}
         subHeading={pageData.heroSubheading}

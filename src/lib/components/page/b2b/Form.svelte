@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
-                    <p class="text-xl font-serif text-gray">
+                    <p class="text-xl text-center font-serif text-gray">
                         {formData.businessActivity}
                     </p>
                     <p class="font-sansy text-brown">
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="flex flex-col items-center space-y-1">
-                    <p class="text-xl font-serif text-gray">
+                    <p class="text-xl text-center font-serif text-gray">
                         {formData.interests}
                     </p>
                     <p class="font-sansy text-brown">

@@ -10,7 +10,7 @@
 
 </script>
 
-<section class="flex flex-col items-center">
+<section class="flex flex-col items-center p-5">
     <div class="max-w-4xl flex flex-col items-center space-y-10">
         <div class="flex flex-col items-center space-y-4">
         <a  href={$page.params.lang ? "/"+ $page.params.lang + "/wine" : "/bg/wine"}>

@@ -11,11 +11,11 @@
     let isOpen: boolean = false
 </script>
 
-<article class="max-w-4xl flex flex-col space-y-10">
+<article class="max-w-4xl flex flex-col space-y-10 p-5">
     {#if wines.length > 1 }
     <div>
-      <h2 class="font-serif italic text-center text-3xl text-gray">{el.vina?.data?.attributes?.name}</h2>
-      <p class="text-center font-sansy text-brown mt-4">{el.vintage}</p>
+      <h2 class="font-serif italic text-center text-2xl md:text-3xl text-gray">{el.vina?.data?.attributes?.name}</h2>
+      <p class="text-center font-sansy text-brown md:mt-4">{el.vintage}</p>
     </div>
     {/if}
     <div class="flex flex-col items-center h-20 md:h-32 lg:h-48">

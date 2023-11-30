@@ -1,14 +1,23 @@
 <script lang="ts">
+  import { onMount } from "svelte";
     import type { Maybe } from "../../../../__generated__/graphql";
     export let src: Maybe<string> | undefined
     export let alt: Maybe<string> | undefined
     export let heading: Maybe<string> | undefined
     export let subHeading: Maybe<string> | undefined
+
+    let isLoaded = false
+    onMount(()=>{
+        isLoaded = true
+    })
+
 </script>
 
 
-<section class="relative h-screen flex items-center justify-center">
-    <img {src} {alt} class="img h-screen absolute w-full object-cover">
+<section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <img src={src+"?format=webp&width=50"} {alt} class="img h-screen blur-md scale-125 absolute w-full object-cover">
+    <img 
+        src={src+"?format=webp"} {alt} class="img {isLoaded ? "opacity-100" : "opacity-0"} transition-all duration-1000 delay-200 h-screen absolute w-full object-cover">
     <div class="relative z-10 flex flex-col space-y-14 items-center justify-center p-5">
         <svg width="142" height="155" viewBox="0 0 142 155" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_219_171)">
