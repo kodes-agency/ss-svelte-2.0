@@ -153,4 +153,54 @@ interface QuantityLimits {
       cart?: Record<string, any>; // You might need to define the specific structure of the 'cart' object
     };
   }
+
+  export interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    parent: number;
+    type: string;
+    variation: string;
+    permalink: string;
+    sku: string;
+    short_description: string;
+    description: string;
+    on_sale: boolean;
+    prices: {
+        price: string;
+        regular_price: string;
+        sale_price: string;
+        price_range: null | any; // You might need to specify the correct type here
+        currency_code: string;
+        currency_symbol: string;
+        currency_minor_unit: number;
+        currency_decimal_separator: string;
+        currency_thousand_separator: string;
+        currency_prefix: string;
+        currency_suffix: string;
+    };
+    price_html: string;
+    average_rating: string;
+    review_count: number;
+    images: any[]; // You might need to specify the correct type here
+    categories: any[]; // You might need to specify the correct type here
+    tags: any[]; // You might need to specify the correct type here
+    attributes: any[]; // You might need to specify the correct type here
+    variations: any[]; // You might need to specify the correct type here
+    has_options: boolean;
+    is_purchasable: boolean;
+    is_in_stock: boolean;
+    is_on_backorder: boolean;
+    low_stock_remaining: null | any; // You might need to specify the correct type here
+    sold_individually: boolean;
+    add_to_cart: {
+        text: string;
+        description: string;
+        url: string;
+        minimum: number;
+        maximum: number;
+        multiple_of: number;
+    };
+    extensions: any; // You might need to specify the correct type here
+}
   

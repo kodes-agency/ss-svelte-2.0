@@ -6,8 +6,6 @@ export default function () {
       products(filters: $filters, locale: $locale) {
         data {
           attributes {
-            regularPrice
-            salePrice
             productCode
             wine {
               vintage
@@ -77,7 +75,7 @@ export default function () {
           }
         }
       }
-      shopPage {
+      shopPage(locale: $locale) {
         data {
           attributes {
             cartMainLabel

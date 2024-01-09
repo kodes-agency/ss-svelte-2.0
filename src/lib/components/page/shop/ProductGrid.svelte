@@ -19,6 +19,7 @@
             wine={product.attributes?.wine}
             slug={product.attributes?.slug}
             productCode={product.attributes?.productCode}
+            isAvailable={product.attributes?.isAvailable}
           />
       {/each}
     </section>
@@ -41,6 +42,7 @@
                 wine={product.attributes?.wine}
                 slug={product.attributes?.slug}
                 productCode={product.attributes?.productCode}
+                isAvailable={product.attributes?.isAvailable}
               />
             {/if}
           {/each}

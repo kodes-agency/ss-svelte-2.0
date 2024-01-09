@@ -22,7 +22,7 @@
 <section class="flex flex-col items-center p-5 space-y-10">
   <p class=" text-center italic font-serif text-gray">{@html subHeading}</p>
   <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10">
-    <Button buttonText={paymentInfoButton} />
-    <Button buttonText={deliveryInfoButton} />
+    <Button link="/shop#info" buttonText={paymentInfoButton} />
+    <Button link="/shop#info" buttonText={deliveryInfoButton} />
   </div>
 </section>

@@ -50,7 +50,7 @@
     })
 
     let pageData: ContactPage
-    $:pageData = $page.data.data.contactPage.data.attributes
+    $:pageData = $page.data.data.data.contactPage.data.attributes
 </script>
 
 <svelte:head >

@@ -1,8 +1,8 @@
 <script lang=ts>
     import type {
         Product,
-        ShopPage,
         ComponentProductProductName,
+        ShopPage,
     } from "../../../../__generated__/graphql.js";
     import ProductItem from "../product/Product.svelte";
     import { page } from "$app/stores";
@@ -10,10 +10,16 @@
 
     export let product: Product
     export let wine: ComponentProductProductName[]
+    export let pageData: ShopPage
 
     let volume: number = 0
     let quantity: number = 1
+    let maxQuantity: number = 10
+
+    // @ts-ignore
+    $:maxQuantity = product.maximumOrder
     $:quantity
+
 
     wine.forEach((item)=>{
         if(item.quantity){
@@ -24,7 +30,7 @@
     })
 
     function adjustQunatity(direction: "add" | "substract"){
-        if(direction === "add"){
+        if(direction === "add" && quantity < maxQuantity){
             quantity += 1
         }
         if(direction === "substract" && quantity > 1) {
@@ -51,6 +57,10 @@
     <div class="p-5 lg:p-10 flex flex-col space-y-6">
         <div>
             <p class="text-brown font-sansy uppercase">{product.productType?.data?.attributes?.productType}</p>
+            {#if !product.isAvailable } 
+                <p class="text-gray font-serif italic">Няма наличност</p>
+            {/if}
+
             {#if wine.length > 1 }
                 <div class="mt-2">
                     {#each wine as el }
@@ -59,10 +69,17 @@
                 </div>
             {/if}
         </div>
-        <div>
-            <p class="font-serif text-gray text-2xl">{Number(product.regularPrice).toFixed(2)} лв.</p>
-            <p class="font-serif text-brown text-sm">{(Number(product.regularPrice)/volume).toFixed(2)} лв./л</p>
-        </div>
+        {#if Number(product.salePrice) < Number(product.regularPrice) }
+            <div>
+                <p class="font-serif text-gray text-2xl">{(Number(product.salePrice)/100).toFixed(2)} лв.</p>
+                <p class="font-serif text-brown text-sm">{ ((Number(product.salePrice)/100) / volume).toFixed(2)} лв./л</p>
+            </div>
+        {:else}
+            <div>
+                <p class="font-serif text-gray text-2xl">{(Number(product.regularPrice)/100).toFixed(2)} лв.</p>
+                <p class="font-serif text-brown text-sm">{ ((Number(product.regularPrice)/100) / volume).toFixed(2)} лв./л</p>
+            </div>
+        {/if}
         <div class="flex space-x-3 lg:space-x-6">
             <div class="border border-brown justify-between w-16 h-10 rounded-md flex">
                 <div class="flex flex-col items-center justify-center w-full">
@@ -84,11 +101,12 @@
                 </div>
             </div>
             <button 
+                disabled={!product.isAvailable}
                 on:click={async ()=>{
                     await addToCart()
                     goto('/shop/checkout')
                 }}
-                class="uppercase font-sansy text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 px-5 lg:px-10">Добави</button>
+                class="uppercase font-sansy disabled:bg-gray disabled:bg-opacity-50 text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 whitespace-nowrap px-5">{pageData.addToCartButton}</button>
         </div>
         <ProductItem 
             packageTitle={product.packageTitle}
@@ -105,16 +123,24 @@
         {:else}
             <p class="font-serif italic text-center leading-tight text-gray text-lg">{wine[0].vina?.data?.attributes?.name}</p>
         {/if}
-        <div class="flex items-baseline space-x-2">
-            <p class="font-serif text-gray text-lg">{Number(product.regularPrice).toFixed(2)} лв.</p>
-            <p class="font-serif text-brown text-sm">({(Number(product.regularPrice)/volume).toFixed(2)} лв./л)</p>
-        </div>
+        {#if Number(product.salePrice) < Number(product.regularPrice) }
+            <div class="flex items-baseline space-x-2">
+                <p class="font-serif text-gray text-lg">{(Number(product.salePrice)/100).toFixed(2)} лв.</p>
+                <p class="font-serif text-brown text-sm">{ ((Number(product.salePrice)/100) / volume).toFixed(2)} лв./л</p>
+            </div>
+        {:else}
+            <div class="flex items-baseline space-x-2">
+                <p class="font-serif text-gray text-lg">{(Number(product.regularPrice)/100).toFixed(2)} лв.</p>
+                <p class="font-serif text-brown text-sm">{ ((Number(product.regularPrice)/100) / volume).toFixed(2)} лв./л</p>
+            </div>
+        {/if}
         <button
+            disabled={!product.isAvailable}
             on:click={async()=>{
                 await addToCart()
                 goto('/shop/checkout')
             }}
-            class="w-full h-12 bg-brown bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 rounded-md">
+            class="w-full h-12 bg-brown disabled:bg-gray disabled:bg-opacity-50 bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 rounded-md">
             <p class="uppercase font-sansy text-white">Добави в количка</p>
         </button>
     </div>

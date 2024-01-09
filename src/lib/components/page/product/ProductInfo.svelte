@@ -3,10 +3,12 @@
     import { page } from "$app/stores";
     import { PUBLIC_IMG_URL } from "$env/static/public";
     import { slide } from "svelte/transition";
-    import type { ComponentProductProductName, SingleWinePage } from "../../../../__generated__/graphql";
+    import type { ComponentProductProductName, SingleWinePage, ShopPage } from "../../../../__generated__/graphql";
     export let winePageData: SingleWinePage;
     export let wines: ComponentProductProductName[]
     export let el: ComponentProductProductName
+    export let pageData: ShopPage;
+
 
     let isOpen: boolean = false
 </script>
@@ -31,7 +33,7 @@
                 isOpen = !isOpen
             }}
         >
-          Научи повече
+          {pageData.learnMoreButton}
         </button>
     </div>
     {#if isOpen }

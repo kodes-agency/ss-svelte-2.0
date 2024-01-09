@@ -11,6 +11,7 @@
     export let id: Maybe<string> | undefined;
     export let wine: ComponentProductProductName[]
     export let slug: Maybe<string> | undefined;
+    export let isAvailable: boolean
 
     async function addToCart() {
         const response = await fetch ('/api/cart/add-item', {
@@ -26,14 +27,18 @@
 </script>
 
 <article class="group relative">
-    <button
-        on:click={()=>{
-            addToCart()
-        }}
-        class="absolute z-10 top-3 right-3 bg-brown h-8 w-8 rounded-full opacity-0 md:hover:scale-110 md:group-hover:opacity-100 transition-all duration-300 flex items-center justify-center ">
-        <div class="h-0.5 rounded-full w-4 absolute bg-white"></div>
-        <div class="h-0.5 rounded-full w-4 absolute rotate-90 bg-white"></div>
-    </button>
+    {#if isAvailable }
+        <button
+            on:click={()=>{
+                addToCart()
+            }}
+            class="absolute z-10 top-3 right-3 bg-brown h-8 w-8 rounded-full opacity-0 md:hover:scale-110 md:group-hover:opacity-100 transition-all duration-300 flex items-center justify-center ">
+            <div class="h-0.5 rounded-full w-4 absolute bg-white"></div>
+            <div class="h-0.5 rounded-full w-4 absolute rotate-90 bg-white"></div>
+        </button>
+    {:else}
+        <p class="absolute z-10 top-3 text-gray italic font-serif right-3">Няма наличности</p>
+    {/if}
     <a class="" href="{$page.params.lang ? "/"+$page.params.lang+"/shop/"+slug : "/bg/shop/"+slug}">
         <div class="w-full flex flex-col items-center pt-14 pb-10 px-5 relative h-full border border-brown md:group-hover:border-opacity-100 transition-all duration-300 border-opacity-40 rounded-lg">
             <p class="absolute -top-2 text-xs uppercase font-sansy text-brown bg-white px-3">{category}</p>
@@ -44,7 +49,13 @@
                     </div>
                     <h3 class="text-brown italic font-serif text-lg text-center">{el.vina?.data?.attributes?.name}</h3>
                     <p class="text-brown opacity-80 pb-4 font-serif text-center">{el.vintage}</p>
-                    <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? Number(regularPrice).toFixed(2)+" лв." : ( Number(regularPrice).toFixed(2) / 2)+" €"} </p>
+                    <div>
+                        {#if Number(salePrice) < Number(regularPrice) }
+                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                        {:else}
+                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                        {/if}
+                    </div>
                     <p class="text-brown opacity-80 font-sansy text-center">{el.volume?.toFixed(3)} L</p>
                 {/each}
             {/if}
@@ -72,7 +83,13 @@
                                 </div>
                             {/each}
                         </div>
-                        <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? Number(regularPrice).toFixed(2)+" лв." : ( Number(regularPrice).toFixed(2) / 2)+" €"} </p>
+                        <div>
+                            {#if Number(salePrice) < Number(regularPrice) }
+                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                            {:else}
+                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                            {/if}
+                        </div>
                     </div>
                 {/if}
             </div>
@@ -99,7 +116,13 @@
                                 </div>
                             {/each}
                         </div>
-                        <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? Number(regularPrice).toFixed(2)+" лв." : ( Number(regularPrice).toFixed(2) / 2)+" €"} </p>
+                        <div>
+                            {#if Number(salePrice) < Number(regularPrice) }
+                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                            {:else}
+                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                            {/if}
+                        </div>
                     </div>
                 {/if}
             </div>
@@ -127,7 +150,13 @@
                                     </div>
                                 {/each}
                             </div>
-                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? Number(regularPrice).toFixed(2)+" лв." : ( Number(regularPrice).toFixed(2) / 2)+" €"} </p>
+                            <div>
+                                {#if Number(salePrice) < Number(regularPrice) }
+                                    <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                                {:else}
+                                    <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                                {/if}
+                            </div>
                         </div>
                     </div>
                 {/if}

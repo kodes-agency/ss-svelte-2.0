@@ -1,6 +1,6 @@
 import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/navMenu";
-import { cart } from "$lib/store/store.js";
+import { SHOP_API_URL } from "$env/static/private";
 
 
 
@@ -14,15 +14,13 @@ export const load = async ({params, fetch, cookies}) => {
     })
 
     async function getCart () {
-        let url = "https://ss.kodes.agency/wp-json/wc/store/v1/cart"
-        let response = await fetch(url, {
+        let response = await fetch(SHOP_API_URL + "/cart", {
             headers: {
                 "Nonce": `${cookies.get('nonce') || ""}`,
                 "Cart-token": `${cookies.get('cart-token') || ""}`
             }
         })
         let cartData = await response.json()
-        cart.set(cartData)
         
         cookies.set('nonce', response.headers.get('nonce') || "", {
             path: "/",
@@ -44,10 +42,6 @@ export const load = async ({params, fetch, cookies}) => {
 
         return cartData
     }
-
-    // cart.subscribe((value)=>{
-    //     console.log(value)
-    // })
 
     let cartData = await getCart()
 

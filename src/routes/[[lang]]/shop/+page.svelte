@@ -22,7 +22,7 @@
   let infoTab: ComponentShopPageShopPageInfoTab[]
   let filterData: ProductEntity[]
 
-  $: products = data.data?.data?.products?.data;
+  $: products = data.products;
   $: productTypes = data.data?.data?.productTypes?.data;
   $: pageData = data.data?.data?.shopPage?.data?.attributes;
   $: filterData = data?.filterData?.data?.products?.data
