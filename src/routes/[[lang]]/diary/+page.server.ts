@@ -1,19 +1,26 @@
-import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/diaryCollectionPage";
-
+import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ params }) => {
-    const data = await getClient().query({
-        query: query(),
-        variables: {
-            "locale": `${params.lang ? params.lang : "bg"}`,
-            "pagination": {
-              "page": 1,
-              "pageSize": 200
-            }
+export const load = async ({params}) => {
+    try { 
+        const response = await fetch(PUBLIC_GRAPHQL_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                query: query(params.lang ? params.lang : "bg"),
+            })
+        });
+        
+        const data = await response.json();
+        
+        return {
+            diaryPage: data.data.Diaries.docs
         }
-    })
-    
-    return data
+    } catch (error) {
+        console.log(error);
+    }
 }

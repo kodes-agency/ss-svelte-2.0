@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { page } from '$app/stores';
-    import type { ContactPage } from '../../../__generated__/graphql';
+
     import { isInverted } from '$lib/store/store';
+
+    export let data
 
     let markerSvgString = `
         <svg width="100" height="69" viewBox="0 0 100 69" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,6 +26,7 @@
         // Request needed libraries.
         //@ts-ignore
         const { Map } = await google.maps.importLibrary("maps");
+        // @ts-ignore
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
         let pinSvg = parser.parseFromString(markerSvgString, "image/svg+xml").documentElement
@@ -48,9 +50,6 @@
     onMount(()=>{
         initMap();
     })
-
-    let pageData: ContactPage
-    $:pageData = $page.data.data.data.contactPage.data.attributes
 </script>
 
 <svelte:head >
@@ -64,21 +63,21 @@
 
 <section class="py-10">
     <div class="min-h-screen flex flex-col space-y-14 items-center pt-40 ">
-        <h1 class="text-center text-gray text-4xl font-serif">{pageData.heroHeading}</h1>
+        <h1 class="text-center text-gray text-4xl font-serif">{data.layoutData.contact.pageTitle}</h1>
         <div class="flex w-full flex-col items-center space-y-4 md:space-y-0 md:items-start md:flex-row justify-around max-w-3xl">
             <div class="contacts-wrapper">
-                <p class="text-center text-gray font-serif italic">{pageData.addressLine1}</p>
-                <p class="text-center text-gray font-serif italic">{pageData.addressLine2}</p>
-                <p class="text-center text-gray font-serif italic">{pageData.addressLine3}</p>
+                <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[0]?.text}</p>
+                <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[1]?.text}</p>
+                <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[2]?.text}</p>
             </div>
             <div class="flex flex-col">
-                <a title="Phone number link" aria-label="Phone number link" href="tel:{pageData.phoneNumber}" target="_blank">
-                    <p class="text-center text-gray font-serif italic">{pageData.phoneNumber}</p>
+                <a title="Phone number link" aria-label="Phone number link" href="tel:{data?.layoutData?.footer?.address[3]?.url}" target="_blank">
+                    <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[3]?.text}</p>
                 </a>
-                <a title="Email link" aria-label="Email link" href="mailto:{pageData.email}" target="_blank">
-                    <p class="text-center text-gray font-serif italic">{pageData.email}</p>
+                <a title="Email link" aria-label="Email link" href="mailto:{data?.layoutData?.footer?.address[4]?.url}" target="_blank">
+                    <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[4]?.text}</p>
                 </a>
-                <p class="text-center text-gray font-serif italic">{pageData.website}</p>
+                <p class="text-center text-gray font-serif italic">{data?.layoutData?.footer?.address[5]?.url}</p>
                 <div class="flex justify-center space-x-4">
                     <a title="Link to the facebook page" aria-label="Link to the facebook page" target="_blank" href="https://www.facebook.com/SantaSarahFamilyWineEstate/">           
                         <svg class="w-7 fill-brown" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">

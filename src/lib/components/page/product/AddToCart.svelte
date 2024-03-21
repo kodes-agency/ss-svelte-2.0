@@ -1,33 +1,31 @@
 <script lang=ts>
-    import type {
-        Product,
-        ComponentProductProductName,
-        ShopPage,
-    } from "../../../../__generated__/graphql.js";
     import ProductItem from "../product/Product.svelte";
-    import { page } from "$app/stores";
     import { goto, invalidateAll } from "$app/navigation";
+    import { page } from "$app/stores";
 
-    export let product: Product
-    export let wine: ComponentProductProductName[]
-    export let pageData: ShopPage
+    export let wine: any;
+    export let pageData: any;
+    export let productTypes: any;
+
+    let productType = productTypes.find((el:any)=>el.value === wine.productKind)
 
     let volume: number = 0
     let quantity: number = 1
     let maxQuantity: number = 10
 
     // @ts-ignore
-    $:maxQuantity = product.maximumOrder
+    $:maxQuantity
     $:quantity
 
+    if(wine.productBundle.length > 0){  
+        wine.productBundle.forEach((item:any)=>{
+            let itemVolume = Number(item.product.stockManagement.volume.replace("_", ""))
+            volume += itemVolume * item.quantity
+        })
+    } else {
+        volume = Number(wine.stockManagement.volume.replace("_", ""))
+    }
 
-    wine.forEach((item)=>{
-        if(item.quantity){
-            volume += Number(item.volume) * Number(item.quantity)
-        } else {
-            volume += Number(item.volume)
-        }
-    })
 
     function adjustQunatity(direction: "add" | "substract"){
         if(direction === "add" && quantity < maxQuantity){
@@ -43,41 +41,34 @@
             method: "POST",
             body: JSON.stringify({
                 quantity: quantity,
-                id: product.productCode
+                id: wine.productId
             })
         })
         invalidateAll()
     }
-
-
-
 </script>
 
 <div class="w-full border-l hidden md:block border-brown sticky md:top-20 lg:top-28">
     <div class="p-5 lg:p-10 flex flex-col space-y-6">
         <div>
-            <p class="text-brown font-sansy uppercase">{product.productType?.data?.attributes?.productType}</p>
-            {#if !product.isAvailable } 
-                <p class="text-gray font-serif italic">Няма наличност</p>
-            {/if}
-
-            {#if wine.length > 1 }
+            <p class="text-brown font-sansy uppercase">{productType.label}</p>
+            {#if wine.productBundle.length > 1 }
                 <div class="mt-2">
-                    {#each wine as el }
-                        <p class="text-xs font-serif italic text-gray">{el.quantity} x {el.vina?.data?.attributes?.name}</p>
+                    {#each wine.productBundle as el }
+                        <p class="text-xs font-serif italic text-gray">{el.quantity} x {el.product.productTitle}</p>
                     {/each}
                 </div>
             {/if}
         </div>
-        {#if Number(product.salePrice) < Number(product.regularPrice) }
+        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
             <div>
-                <p class="font-serif text-gray text-2xl">{(Number(product.salePrice)/100).toFixed(2)} лв.</p>
-                <p class="font-serif text-brown text-sm">{ ((Number(product.salePrice)/100) / volume).toFixed(2)} лв./л</p>
+                <p class="font-serif text-gray text-2xl">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.salePrice)/2).toFixed(2) +" €"}</p>
+                <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.salePrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.salePrice)) / volume*1000/2).toFixed(2)  +" €/L"} </p>
             </div>
         {:else}
             <div>
-                <p class="font-serif text-gray text-2xl">{(Number(product.regularPrice)/100).toFixed(2)} лв.</p>
-                <p class="font-serif text-brown text-sm">{ ((Number(product.regularPrice)/100) / volume).toFixed(2)} лв./л</p>
+                <p class="font-serif text-gray text-2xl">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.regularPrice)/2).toFixed(2) +" €"}</p>
+                <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.regularPrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.regularPrice)) / volume*1000/2).toFixed(2)  +" €/L"}</p>
             </div>
         {/if}
         <div class="flex space-x-3 lg:space-x-6">
@@ -101,15 +92,14 @@
                 </div>
             </div>
             <button 
-                disabled={!product.isAvailable}
+                disabled={wine.stockManagement.quantity && wine.stockManagement.quantity < 1}
                 on:click={async ()=>{
                     await addToCart()
                     goto('/shop/checkout')
                 }}
-                class="uppercase font-sansy disabled:bg-gray disabled:bg-opacity-50 text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 whitespace-nowrap px-5">{pageData.addToCartButton}</button>
+                class="uppercase font-sansy disabled:bg-gray disabled:bg-opacity-50 text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 whitespace-nowrap px-5">{pageData.shop.buttonAddToCart}</button>
         </div>
         <ProductItem 
-            packageTitle={product.packageTitle}
             wine={wine}
         />
     </div>
@@ -118,30 +108,27 @@
 <div class="fixed bottom-0 w-full md:hidden">
     <div class="h-10 w-full bg-gradient-to-t from-white to-[rgba(0,0,0,0)]"></div>
     <div class="bg-white w-full flex flex-col space-y-1 items-center justify-center px-3 pb-4">
-        {#if wine.length > 1}
-            <p class="font-serif italic text-center leading-tight text-gray text-lg">{product.packageTitle}</p>
-        {:else}
-            <p class="font-serif italic text-center leading-tight text-gray text-lg">{wine[0].vina?.data?.attributes?.name}</p>
-        {/if}
-        {#if Number(product.salePrice) < Number(product.regularPrice) }
+        <p class="font-serif italic text-center leading-tight text-gray text-lg">{wine.productTitle}</p>
+
+        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
             <div class="flex items-baseline space-x-2">
-                <p class="font-serif text-gray text-lg">{(Number(product.salePrice)/100).toFixed(2)} лв.</p>
-                <p class="font-serif text-brown text-sm">{ ((Number(product.salePrice)/100) / volume).toFixed(2)} лв./л</p>
+                <p class="font-serif text-gray text-lg">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.salePrice)/2).toFixed(2) +" €"}</p>
+                <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.salePrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.salePrice)) / volume*1000/2).toFixed(2)  +" €/L"}</p>
             </div>
         {:else}
             <div class="flex items-baseline space-x-2">
-                <p class="font-serif text-gray text-lg">{(Number(product.regularPrice)/100).toFixed(2)} лв.</p>
-                <p class="font-serif text-brown text-sm">{ ((Number(product.regularPrice)/100) / volume).toFixed(2)} лв./л</p>
+                <p class="font-serif text-gray text-lg">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.regularPrice)/2).toFixed(2) +" €"}</p>
+                <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.regularPrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.regularPrice)) / volume*1000/2).toFixed(2)  +" €/L"}</p>
             </div>
         {/if}
         <button
-            disabled={!product.isAvailable}
+            disabled={wine.stockManagement.quantity && wine.stockManagement.quantity < 1}
             on:click={async()=>{
                 await addToCart()
                 goto('/shop/checkout')
             }}
             class="w-full h-12 bg-brown disabled:bg-gray disabled:bg-opacity-50 bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 rounded-md">
-            <p class="uppercase font-sansy text-white">Добави в количка</p>
+            <p class="uppercase font-sansy text-white">{pageData.shop.buttonAddToCart}</p>
         </button>
     </div>
 </div>

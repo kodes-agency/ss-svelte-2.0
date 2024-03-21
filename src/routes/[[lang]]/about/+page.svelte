@@ -1,17 +1,15 @@
 <script lang=ts>
+    import { isInverted } from '$lib/store/store.js';
+    import LogoColorChange from '$lib/components/global/LogoColorChange.svelte';
     import Layout from '$lib/components/global/Layout.svelte';
-    import type { AboutPage } from '../../../__generated__/graphql.js';
-    import { isInverted } from "$lib/store/store.js";
-
-    export let data
-
-    let pageData: AboutPage
-    $: pageData = data.data?.aboutPage?.data?.attributes    
-    $isInverted = false
-</script>
-
-<div class="pt-10 md:pt-0">
-    <Layout 
-        layout={pageData.aboutPageLayout}
-    />
-</div>
+  
+    export let data;
+  
+    $isInverted = false;
+  </script>
+  
+  <div class="flex flex-col space-y-20 md:space-y-32 pt-40">
+    <Layout pageData={data.aboutPageData}/>
+  </div>
+  
+  

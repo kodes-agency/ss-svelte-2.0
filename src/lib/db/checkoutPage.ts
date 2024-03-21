@@ -1,28 +1,22 @@
-import { gql } from "@apollo/client/core/index.js";
-
-export default function () {
-  const query = gql`
-    query Products($filters: ProductFiltersInput, $locale: I18NLocaleCode) {
-      products(filters: $filters, locale: $locale) {
-        data {
-          attributes {
-            productCode
-            wine {
-              vina {
-                data {
-                  attributes {
-                    name
-                  }
-                }
-              }
-            }
-            packageTitle
-            slug
+export default function (locale: string, productId: string) {
+  const query = `
+    query {
+      Products(locale: ${locale}, where:{productId:{in:[${productId}]}}){
+        docs {
+          productTitle
+          productId
+          productKind
+          slug
+          stockManagement {
+            volume
+          }
+          productBasicInformation {
+            harvestYear
           }
         }
       }
     }
   `;
-
+  
   return query;
 }

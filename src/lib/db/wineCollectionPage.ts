@@ -1,54 +1,32 @@
-import { gql } from "@apollo/client/core/index.js";
-
-export default function () {
-  const query = gql`
-    query CollectionPage($locale: I18NLocaleCode, $filters: VinaFiltersInput, $pagination: PaginationArg) {
-      vinas(locale: $locale, filters: $filters, pagination: $pagination) {
-        data {
-          attributes {
+export default function (locale: string, wineSort: string | null) {
+  const query = `
+    query {
+      Products(
+        locale: ${locale},
+        limit: 100,
+        where: {
+          AND: [
+            ${wineSort ? `{productBasicInformation__wineSort: {equals: ${wineSort}}},` : ""}
+            {productKind:{equals:bottle}},
+            {productType__productPosition:{equals:catalog_shop}}
+          ]
+      }){
+        docs {
+          productTitle
+          slug
+          productBasicInformation{
+            wineSort
             harvestYear
-            slug
-            image {
-              data {
-                attributes {
-                  alternativeText
-                  url
-                }
-              }
-            }
             shortDescription
-            name
-            wineType {
-              data {
-                attributes {
-                  wineType
-                  filterName
-                }
-              }
+            img {
+              url
+              alt
             }
-          }
-        }
-      }
-      winesPage(locale: $locale) {
-        data {
-          attributes {
-            heroHeading
-            heroSubheading
-            hideFilters
-            showFilters
-          }
-        }
-      }
-      wineTypes(locale: $locale) {
-        data {
-          attributes {
-            filterName
-            wineType
           }
         }
       }
     }
   `;
-
+  
   return query;
 }

@@ -1,25 +1,25 @@
 <script lang="ts">
-    import type { NewEntity } from '../../../../__generated__/graphql';
     import { page } from '$app/stores';
     import { getDate } from '$lib/functions/getDate'
-    export let news: NewEntity[]
+    import type { News } from '$lib/types/payloadTypes';
+    export let news: News
 
-    const News = news.map((el) => {
+    const newsArr = news.map((el: News) => {
         return {
-            slug: el.attributes?.slug,
-            title: el.attributes?.title,
-            publicationDate: new Date(el.attributes?.publicationDate),
+            slug: el.slug,
+            title: el.title,
+            publishedAt: new Date(el.publishedAt),
         }
     })
 
-    const sortedNews = News.sort((objA, objB) => Number(objB.publicationDate) - Number(objA.publicationDate),);
+    const sortedNews = newsArr.sort((objA, objB) => Number(objB.publishedAt) - Number(objA.publishedAt),);
 
-    const years = [...new Set(sortedNews.map((element) => element.publicationDate.getFullYear()))];
+    const years = [...new Set(sortedNews.map((element) => element.publishedAt.getFullYear()))];
 
     const newNews = years.map((year) => {
         return {
             year: year,
-            news: sortedNews.filter((element) => element.publicationDate.getFullYear() === year),
+            news: sortedNews.filter((element) => element.publishedAt.getFullYear() === year),
         }
     })
 
@@ -40,7 +40,7 @@
                     <a class="group" title="Link to {news.title}" aria-label="Link to {news.title}" href="{$page.params.lang ? "/"+$page.params.lang + "/news/"+news.slug : "/bg/news/"+news.slug}">
                         <div class="p-5">
                             <div class="w-fit">
-                                <p class="uppercase text-gray text-lg">{getDate(new Date(news.publicationDate), $page.params.lang ? $page.params.lang : "bg")}</p>
+                                <p class="uppercase text-gray text-lg">{getDate(new Date(news.publishedAt), $page.params.lang ? $page.params.lang : "bg")}</p>
                                 <div class="w-0 h-px bg-gray transition-all duration-300  group-hover:w-full"></div>
                             </div>
                             <p class="text-brown italic font-serif">{news.title}</p>

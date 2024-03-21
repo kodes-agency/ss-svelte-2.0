@@ -6,30 +6,12 @@
   import SummaryItem from "./SummaryItem.svelte";
   import { enhance } from "$app/forms";
   import { formatPrice } from "$lib/functions/formatPrice";
+  import type { General } from "$lib/types/payloadTypes";
   export let cart: Order;
-  export let toggleSteps: any;
-  export let backButton: any = "Назад";
-  export let nextButton: any = "Плащане";
+  export let toggleSteps: any;;
   export let yourOrderTitle: any = "Вашата поръчка";
-  export let deliveryTitle: any = "Доставка";
-  export let totalTitle: any = "Общо";
-  export let paymentMethodTitle: any = "Начин на плащане";
-  export let orderDetailsTitle: any = "Данни на поръчител";
-  export let customerNoteTitle: any = "Бележка към поръчката";
-  export let invoiceTitle: any = "Данни за фактура";
-  export let firstNameLabel = "Име";
-  export let lastNameLabel = "Фамилия";
-  export let emailLabel = "Имейл";
-  export let phoneLabel = "Телефон";
-  export let countryLabel = "Държава";
-  export let cityLabel = "Град";
-  export let regionLabel = "Област";
-  export let postCodeLabel = "Пощенски код";
-  export let addressLabel = "Адрес";
-  export let companyNameLabel = "Име на фирма";
-  export let companyVatLabel = "ЕИК (булстат)";
-  export let companyCountryLabel = "Държава на регистрация";
-  export let companyAddressLabel = "Адрес на регистрация";
+
+  export let pageData: General
 </script>
 
 <section class="w-full flex flex-col items-center">
@@ -37,7 +19,7 @@
     class="w-full flex flex-col space-y-1 items-center max-w-4xl pt-10 md:pt-20"
   >
     <p class="uppercase text-sm font-sansy w-full text-brown">
-      {yourOrderTitle}
+      {pageData.shop.orderTitle}
     </p>
     <div class="flex w-full flex-col border-y border-brown">
       {#each cart.items as el, i}
@@ -56,16 +38,10 @@
       {/each}
     </div>
 
-    <div class="w-full flex flex-col items-end pt-10">
+    <div class="w-full flex flex-col items-end pt-5">
       <div class="flex space-x-20">
-        <p class="font-serif italic text-brown">{deliveryTitle}</p>
-        <p class="font-serif min-w-[100px] text-end text-gray">
-            {formatPrice($page.params.lang ,cart.totals.total_shipping)}
-        </p>
-      </div>
-      <div class="flex space-x-20">
-        <p class="font-serif italic text-brown">{totalTitle}</p>
-        <p class="font-serif min-w-[100px] text-end text-gray">
+        <p class="font-serif italic text-brown">{pageData.shop.cartTitle}</p>
+        <p class="font-serif md:min-w-[120px] text-end text-gray">
           {formatPrice($page.params.lang, cart.totals.total_price)}
         </p>
       </div>
@@ -75,82 +51,73 @@
       <div class="flex flex-col w-full space-y-6 pt-10">
         <div class="w-full space-y-1">
           <p class="uppercase text-sm font-sansy text-brown">
-            {paymentMethodTitle}
+            {pageData.shop.paymentMethodsButton}
           </p>
           <div class="w-full h-px bg-brown"></div>
           <div class="flex flex-row w-full justify-between">
             <p class="text-gray italic font-serif">
               {window.sessionStorage.getItem("paymentMethod") == "card"
-                ? "С карта"
-                : "В брой"}
+                ? pageData.shop.buttonCard
+                : pageData.shop.buttonCash}
             </p>
           </div>
         </div>
         <div class="w-full space-y-1">
           <p class="uppercase text-sm font-sansy text-brown">
-            {orderDetailsTitle}
+            {pageData.shop.clientDetails}
           </p>
           <div class="w-full h-px bg-brown"></div>
           <div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{firstNameLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.firstName}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("firstName")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{lastNameLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.lastName}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("lastName")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{emailLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.email}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("email")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{phoneLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.phone}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("phone")}
               </p>
             </div>
-          </div>
-        </div>
-
-        <div class="w-full space-y-1">
-          <p class="uppercase text-sm font-sansy text-brown">
-            {orderDetailsTitle}
-          </p>
-          <div class="w-full h-px bg-brown"></div>
-          <div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{countryLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.country}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("country")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{regionLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.region}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("region")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{postCodeLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.zipCode}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("postCode")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{cityLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.city}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("city")}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{addressLabel}</p>
+              <p class="text-gray italic font-serif">{pageData.shop.address}</p>
               <p class="text-gray italic font-serif">
                 {window.sessionStorage.getItem("address")}
               </p>
@@ -161,7 +128,7 @@
         {#if window && window.sessionStorage.getItem("customerNote")}
           <div class="w-full space-y-1">
             <p class="uppercase text-sm font-sansy text-brown">
-              {customerNoteTitle}
+              {pageData.shop.orderNote}
             </p>
             <div class="w-full h-px bg-brown"></div>
             <div>
@@ -178,30 +145,30 @@
         {#if window && window.sessionStorage.getItem("invoice")}
           <div class="w-full space-y-1">
             <p class="uppercase text-sm font-sansy text-brown">
-              {invoiceTitle}
+              {pageData.shop.formTitle}
             </p>
             <div class="w-full h-px bg-brown"></div>
             <div>
               <div class="flex flex-row w-full justify-between">
-                <p class="text-gray italic font-serif">{companyNameLabel}</p>
+                <p class="text-gray italic font-serif">{pageData.shop.companyName}</p>
                 <p class="text-gray italic font-serif">
                   {window.sessionStorage.getItem("companyName")}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
-                <p class="text-gray italic font-serif">{companyVatLabel}</p>
+                <p class="text-gray italic font-serif">{pageData.shop.vatNumber}</p>
                 <p class="text-gray italic font-serif">
                   {window.sessionStorage.getItem("companyVat")}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
-                <p class="text-gray italic font-serif">{companyCountryLabel}</p>
+                <p class="text-gray italic font-serif">{pageData.shop.companyCountry}</p>
                 <p class="text-gray italic font-serif">
                   {window.sessionStorage.getItem("companyCountry")}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
-                <p class="text-gray italic font-serif">{companyAddressLabel}</p>
+                <p class="text-gray italic font-serif">{pageData.shop.companyAddress}</p>
                 <p class="text-gray italic font-serif">
                   {window.sessionStorage.getItem("companyAddress")}
                 </p>
@@ -213,17 +180,18 @@
     {/if}
     <div class="pt-20 flex flex-col space-y-4">
       <button
-        type="submit"
-        form="order"
-        class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
-        >{nextButton}</button
-      >
+        disabled
+        class=" font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
+        >{pageData.shop.buttonPay}</button
+        >
+        <!-- type="submit"
+        form="order" -->
       <button
         on:click={() => {
           toggleSteps("backwards");
         }}
         class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-opacity-70 text-brown bg-white px-6 py-1"
-        >{backButton}</button
+        >{pageData.shop.buttonBack}</button
       >
     </div>
   </div>

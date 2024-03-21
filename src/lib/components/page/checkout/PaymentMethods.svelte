@@ -1,37 +1,49 @@
 <script lang="ts">
-  export let title: any = "Метод на плащане";
+  import type { General } from "$lib/types/payloadTypes";
+  export let deliveryConsent: any;
   export let toggleSteps: any;
   export let paymentMethod: any;
-  export let backButton: any = "Назад";
-  export let nextButton: any = "Напред";
-  export let titleLeft: any = "Начин на доставка";
-  export let titleRight: any = "Цена на доставка";
-  export let price: any = "5.99";
-  export let currencyCode: any = " лв.";
+
+  export let pageData: General
 </script>
 
-<section class="h-screen pt-20 flex flex-col items-center">
+<section class="pt-20 flex flex-col items-center">
   <div class="w-full space-y-10 flex flex-col max-w-4xl">
     <div class="flex flex-col space-y-1">
         <div class="flex justify-between">
-          <p class="uppercase text-sm font-sansy text-brown">{titleLeft}</p>
-          <p class="uppercase text-sm font-sansy text-brown">{titleRight}</p>
+          <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.deliveryMethodsButton}</p>
         </div>
         <div class="w-full h-px bg-brown"></div>
-        <div class="flex p-3 justify-between">
-          <p class="italic text-gray font-serif">Стандартна доставка</p>
-          <p class="italic text-gray font-serif">{price} {currencyCode}</p>
+        <div class="flex p-3 pr-4 justify-between items-center">
+          <label class="italic text-gray font-serif pr-10 md:pr-20" for="deliveryConsent">{pageData.shop.deliveryConsent}</label>
+          <input
+          checked={deliveryConsent ? true : false}
+          on:change={({ target }) => {
+            let { checked } = target;
+            if (!checked) {
+              window.sessionStorage.removeItem("deliveryConsent");
+              deliveryConsent = window.sessionStorage.getItem("deliveryConsent");
+              return;
+            }
+
+            window.sessionStorage.setItem("deliveryConsent", "1");
+            deliveryConsent = window.sessionStorage.getItem("deliveryConsent");
+          }}
+          type="checkbox"
+          id="deliveryConsent"
+          class="focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown"
+        />
         </div>
         <div class="w-full h-px bg-brown"></div>
     </div>
 
     <div class="flex flex-col space-y-1">
-        <p class="uppercase text-sm font-sansy text-brown">{title}</p>
+        <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.paymentMethodsButton}</p>
         <div class="w-full h-px bg-brown"></div>
 
         <div class=" space-y-4 py-4">
           <div class="flex justify-between items-center px-4">
-            <label for="cod" class="italic font-serif text-gray">В брой при доставка</label>
+            <label for="cod" class="italic font-serif text-gray">{pageData.shop.buttonCash}</label>
             <input 
               id="cod" 
               value="cod" 
@@ -45,7 +57,7 @@
               class="form-radio focus:ring-gray rounded-none caret-brown bg-white focus:outline-none focus:border-gray border text-base text-brown font-sansy border-brown">
           </div>
           <div class="flex justify-between items-center px-4">
-            <label for="card" class="italic font-serif text-gray">С дебитна/кредитна карта - Mastercard или Visa</label>
+            <label for="card" class="italic font-serif text-gray">{pageData.shop.buttonCard}</label>
             <input 
               id="card" 
               value="card" 
@@ -69,7 +81,7 @@
               toggleSteps("backwards");
             }}
             class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-brown bg-white px-6 py-1"
-            >{backButton}</button
+            >{pageData.shop.buttonBack}</button
           >
           <button
             on:click={() => {
@@ -77,7 +89,7 @@
             }}
             disabled={!paymentMethod}
             class="disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-50 font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
-            >{nextButton}</button
+            >{pageData.shop.buttonContinueToCheckout}</button
           >
         </div>
     </div>

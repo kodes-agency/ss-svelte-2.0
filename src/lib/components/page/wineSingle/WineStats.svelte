@@ -1,56 +1,42 @@
-<script lang="ts">
-  import type { ComponentWineProfileWineDetails, SingleWinePage } from "../../../../__generated__/graphql";
-  
-  export let pageData: SingleWinePage
-  export let wineDetails: ComponentWineProfileWineDetails
-
+<script lang="ts">  
+  export let pageData:any
+  export let wineDetails:any
+  export let closingType:any
 </script>
 
-<section class=" flex flex-col items-center p-5">
+<section class=" flex flex-col items-center">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-w-4xl">
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.alchohol}</h2>
-            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.alchohol).toFixed(2)}</p>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.alchoholContent}</h2>
+            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.alchoholContent).toFixed(2)}</p>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.acid}</h2>
-            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.acids).toFixed(2)}</p>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.acidContent}</h2>
+            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.acidContent).toFixed(2)}</p>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20 ">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.sugars}</h2>
-            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.sugars).toFixed(2)}</p>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.sugarContent}</h2>
+            <p class="text-gray whitespace-nowrap font-serif italic">{Number(wineDetails.sugarContent).toFixed(2)}</p>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.volume}</h2>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.bottleVolumeSize}</h2>
             <div class="flex space-x-2">
-                {#each wineDetails.volumeNCount as el }
-                    <p class="text-gray whitespace-nowrap font-serif italic">{el.volume} {pageData.unit}</p>
-                {/each}
+                <div>
+                    {#each wineDetails.volumeAndQuantity as el }
+                        <p class="text-gray whitespace-nowrap font-serif italic">{el.volume}ml x {el.quantity}</p>
+                    {/each}
+                </div>
             </div>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.closing}</h2>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.closingType}</h2>
             <div class="flex space-x-2">
-                {#each wineDetails.closing.data as el }
-                    <p class="text-gray whitespace-nowrap font-serif italic">{el.attributes.capType}</p>
-                {/each}
+                <p class="text-gray whitespace-nowrap font-serif italic">{closingType}</p>
             </div>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.year}</h2>
-            <p class="text-gray whitespace-nowrap font-serif italic">{new Date(wineDetails.year).getFullYear()}</p>
-        </div>
-        <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
-            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.bottlesProduced}</h2>
-            <div class="flex flex-col space-y-1">
-                {#each wineDetails.volumeNCount as el }
-                    <p class="text-gray whitespace-nowrap font-serif italic">{el.bottlesProduced} 
-                        {#if wineDetails.volumeNCount?.length > 1 }  
-                            ({el.volume} {pageData.unit})
-                        {/if}
-                    </p>
-                {/each}
-            </div>
+            <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.bottledYear}</h2>
+            <p class="text-gray whitespace-nowrap font-serif italic">{new Date(wineDetails.yearBottled).getFullYear()}</p>
         </div>
         <div class="flex flex-col items-center space-y-1 m-2 md:m-4 mx-20">
             <h2 class="text-brown whitespace-nowrap font-sansy text-center">{pageData.temperature}</h2>

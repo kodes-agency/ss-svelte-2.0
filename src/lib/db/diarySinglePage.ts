@@ -1,60 +1,20 @@
-import { gql } from "@apollo/client/core/index.js";
-
-export default function () {
-  const query = gql`
-    query DiariesSingle($filters: DiaryFiltersInput, $locale: I18NLocaleCode) {
-      diaries(filters: $filters, locale: $locale) {
-        data {
-          attributes {
-            content
-            image {
-              data {
-                attributes {
-                  alternativeText
-                  url
-                }
-              }
-            }
-            gallery {
-              data {
-                attributes {
-                  alternativeText
-                  url
-                }
-              }
-            }
-            publicationDate
-            slug
-            title
-          }
-        }
-      }
-      homePage(locale: $locale) {
-        data {
-          attributes { 
-            diaryHeading
-            featuredDiary {
-              data {
-                attributes {
-                  title
-                  slug
-                  publicationDate
-                  image {
-                    data {
-                      attributes {
-                        alternativeText
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            }
+export default function (locale: string, slug: string) {
+  const query = `
+    query {
+      Diaries(locale: ${locale}, where: {slug: {equals: "${slug}"}}){
+        docs {
+          title
+          publishedAt
+          text_html
+          slug
+          img {
+            url
+            alt
           }
         }
       }
     }
   `;
-
+  
   return query;
 }

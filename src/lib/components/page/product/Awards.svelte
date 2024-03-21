@@ -1,10 +1,11 @@
 <script lang="ts">
-    import type { Maybe, ComponentWineProfileWineAwards } from "../../../../__generated__/graphql";
-    export let heading: Maybe<string> | undefined;
-    export let awards: ComponentWineProfileWineAwards[]
+  import { getYear } from "$lib/functions/getDate";
+
+    export let heading: any;
+    export let awards: any;
 </script>
 
-<section class="flex flex-col items-center w-full p-5">
+<section class="flex flex-col items-center w-full px-5">
     <div class="flex flex-col w-full max-w-xl">
         <div class="flex space-x-2 justify-center items-center">
             <div class="w-full h-px bg-brown"></div>
@@ -16,8 +17,8 @@
                 {#each awards as award, i }
                     <div class="flex flex-col items-center">
                         <div class="flex flex-col items-center">
-                            <p class="text-center text-brown font-sansy">{award.year}</p>
-                            <p class="text-center italic font-serif max-w-sm text-gray">{award.awardDescription}</p>
+                            <p class="text-center text-brown font-sansy">{getYear(award.year)}</p>
+                            <p class="text-center italic font-serif max-w-sm text-gray">{award.award}</p>
                         </div>
                         {#if i+1 != awards.length }
                             <div class="h-px w-60 my-5 bg-brown" />

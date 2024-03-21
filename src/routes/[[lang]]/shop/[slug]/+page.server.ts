@@ -1,36 +1,47 @@
-import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/singleProductPage";
-import { SHOP_API_URL } from "$env/static/private";
-
+import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { wineTypes, productTypes, closingTypes } from "$lib/store/categoryTypes.js";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({params}) => {
+export const load = async ({ params }) => {
+  try { 
+    const response = await fetch(PUBLIC_GRAPHQL_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: query(params.lang ? params.lang : "bg", params.slug),
+        })
+    });
 
-    const data = await getClient().query({
-        query: query(),
-        variables: {
-            "locale": `${params.lang ? params.lang : "bg"}`,
-            "filters": {
-              "slug": {
-                "eqi" : params.slug
-              }
-            },
-        }
+    const data = await response.json();
+
+    let wineType = wineTypes.find(wineType => {
+        const locale = params.lang || "bg";
+        return wineType.locale === locale;
+    });
+
+    let productType = productTypes.find(productType => {
+        const locale = params.lang || "bg";
+        return productType.locale === locale;
+    })
+    
+    let closingType = closingTypes.find(closingType => {
+        const locale = params.lang || "bg";
+        return closingType.locale === locale;
     })
 
-    const response = await fetch(SHOP_API_URL + `/products/${data.data.products.data[0].attributes.productCode}`)
-    let productData = await response.json()
 
-
-    const product = {
-      attributes: {
-        ...data.data.products.data[0].attributes,
-        salePrice: Number(productData.prices.sale_price),
-        regularPrice: Number(productData.prices.regular_price),
-        isAvailable: productData.is_in_stock,
-        maximumOrder: productData.add_to_cart.maximum
-      }
+    return {
+        productPage: data.data.Products.docs[0],
+        wineType: wineType?.wineTypes,
+        productType: productType?.productTypes,
+        closingType: closingType?.closingTypes
     }
     
-    return { data , product}
-}
+  } catch (error) {
+      console.log(error);
+  }
+};

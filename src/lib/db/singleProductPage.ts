@@ -1,109 +1,98 @@
-import { gql } from "@apollo/client/core/index.js";
-
-export default function () {
-  const query = gql`
-    query Products($filters: ProductFiltersInput, $locale: I18NLocaleCode) {
-      products(filters: $filters, locale: $locale) {
-        data {
-          attributes {
-            productCode
-            wine {
-              vintage
+export default function (locale: string, slug: string) {
+  const query = `
+    query {
+      Products(locale: ${locale}, where:{slug:{equals:"${slug}"}}){
+        docs{
+          productTitle
+          slug
+          productKind
+          productType {
+            productPosition
+          }
+          productBasicInformation {
+            wineSort
+            harvestYear
+            img {
+              url
+              alt
+            }
+            longDescription
+            wineAwards {
+              award
+              year
+            }
+          }
+          wineDetails {
+            alchoholContent
+            acidContent
+            sugarContent
+            bottleClosingType
+            yearBottled
+            temperatureC
+            temperatureF
+            volumeAndQuantity {
               volume
               quantity
-              vina {
-                data {
-                  attributes {
-                    name
-                    image {
-                      data {
-                        attributes {
-                          alternativeText
-                          url
-                        }
-                      }
-                    }
-                    shortDescription
-                    longDescription
-                    wineAwards {
-                      awardDescription
-                      year
-                      id
-                    }
-                    wineDetails {
-                      acids
-                      closing {
-                        data {
-                          attributes {
-                            capType
-                          }
-                        }
-                      }
-                      alchohol
-                      sugars
-                      temperatureC
-                      temperatureF
-                    }
-                    wineAwards {
-                      awardDescription
-                      year
-                    }
-                    wineType {
-                      data {
-                        attributes {
-                          wineType
-                        }
-                      }
-                    }
-                    wineInformation {
-                      food
-                    }
-                    slug
-                  }
-                }
-              }
             }
-            packageTitle
-            productType {
-              data {
-                attributes {
-                  productType
-                }
-              }
-            }
-            slug
           }
-        }
-      }
-      shopPage(locale: $locale) {
-        data {
-          attributes {
-            cartMainLabel
-            cartTotalLabel
-            cartPriceLabel
-            cartQuantityLabel
-            cartProductLabel
-            nextButton
-            continueShoppingButton
-            addToCartButton
-            learnMoreButton
-            singleProductHeading
-          }
-        }
-      }
-      singleWinePage(locale: $locale) {
-        data {
-          attributes {
-            rewardsHeading
-            alchohol
-            volume
-            closing
+          wineRemarks {
             food
+          }
+          priceManagement {
+            regularPrice
+            salePrice
+          }
+          stockManagement {
+            stockQuantity
+            volume
+          }
+          productId
+          productBundle {
+            quantity
+            product (locale: ${locale}){
+              slug
+              productTitle
+              productType {
+                productPosition
+              }
+              stockManagement {
+                volume
+              }
+              productBasicInformation {
+                wineSort
+                longDescription
+                harvestYear
+                img {
+                  url
+                  alt
+                }
+                wineAwards {
+                  award
+                  year
+                }
+              }
+              wineDetails {
+                alchoholContent
+                acidContent
+                sugarContent
+                bottleClosingType
+                yearBottled
+                temperatureC
+                temperatureF
+                volumeAndQuantity {
+                  volume
+                  quantity
+                }
+              }
+              wineRemarks {
+                food
+              }
+            }
           }
         }
       }
     }
   `;
-
+  
   return query;
 }

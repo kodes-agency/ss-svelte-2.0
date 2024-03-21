@@ -1,48 +1,54 @@
 import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/checkoutPage";
 import { SHOP_API_URL } from "$env/static/private";
+import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import type { Product } from "$lib/types/payloadTypes.js";
 import type { Actions } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ params, cookies }) => {
-  let response1 = await fetch(SHOP_API_URL + "/cart", {
-    headers: {
-      Nonce: `${cookies.get("nonce") || ""}`,
-      "Cart-token": `${cookies.get("cart-token") || ""}`,
-    },
-  });
-
-  let checkoutData = await response1.json();
-
-  let cartItemsIds = await checkoutData.items.map(item => {
-    return item.id.toString()
-  });
-  
-  const response2 = await getClient().query({
-    query: query(),
-    variables: {
-      locale: `${params.lang ? params.lang : "bg"}`,
-      filters: {
-        productCode: {
-          in: cartItemsIds,
-        },
+  try {
+    let checkoutResponse = await fetch(SHOP_API_URL + "/cart", {
+      headers: {
+        Nonce: `${cookies.get("nonce") || ""}`,
+        "Cart-token": `${cookies.get("cart-token") || ""}`,
       },
-    },
-  });
-  
-  checkoutData.items.forEach(item => {
-    let productId = item.id
-    
-    const correspondingProduct = response2.data.products.data.find(
-      (product) => productId === Number(product.attributes.productCode)
-    );
-      
-      item.productName = correspondingProduct.attributes.wine.length > 1 ? correspondingProduct.attributes.packageTitle : correspondingProduct.attributes.wine[0].vina.data.attributes.name
-      item.productSlug = correspondingProduct.attributes.slug
     });
-      
+  
+    let checkoutData = await checkoutResponse.json();
+  
+    let cartItemsIds = await checkoutData.items.map((item:any) => {
+      return `"${item.id}"`
+    });
 
-  return checkoutData;
+    const response = await fetch(PUBLIC_GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: query(params.lang ? params.lang : "bg", cartItemsIds),
+      })
+    });
+
+    const data = await response.json();
+
+    checkoutData.items.forEach((item:any) => {
+      let productId = item.id
+      
+      const correspondingProduct: Product = data.data.Products.docs.find(
+        (product: Product) => productId === Number(product.productId)
+      );
+      
+      item.productName = correspondingProduct.productKind === "bottle" ? `${correspondingProduct.productTitle} ${new Date(correspondingProduct?.productBasicInformation.harvestYear).getFullYear()} ${correspondingProduct.stockManagement.volume.replace("_", "")}ml` : correspondingProduct.productTitle;
+      item.productSlug = correspondingProduct.slug;
+    });
+
+    return checkoutData
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 
@@ -86,11 +92,7 @@ export const actions: Actions = {
     });
 
     let json = await response.json()
-
-    console.log(json)
   },
-
-
 
   order: async ({ cookies, fetch, request }) => {
     const formData = await request.formData();
@@ -133,6 +135,5 @@ export const actions: Actions = {
       },
       body: JSON.stringify(order)
     });
-    console.log(await response.json())
   }
 };

@@ -14,7 +14,7 @@
                 <h1 class="font-serif text-3xl italic text-gray">Количка</h1>
                 <p class="font-serif text-3xl text-brown">{(Number(cart.totals.total_price)/100).toFixed(2)} лв.</p>
             </div>
-            <a href="/shop" class="uppercase font-sansy text-sm text-brown h-8 px-6 border border-brown rounded-sm hover:bg-black hover:text-white hover:bg-brown transition-all duration-500">Продължи с пазаруването</a>
+            <a href={$page.params.lang ? "/" +$page.params.lang+"/shop/" : "/bg" + "/shop/"}  class="uppercase font-sansy text-sm text-brown h-8 px-6 border border-brown rounded-sm hover:bg-black hover:text-white hover:bg-brown transition-all duration-500">Продължи с пазаруването</a>
         </div>
 
         <section class="flex flex-col w-full space-y-10">

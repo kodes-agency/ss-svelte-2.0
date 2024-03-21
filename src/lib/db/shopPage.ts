@@ -1,85 +1,59 @@
-import { gql } from "@apollo/client/core/index.js";
-
-export default function () {
-  const query = gql`
-    query Product(
-      $locale: I18NLocaleCode
-      $pagination: PaginationArg,
-      $filters: ProductFiltersInput
-    ) {
-      products(locale: $locale, pagination: $pagination, filters: $filters) {
-        data {
-          attributes {
-            packageTitle
-            productType {
-              data {
-                attributes {
-                  productType
-                }
-              }
+export default function (locale: string, wineSort: string[], productType: string[], year: [], volume: number) {
+  const query = `
+    query {
+      Products(
+        locale: ${locale},
+        limit: 100,
+        where:{
+          AND: [
+            {productBasicInformation__wineSort: {in: [${wineSort}]}},
+            {productKind:{in:[${productType}]}},
+            ${year ? `{productBasicInformation__harvestYear:{equals: "${year}-01-01T12:00:00.000Z"}},` : ""}
+            {stockManagement__volume:{in: [${volume}]}},
+            {visibilityGroup__visibility:{equals:_1}}
+          ]
+      }){
+        docs{
+          productTitle
+          productKind
+          slug
+          productBasicInformation{
+            wineSort
+            harvestYear
+            img {
+              url
+              alt
             }
+          }
+          priceManagement {
             regularPrice
             salePrice
-            slug
-            productCode
-            wine {
-              quantity
-              vintage
-              volume
-              vina {
-                data {
-                  attributes {
-                    name
-                    image {
-                      data {
-                        attributes {
-                          alternativeText
-                          url
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
-        }
-      }
-      shopPage(locale: $locale) {
-        data {
-          attributes {
-            heroHeading
-            heroSubheading
-            heroImage {
-              data {
-                attributes {
+          stockManagement {
+            stockQuantity
+            volume
+          }
+          productId
+          productBundle {
+            quantity
+            product (locale: ${locale}){
+              productTitle
+              stockManagement {
+                volume
+              }
+              productBasicInformation {
+                harvestYear
+                img {
                   url
-                  alternativeText
+                  alt
                 }
               }
             }
-            deliveryInfoButton
-            paymentInfoButton
-            infoTab {
-              tabContent
-              tabHeading
-            }
-            filterWineType
-            filterVintage
-            filterProductType
-            filterVolume
-          }
-        }
-      }
-      productTypes(locale: $locale) {
-        data {
-          attributes {
-            productType
           }
         }
       }
     }
   `;
-
+  
   return query;
 }

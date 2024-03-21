@@ -1,4 +1,4 @@
-import { PUBLIC_API_URL } from "$env/static/public";
+import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
 
 /* Important to import from index.js to solve Module issues */
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client/core/index.js";
@@ -8,7 +8,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client/core/index
 */
 export function getClient() {
   const httpLink = new HttpLink({
-    uri: PUBLIC_API_URL,
+    uri: PUBLIC_GRAPHQL_URL,
   });
 
   const client = new ApolloClient({

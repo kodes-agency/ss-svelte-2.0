@@ -19,8 +19,8 @@
     {@html heading}
   </h1>
 </section>
-<section class="flex flex-col items-center p-5 space-y-10">
-  <p class=" text-center italic font-serif text-gray">{@html subHeading}</p>
+<section class="flex flex-col items-center p-5 py-10 space-y-10">
+  <p class=" text-center italic max-w-3xl font-serif text-gray">{@html subHeading}</p>
   <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10">
     <Button link="/shop#info" buttonText={paymentInfoButton} />
     <Button link="/shop#info" buttonText={deliveryInfoButton} />

@@ -1,112 +1,45 @@
-import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/shopPage";
-import filtersQuery from "$lib/db/filterQuery";
-import { SHOP_API_URL } from "$env/static/private";
-import type { Product } from "$lib/types/orderTypes.js";
+import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { productTypes, wineTypes } from "$lib/store/categoryTypes.js";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ params, url }) => {
-  let productType = url.searchParams.getAll("category");
-  let vintage = url.searchParams.getAll("vintage");
-  let wineType = url.searchParams.getAll("wineType");
-  let volume = url.searchParams.getAll("volume").map((str) => {
-    return parseFloat(str);
-  });
+  try { 
+    let WineSort = url.searchParams.getAll("wineType").length === 0 ? ["red", "white", "rose", "collection"] : url.searchParams.getAll("wineType");
+    let ProductType = url.searchParams.getAll("category").length === 0 ? ["bundle", "special", "bottle" ] : url.searchParams.getAll("category");
+    let Vintage = url.searchParams.getAll("vintage").length === 1 ? [url.searchParams.get("vintage")] : url.searchParams.getAll("vintage")[0];
+    let Volume = url.searchParams.getAll("volume").length === 0 ? ["_375", "_750", "_1500", "_0"] : url.searchParams.getAll("volume").map((str) => { return `_${parseInt(str)}` });
 
-  const getProducts = async () => {
-    const response = await fetch(SHOP_API_URL + "/products?page=1&per_page=100");
-    if (!response.ok) {
-      throw new Error("Network response was not ok.");
-    }
+    console.log(WineSort, ProductType, Vintage, Volume)
 
-    let allProducts: Product[] = await response.json();
-
-    return allProducts;
-  };
-
-  const [data, filterData, allProducts] = await Promise.all([
-    getClient().query({
-      query: query(),
-      variables: {
-        locale: `${params.lang ? params.lang : "bg"}`,
-        filters: {
-          productType: {
-            filterName: {
-              in: productType.length > 0 ? productType : undefined,
-            },
-          },
-          wine: {
-            vintage: {
-              in: vintage.length > 0 ? vintage : undefined,
-            },
-            volume: {
-              in: volume.length > 0 ? volume : undefined,
-            },
-            vina: {
-              wineType: {
-                filterName: {
-                  in: wineType.length > 0 ? wineType : undefined,
-                },
-              },
-            },
-          },
+    const response = await fetch(PUBLIC_GRAPHQL_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
-        pagination: {
-          pageSize: 400,
-        },
-      },
-    }),
-    getClient().query({
-      query: filtersQuery(),
-      variables: {
-        locale: `${params.lang ? params.lang : "bg"}`,
-        pagination: {
-          pageSize: 400,
-        },
-      },
-    }),
-    getProducts(),
-  ]);
+        body: JSON.stringify({
+            query: query(params.lang ? params.lang : "bg", WineSort, ProductType, Vintage, Volume),
+        })
+    });
+    
+    const data = await response.json();
 
-  const products = data.data.products.data
-    .map((infoItem) => {
-      const productId = infoItem.attributes.productCode;
-
-      // Find the corresponding product in the product array
-      const correspondingProduct = allProducts.find(
-        (product) => product.id === parseInt(productId)
-      );
-
-      if (correspondingProduct) {
-        // Check availability from product array
-        const isAvailable = correspondingProduct.is_in_stock === true;
-
-        // Get prices from product array
-        const regularPrice = parseFloat(
-          correspondingProduct.prices.regular_price
-        );
-        const salePrice = parseFloat(correspondingProduct.prices.sale_price);
-
-        // Construct the new object with merged data
-        return {
-          attributes: {
-            ...infoItem.attributes,
-            isAvailable,
-            regularPrice,
-            salePrice,
-          },
-        };
-      }
-
-      // If no corresponding product is found, return null or handle as needed
-      return null;
+    let productType = productTypes.find((type) => type.locale === params.lang ? params.lang : "bg")
+    let wineCategory = wineTypes.find((type) => type.locale === params.lang ? params.lang : "bg")
+    let wineYears = data.data.Products.docs.map((product) => {
+      return new Date(product.productBasicInformation.harvestYear).getFullYear();
     })
-    .filter(Boolean); // Remove null entries if any
-
-
-  return {
-    data,
-    filterData,
-    products,
-  };
+      .sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index && value !== 1970)
+    
+    return {
+        shopPage: data.data.Products.docs,
+        productTypes: productType?.productTypes,
+        wineTypes: wineCategory?.wineTypes,
+        wineYears: wineYears
+    }
+    
+  } catch (error) {
+      console.log(error);
+  }
 };

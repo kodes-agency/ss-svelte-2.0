@@ -3,11 +3,10 @@
     import { page } from "$app/stores";
     import gsap from 'gsap/dist/gsap'
     import ScrollTrigger from 'gsap/dist/ScrollTrigger'
+    import { blur } from "svelte/transition";
+    import { afterUpdate, onMount } from "svelte";
 
-    import { blur, fade } from "svelte/transition";
-    import type { VinaEntity } from "../../../__generated__/graphql";
-    import { afterUpdate, beforeUpdate, onMount } from "svelte";
-    export let wines: VinaEntity[]
+    export let wines:any
 
     let targetWine: number | null
     let winesEls: NodeListOf<HTMLElement>
@@ -29,7 +28,6 @@
                         reversed: true
                     })
     
-    
                     tlEnter.to(el, {
                         opacity: 1,
                         duration: 0,
@@ -49,22 +47,18 @@
         })
     })
 
-
-
     onMount(()=>{
         return()=>{
             ctx.revert()
         }
     })
-
-
 </script>
 
 <section class="w-full flex flex-col items-center min-h-[70vh] p-5 relative">
     <div class="absolute hidden lg:flex top-0 h-full justify-center">
         {#each wines as wine, i } 
             {#if targetWine == i }
-                <img in:blur={{amount:10}} class="sticky top-20 h-[70vh]" src={PUBLIC_IMG_URL+wine.attributes?.image?.data?.attributes?.url+"?format=webp"} alt={wine.attributes?.image?.data?.attributes?.alternativeText}>
+                <img in:blur={{amount:10}} class="sticky top-20 h-[70vh]" src={PUBLIC_IMG_URL+ wine.productBasicInformation.img.url} alt={wine.productBasicInformation.img.alt}>
             {/if}
         {/each}
     </div>
@@ -91,14 +85,14 @@
                 }}
                 class="wine transition-all {displayWidth <= 1024 ? "opacity-30" : ""} duration-300 lg:opacity-100"
             >
-                <a href={$page.params.lang ? "/"+$page.params.lang+"/wine/"+wine.attributes?.slug : "/bg/wine/"+wine.attributes?.slug}>
+                <a href={$page.params.lang ? "/"+$page.params.lang+"/wines/"+wine.slug : "/bg/wines/"+wine.slug}>
                     <div class="max-w-xs flex flex-col items-center space-y-2">
                         <div class="relative lg:hidden h-48">
-                            <img  class="rotate-90 h-[250px]" src={PUBLIC_IMG_URL+wine.attributes?.image?.data?.attributes?.url+"?format=webp"} alt={wine.attributes?.image?.data?.attributes?.alternativeText}>
+                            <img  class="rotate-90 h-[250px]" src={PUBLIC_IMG_URL+ wine.productBasicInformation.img.url} alt={wine.productBasicInformation.img.alt}>
                         </div>
-                        <h2 class=" text-center text-xl md:text-2xl font-serif italic text-gray">{wine.attributes?.name}</h2>
-                        <p class=" text-center text-brown font-serif">{new Date(wine.attributes?.harvestYear).getFullYear()}</p>
-                        <p class=" text-center text-gray italic font-serif">{wine.attributes?.shortDescription}</p>
+                        <h2 class=" text-center text-xl md:text-2xl font-serif italic text-gray">{wine.productTitle}</h2>
+                        <p class=" text-center text-brown font-serif">{new Date(wine.productBasicInformation.harvestYear).getFullYear()}</p>
+                        <p class=" text-center text-gray italic font-serif">{wine.productBasicInformation.shortDescription}</p>
                     </div>
                 </a>
             </article>

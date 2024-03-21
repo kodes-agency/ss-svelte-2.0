@@ -1,13 +1,9 @@
 <script lang="ts">
-  import type {
-    ComponentWineProfileWineInformation,
-    Maybe,
-  } from "../../../../__generated__/graphql";
-  export let details: ComponentWineProfileWineInformation;
-  export let degustaion: Maybe<string> | undefined;
-  export let food: Maybe<string> | undefined;
-  export let maturation: Maybe<string> | undefined;
-  export let vinification: Maybe<string> | undefined;
+  export let details:any
+  export let degustation:any
+  export let food:any
+  export let maturation:any
+  export let vinification:any
 </script>
 
 <section class="flex flex-col items-center p-5">
@@ -21,8 +17,8 @@
       <p class="text-center italic font-serif text-gray">{details.maturation}</p>
     </div>
     <div class="flex flex-col items-center space-y-4">
-      <h2 class="text-center text-gray font-serif text-3xl md:text-4xl">{degustaion}</h2>
-      <p class="text-center italic font-serif text-gray">{details.degustaion}</p>
+      <h2 class="text-center text-gray font-serif text-3xl md:text-4xl">{degustation}</h2>
+      <p class="text-center italic font-serif text-gray">{details.degustation}</p>
     </div>
     <div class="flex flex-col items-center space-y-4">
       <h2 class="text-center text-gray font-serif text-3xl md:text-4xl">{food}</h2>

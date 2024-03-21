@@ -1,25 +1,24 @@
 <script lang="ts">
-    import type { DiaryEntity } from '../../../../__generated__/graphql';
     import { page } from '$app/stores';
     import { getDate } from '$lib/functions/getDate'
-    export let diaries: DiaryEntity[]
+    export let diaries
 
-    const diary = diaries.map((el) => {
+    const diary = diaries.map((el:any) => {
         return {
-            slug: el.attributes?.slug,
-            title: el.attributes?.title,
-            publicationDate: new Date(el.attributes?.publicationDate),
+            slug: el.slug,
+            title: el.title,
+            publishedAt: new Date(el.publishedAt),
         }
     })
 
-    const sortedDiary = diary.sort((objA, objB) => Number(objB.publicationDate) - Number(objA.publicationDate),);
+    const sortedDiary = diary.sort((objA:any, objB:any) => Number(objB.publishedAt) - Number(objA.publishedAt),);
 
-    const years = [...new Set(sortedDiary.map((element) => element.publicationDate.getFullYear()))];
+    const years = [...new Set(sortedDiary.map((element:any) => element.publishedAt.getFullYear()))];
 
     const newDieary = years.map((year) => {
         return {
             year: year,
-            diary: sortedDiary.filter((element) => element.publicationDate.getFullYear() === year),
+            diary: sortedDiary.filter((element:any) => element.publishedAt.getFullYear() === year),
         }
     })
 
@@ -38,7 +37,7 @@
                     <a class="group" title="Link to {diary.title}" aria-label="Link to {diary.title}" href="{$page.params.lang ? "/"+$page.params.lang + "/diary/"+diary.slug : "/bg/diary/"+diary.slug}">
                         <div class="p-5">
                             <div class="w-fit">
-                                <p class="uppercase text-gray text-lg">{getDate(new Date(diary.publicationDate), $page.params.lang ? $page.params.lang : "bg")}</p>
+                                <p class="uppercase text-gray text-lg">{getDate(new Date(diary.publishedAt), $page.params.lang ? $page.params.lang : "bg")}</p>
                                 <div class="w-0 h-px bg-gray transition-all duration-300  group-hover:w-full"></div>
                             </div>
                             <p class="text-brown italic font-serif">{diary.title}</p>

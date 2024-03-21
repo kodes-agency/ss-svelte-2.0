@@ -51,6 +51,7 @@
 
   // STEP:4 Delivery method
   let deliveryMethod: any
+  let deliveryConsent: any
 
   // STEP:5 Payment method
   let paymentMethod: any
@@ -94,26 +95,29 @@
     // STEP:4 Delivery & Payment method
     deliveryMethod = window.sessionStorage.getItem('deliveryMethod')
     paymentMethod = window.sessionStorage.getItem('paymentMethod')
+    deliveryConsent = window.sessionStorage.getItem('deliveryConsent')
+
 
     invalidateAll();
   });
 </script>
 
-<div class="p-3 min-h-screen">
+<div class="px-7 min-h-screen">
   {#if data.items.length > 0}
-    <StepMap bind:step bind:ageConsent bind:policyConsent bind:customerDetails bind:paymentMethod/>
+    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:customerDetails bind:paymentMethod/>
 
     {#if step === 1}
       <div transition:slide>
-        <Cart {cart} {toggleSteps} />
+        <Cart pageData={data.layoutData} {cart} {toggleSteps} />
       </div>
     {:else if step === 2}
       <div transition:slide>
-        <Consent bind:marketingConsent bind:customerNote bind:ageConsent bind:policyConsent {toggleSteps} />
+        <Consent pageData={data.layoutData} bind:marketingConsent bind:customerNote bind:ageConsent bind:policyConsent {toggleSteps} />
       </div>
     {:else if step === 3}
       <div transition:slide>
         <OrderForm 
+          pageData={data.layoutData}
           bind:firstName
           bind:lastName
           bind:email
@@ -135,12 +139,14 @@
     {:else if step === 4}
       <div transition:slide>
         <PaymentMethods
+          pageData={data.layoutData}
           bind:paymentMethod
+          bind:deliveryConsent
         {toggleSteps} />
       </div>
     {:else if step === 5}
       <div transition:slide>
-        <OrderSummary {cart} {toggleSteps} />
+        <OrderSummary pageData={data.layoutData} {cart} {toggleSteps} />
       </div>
     {/if}
   {:else}

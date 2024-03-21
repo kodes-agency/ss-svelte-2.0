@@ -85,3 +85,7 @@ export function getDate(date: Date, locale: string) {
 
     return day + ' ' + month + ' ' + year;
   }
+
+export function getYear(date: string | Date | number) {
+    return new Date(date).getFullYear();
+}

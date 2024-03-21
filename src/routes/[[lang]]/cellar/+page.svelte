@@ -1,21 +1,16 @@
-<script lang="ts">
-  import { PUBLIC_IMG_URL } from "$env/static/public";
-  import ImgHero from "$lib/components/elements/global/ImgHero.svelte";
-  import { isInverted } from "$lib/store/store.js";
-  import Layout from "$lib/components/global/Layout.svelte";
-  import LogoColorChange from "$lib/components/global/LogoColorChange.svelte";
-  import type { CellerPage } from "../../../__generated__/graphql.js";
+<script lang=ts>
+  import { isInverted } from '$lib/store/store.js';
+  import LogoColorChange from '$lib/components/global/LogoColorChange.svelte';
+  import Layout from '$lib/components/global/Layout.svelte';
 
   export let data;
 
-  let pageData: CellerPage;
-  $: pageData = data.data?.cellerPage?.data?.attributes;
-  $isInverted = true
+  $isInverted = true;
 </script>
 
 <LogoColorChange />
-<ImgHero
-  src={PUBLIC_IMG_URL + pageData.heroImage?.data?.attributes?.url}
-  alt={pageData.heroImage?.data?.attributes?.alternativeText}
-/>
-<Layout layout={pageData.cellerPageLayout} />
+
+<div class="flex flex-col space-y-20 md:space-y-32">
+  <Layout pageData={data.cellarPageData}/>
+</div>
+

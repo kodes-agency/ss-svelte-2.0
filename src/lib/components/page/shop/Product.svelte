@@ -1,24 +1,17 @@
 <script lang=ts>
-    import type { Maybe, ComponentProductProductName } from "../../../../__generated__/graphql";
     import { page } from "$app/stores";
     import { PUBLIC_IMG_URL } from "$env/static/public";
     import { invalidateAll } from "$app/navigation";
-    export let packageTitle: Maybe<string> | undefined;
-    export let productCode: Maybe<string> | undefined;
-    export let category: Maybe<string> | undefined;
-    export let regularPrice: number | undefined;
-    export let salePrice: Maybe<number> | undefined;
-    export let id: Maybe<string> | undefined;
-    export let wine: ComponentProductProductName[]
-    export let slug: Maybe<string> | undefined;
-    export let isAvailable: boolean
+    import type { Product } from "$lib/types/payloadTypes";
+
+    export let wine: Product
 
     async function addToCart() {
         const response = await fetch ('/api/cart/add-item', {
             method: "POST",
             body: JSON.stringify({
                 quantity: 1,
-                id: productCode
+                id: wine.productId
             })
         })
         invalidateAll()
@@ -26,8 +19,8 @@
      
 </script>
 
-<article class="group relative">
-    {#if isAvailable }
+{#if wine && wine.productBasicInformation }
+    <article class="group relative">
         <button
             on:click={()=>{
                 addToCart()
@@ -36,131 +29,131 @@
             <div class="h-0.5 rounded-full w-4 absolute bg-white"></div>
             <div class="h-0.5 rounded-full w-4 absolute rotate-90 bg-white"></div>
         </button>
-    {:else}
-        <p class="absolute z-10 top-3 text-gray italic font-serif right-3">Няма наличности</p>
-    {/if}
-    <a class="" href="{$page.params.lang ? "/"+$page.params.lang+"/shop/"+slug : "/bg/shop/"+slug}">
-        <div class="w-full flex flex-col items-center pt-14 pb-10 px-5 relative h-full border border-brown md:group-hover:border-opacity-100 transition-all duration-300 border-opacity-40 rounded-lg">
-            <p class="absolute -top-2 text-xs uppercase font-sansy text-brown bg-white px-3">{category}</p>
-            {#if wine.length == 1 }
-                {#each wine as el }
+
+        <a class="" href="{$page.params.lang ? "/"+$page.params.lang+"/shop/"+ wine.slug : "/bg/shop/"+wine.slug}">
+            <div class="w-full flex flex-col items-center pt-14 pb-10 px-5 relative h-full border border-brown md:group-hover:border-opacity-100 transition-all duration-300 border-opacity-40 rounded-lg">
+                <p class="absolute -top-2 text-xs uppercase font-sansy text-brown bg-white px-3">{wine.productKind}</p>
+                {#if wine.productBundle.length == 0 }
+                    {#if wine.productBasicInformation.img }
+                        <div class="">
+                            <img class="pb-4 object-contain h-60" src="{PUBLIC_IMG_URL + wine.productBasicInformation.img.url}" alt="{wine.productBasicInformation.img.alt}">
+                        </div>
+                    {/if}
+                    <h3 class="text-brown italic font-serif text-lg text-center leading-tight">{wine.productTitle}</h3>
+                    <p class="text-brown opacity-80 pb-4 font-serif text-center">{new Date(wine.productBasicInformation.harvestYear).getFullYear()}</p>
                     <div class="">
-                        <img class="pb-4 h-60" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                    </div>
-                    <h3 class="text-brown italic font-serif text-lg text-center">{el.vina?.data?.attributes?.name}</h3>
-                    <p class="text-brown opacity-80 pb-4 font-serif text-center">{el.vintage}</p>
-                    <div>
-                        {#if Number(salePrice) < Number(regularPrice) }
-                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                         {:else}
-                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                            <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
                         {/if}
                     </div>
-                    <p class="text-brown opacity-80 font-sansy text-center">{el.volume?.toFixed(3)} L</p>
-                {/each}
-            {/if}
+                    <p class="text-brown opacity-80 font-sansy text-center">{wine.stockManagement.volume.replace("_", "")} ml</p>
+                {/if}
 
-            <div class="w-full flex flex-col items-center">
-                {#if wine.length == 2 }
-                    <div class="grid grid-cols-2 h-52 w-full">
-                        {#each wine as el }
-                            <div class="relativ w-full flex justify-center">
-                                <img class="class absolute max-w-[70px] -translate-x-8 scale-95 opacity-80 object-contain h-52" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                                <img class="class absolute opacity-80 translate-x-8 scale-95 max-w-[70px] object-contain h-52" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                                <img class="class absolute max-w-[70px] object-contain h-52" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                            </div>
-                        {/each}
-                    </div>
-                    <div class="w-full flex flex-col items-center pt-10">
-                        <h3 class="text-brown italic font-serif text-lg text-center">{packageTitle}</h3>
-                        <div class="flex flex-col items-center">
-                            {#each wine as el }
-                                <div class="flex">
-                                    <p class="text-gray text-xs font-serif">{el.quantity}&nbsp;x&nbsp;</p>
-                                    <p class="text-gray whitespace-nowrap text-xs font-serif">{el.vina?.data?.attributes?.name} &nbsp;</p>
-                                    <p class="text-gray text-xs font-serif">{el.vintage} &nbsp;</p>
-                                    <p class="text-gray text-xs font-serif">{el.volume?.toFixed(2)}</p>
+
+                <div class="w-full flex flex-col items-center">
+                    {#if wine.productBundle.length == 2 }
+                        <div class="grid grid-cols-2 h-52 w-full">
+                            {#each wine.productBundle as el }
+                                <div class="relativ w-full flex justify-center">
+                                    <img class="object-contain absolute max-w-[70px] -translate-x-8 scale-95 opacity-80 object-contain h-52" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
+                                    <img class="object-contain absolute opacity-80 translate-x-8 scale-95 max-w-[70px] object-contain h-52" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
+                                    <img class="object-contain absolute max-w-[70px] object-contain h-52" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
                                 </div>
                             {/each}
                         </div>
-                        <div>
-                            {#if Number(salePrice) < Number(regularPrice) }
-                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
-                            {:else}
-                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
-                            {/if}
-                        </div>
-                    </div>
-                {/if}
-            </div>
-
-            <div class="w-full flex flex-col items-center">
-                {#if wine.length == 3 }
-                    <div class="grid grid-cols-3 h-52 w-full pb-4">
-                        {#each wine as el }
-                            <div class="relative flex justify-center -translate-x-2">
-                                <img class="class absolute translate-x-4 opacity-80 scale-95 h-52" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                                <img class="class absolute h-52" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                            </div>
-                        {/each}
-                    </div>
-                    <div class="w-full flex flex-col items-center pt-10">
-                        <h3 class="text-brown italic font-serif text-lg text-center">{packageTitle}</h3>
-                        <div class="flex flex-col items-center">
-                            {#each wine as el }
-                                <div class="flex">
-                                    <p class="text-gray text-xs font-serif">{el.quantity}&nbsp;x&nbsp;</p>
-                                    <p class="text-gray whitespace-nowrap text-xs font-serif">{el.vina?.data?.attributes?.name} &nbsp;</p>
-                                    <p class="text-gray text-xs font-serif">{el.vintage} &nbsp;</p>
-                                    <p class="text-gray text-xs font-serif">{el.volume?.toFixed(2)}</p>
-                                </div>
-                            {/each}
-                        </div>
-                        <div>
-                            {#if Number(salePrice) < Number(regularPrice) }
-                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
-                            {:else}
-                                <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
-                            {/if}
-                        </div>
-                    </div>
-                {/if}
-            </div>
-
-
-            <div class="w-full flex flex-col items-center">
-                {#if wine.length > 3 }
-                    <div class="grid grid-cols-3 h-52 w-full pb-4 -translate-x-4">
-                        {#each wine as el, i }
-                        <div class="flex flex-col items-center">
-                            <img class="class h-52 {i > 2 ? " -translate-y-full translate-x-8 scale-95 z-0 opacity-90" : "scale-100 z-10"}" src="{PUBLIC_IMG_URL + el.vina?.data?.attributes?.image?.data?.attributes?.url+"?format=webp"}" alt="{el.vina?.data?.attributes?.image?.data?.attributes?.alternativeText}">
-                        </div>
-                        {/each}
-                    </div>
-                    <div class="flex flex-col items-center space-y-10">
                         <div class="w-full flex flex-col items-center pt-10">
-                            <h3 class="text-brown italic font-serif text-lg text-center">{packageTitle}</h3>
-                            <div class="flex flex-col items-center">
-                                {#each wine as el }
-                                    <div class="flex flex-wrap justify-center">
-                                        <p class="text-gray text-xs font-serif">{el.quantity}&nbsp;x&nbsp;</p>
-                                        <p class="text-gray whitespace-nowrap text-xs font-serif">{Number(el.vina?.data?.attributes?.name?.length) > 30 ? el.vina?.data?.attributes?.name?.slice(0, 30) + "..." : el.vina?.data?.attributes?.name} &nbsp;</p>
-                                        <p class="text-gray text-xs font-serif">{el.vintage} &nbsp;</p>
-                                        <p class="text-gray text-xs font-serif">{el.volume?.toFixed(2)}</p>
+                            <h3 class="text-brown italic font-serif text-lg text-center leading-tight">{wine.productTitle}</h3>
+                            <div class="flex flex-col items-center pt-2">
+                                {#each wine.productBundle as el }
+                                    <div class="flex space-x-1">
+                                        <p class="text-gray text-xs font-serif">{el.quantity}</p>
+                                        <p class="text-gray whitespace-nowrap text-xs font-serif">{el.product.productTitle}</p>
+                                        <p class="text-gray text-xs font-serif">{new Date(el.product.productBasicInformation.harvestYear).getFullYear()}</p>
+                                        <p class="text-gray whitespace-nowrap text-xs font-serif">{el.product.stockManagement.volume.replace("_", "")} ml</p>
                                     </div>
                                 {/each}
                             </div>
                             <div>
-                                {#if Number(salePrice) < Number(regularPrice) }
-                                    <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(salePrice)/100).toFixed(2) +" лв." : ((Number(salePrice)/100)/2).toFixed(2) +" €"} </p>
+                                {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                    <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                                 {:else}
-                                    <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(regularPrice)/100).toFixed(2) +" лв." : ((Number(regularPrice)/100)/2).toFixed(2) +" €"} </p>
+                                    <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
                                 {/if}
                             </div>
                         </div>
-                    </div>
-                {/if}
+                    {/if}
+                </div>
+    
+                <div class="w-full flex flex-col items-center">
+                    {#if wine.productBundle.length == 3 }
+                        <div class="grid grid-cols-3 h-52 w-full pb-4">
+                            {#each wine.productBundle as el }
+                                <div class="relative flex justify-center -translate-x-2">
+                                    <img class="object-contain absolute object-contain translate-x-4 opacity-80 scale-95 h-52" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
+                                    <img class="object-contain object-contain absolute h-52" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
+                                </div>
+                            {/each}
+                        </div>
+                        <div class="w-full flex flex-col items-center pt-10">
+                            <h3 class="text-brown italic font-serif text-lg text-center leading-tight">{wine.productTitle}</h3>
+                            <div class="flex flex-col items-center pt-2">
+                                {#each wine.productBundle as el }
+                                    <div class="flex">
+                                        <p class="text-gray text-xs font-serif">{el.quantity}&nbsp;x&nbsp;</p>
+                                        <p class="text-gray whitespace-nowrap text-xs font-serif">{el.product.productTitle} &nbsp;</p>
+                                        <p class="text-gray text-xs font-serif">{new Date(el.product.productBasicInformation.harvestYear).getFullYear()} &nbsp;</p>
+                                        <p class="text-gray whitespace-nowrap text-xs font-serif">{el.product.stockManagement.volume.replace("_", "")} ml</p>
+                                    </div>
+                                {/each}
+                            </div>
+                            <div>
+                                {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                    <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
+                                {:else}
+                                    <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
+                                {/if}
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+
+
+                <div class="w-full flex flex-col items-center">
+                    {#if wine.productBundle.length > 3 }
+                        <div class="grid grid-cols-3 h-52 w-full pb-4 -translate-x-4">
+                            {#each wine.productBundle as el, i }
+                            <div class="flex flex-col items-center">
+                                <img class="object-contain h-52 {i > 2 ? " -translate-y-full translate-x-8 scale-95 z-0 opacity-90" : "scale-100 z-10"}" src="{PUBLIC_IMG_URL + el.product.productBasicInformation.img.url}" alt="{el.product.productBasicInformation.img.alt}">
+                            </div>
+                            {/each}
+                        </div>
+                        <div class="flex flex-col items-center space-y-10">
+                            <div class="w-full flex flex-col items-center pt-10">
+                                <h3 class="text-brown italic font-serif text-lg text-center leading-tight">{wine.productTitle}</h3>
+                                <div class="flex flex-col items-center">
+                                    {#each wine.productBundle as el }
+                                        <div class="flex flex-wrap justify-center space-x-1">
+                                            <p class="text-gray text-xs font-serif">{el.quantity}</p>
+                                            <p class="text-gray whitespace-nowrap text-xs font-serif">{Number(el.product.productTitle?.length) > 25 ? el.product.productTitle?.slice(0, 25) + ".." : el.product.productTitle}</p>
+                                            <p class="text-gray text-xs font-serif">{new Date(el.product.productBasicInformation.harvestYear).getFullYear()}</p>
+                                            <p class="text-gray whitespace-nowrap text-xs font-serif">{el.product.stockManagement.volume.replace("_", "")} ml</p>
+                                        </div>
+                                    {/each}
+                                </div>
+                                <div>
+                                    {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                        <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
+                                    {:else}
+                                        <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
             </div>
-        </div>
-    </a>
-</article>
+        </a>
+    </article>
+{/if}
