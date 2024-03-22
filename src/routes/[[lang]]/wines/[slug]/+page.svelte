@@ -36,10 +36,10 @@
     vinification={data.layoutData.wines.vinification}
   />
   <div class="flex justify-center">
-    <Button
+    <!-- <Button
       download={true}
       buttonText={data.layoutData.wines.buttonWinePassport}
       link={PUBLIC_IMG_URL + data.wine.productBasicInformation.passport.url}
-    />
+    /> -->
   </div>
 </div>

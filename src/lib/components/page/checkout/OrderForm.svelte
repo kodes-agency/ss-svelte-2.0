@@ -8,6 +8,7 @@
   export let invoice = true;
   export let customerDetails: any;
   export let pageData: General
+  export let toggleSteps: any;
 
   $: invoice = Boolean(invoice);
 </script>
