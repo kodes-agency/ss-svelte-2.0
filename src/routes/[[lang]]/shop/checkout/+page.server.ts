@@ -1,14 +1,13 @@
 import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/checkoutPage";
-import { SHOP_API_URL } from "$env/static/private";
-import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { PUBLIC_GRAPHQL_URL, PUBLIC_SHOP_API_URL } from "$env/static/public";
 import type { Product } from "$lib/types/payloadTypes.js";
 import type { Actions } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ params, cookies }) => {
   try {
-    let checkoutResponse = await fetch(SHOP_API_URL + "/cart", {
+    let checkoutResponse = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
       headers: {
         Nonce: `${cookies.get("nonce") || ""}`,
         "Cart-token": `${cookies.get("cart-token") || ""}`,
@@ -81,7 +80,7 @@ export const actions: Actions = {
       phone: formData.get('phone'),
     }    
 
-    let response = await fetch(SHOP_API_URL + "/cart/update-customer", {
+    let response = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -126,7 +125,7 @@ export const actions: Actions = {
       create_account: false,
     }
 
-    let response = await fetch(SHOP_API_URL + "/checkout", {
+    let response = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

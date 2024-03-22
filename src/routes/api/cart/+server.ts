@@ -1,5 +1,5 @@
 import { json } from "@sveltejs/kit";
-import { SHOP_API_URL } from "$env/static/private";
+import { PUBLIC_SHOP_API_URL } from "$env/static/public";
 export async function GET({ cookies }) {
   const obj: any = {
     "Content-Type": "application/json",
@@ -9,7 +9,7 @@ export async function GET({ cookies }) {
     obj[cookie.name] = cookie.value;
   });
 
-  const responseGet = await fetch(`${SHOP_API_URL}/cart`, {
+  const responseGet = await fetch(`${PUBLIC_SHOP_API_URL}/cart`, {
     method: "GET",
     headers: obj,
   });

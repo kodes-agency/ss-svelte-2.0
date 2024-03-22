@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit'
-import { SHOP_API_URL } from '$env/static/private';
+import { PUBLIC_SHOP_API_URL } from '$env/static/public';
 
 export async function POST({request, cookies, fetch}){
 
@@ -8,7 +8,7 @@ export async function POST({request, cookies, fetch}){
     let nonce = cookies.get('nonce')
     let cartToken = cookies.get('cart-token')
 
-    let response = await fetch(`${SHOP_API_URL}/cart/update-item`, {
+    let response = await fetch(`${PUBLIC_SHOP_API_URL}/cart/update-item`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

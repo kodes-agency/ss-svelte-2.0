@@ -1,5 +1,4 @@
-import { SHOP_API_URL } from "$env/static/private";
-import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { PUBLIC_GRAPHQL_URL, PUBLIC_SHOP_API_URL } from "$env/static/public";
 import query from "$lib/db/navMenu";
 
 const cookieOptions = {
@@ -26,7 +25,7 @@ export const load = async ({params, fetch, cookies}) => {
         
         const pageData = await responsePageData.json();
     
-        let response = await fetch(SHOP_API_URL + "/cart", {
+        let response = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
             headers: {
                 "Nonce": `${cookies.get('nonce') || ""}`,
                 "Cart-token": `${cookies.get('cart-token') || ""}`
