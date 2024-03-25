@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
+  import { PUBLIC_API_URL, PUBLIC_IMG_URL } from "$env/static/public";
     import type { General } from "$lib/types/payloadTypes";
     export let pageData: General
 </script>
@@ -20,6 +21,13 @@
           {:else}
             <p class="text-brown text-center font-serif">{address.text}</p>
           {/if}
+        {/each}
+      </div>
+    {/if}
+    {#if pageData && pageData.footer && pageData.footer.paymentLogos}
+      <div class="flex flex-row space-x-3">
+        {#each pageData.footer.paymentLogos as logo }
+          <img class="w-8 object-contain" src={PUBLIC_IMG_URL + logo.logo.url} alt={logo.logo.alt}>
         {/each}
       </div>
     {/if}

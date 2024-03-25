@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-col space-y-1 w-full">
-    <label class="uppercase text-sm font-sansy text-brown" for="{label}"> {label} </label>
+    <label class="uppercase text-sm font-sansy text-brown" for="{label}"> {label} * </label>
     <input 
         on:input={({target})=>{
             window.sessionStorage.setItem(valueStorageLable, target.value.toString())

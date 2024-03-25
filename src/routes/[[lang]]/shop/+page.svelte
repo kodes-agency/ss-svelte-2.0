@@ -8,7 +8,6 @@
   import InfoTab from "$lib/components/page/shop/InfoTab.svelte";
 
   export let data;
-  console.log(data.shopPage.length)
   $isInverted = true
 </script>
 

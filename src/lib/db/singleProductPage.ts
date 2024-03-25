@@ -6,6 +6,12 @@ export default function (locale: string, slug: string) {
           productTitle
           slug
           productKind
+          productImage {
+            productImage {
+              url
+              alt
+            }
+          }
           productType {
             productPosition
           }

@@ -1,4 +1,3 @@
-import { getClient } from "$lib/functions/getClient";
 import query from "$lib/db/checkoutPage";
 import { PUBLIC_GRAPHQL_URL, PUBLIC_SHOP_API_URL } from "$env/static/public";
 import type { Product } from "$lib/types/payloadTypes.js";

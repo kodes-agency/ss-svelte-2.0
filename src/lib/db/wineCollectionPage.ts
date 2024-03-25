@@ -8,7 +8,7 @@ export default function (locale: string, wineSort: string | null) {
           AND: [
             ${wineSort ? `{productBasicInformation__wineSort: {equals: ${wineSort}}},` : ""}
             {productKind:{equals:bottle}},
-            {productType__productPosition:{equals:catalog_shop}}
+            {productType__productPosition:{not_equals:shop_only}}
           ]
       }){
         docs {

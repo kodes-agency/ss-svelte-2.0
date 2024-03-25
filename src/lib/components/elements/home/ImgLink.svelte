@@ -1,10 +1,9 @@
 <script lang=ts>
     import { page } from "$app/stores";
-    import type { Maybe } from "../../../../__generated__/graphql";
     export let src: string | undefined;
-    export let alt: Maybe<string> | undefined;
-    export let text: Maybe<string> | undefined;
-    export let link: Maybe<string> | undefined;
+    export let alt: any;
+    export let text: any;
+    export let link: any;
 </script>
 
 <article class="group">

@@ -5,3 +5,40 @@
 html, body {
     background-color: #F5F3E4;
 }
+
+.cookieConsentWrapper {
+    background-color: #F5F3E4!important;
+}
+
+.cookieConsent__Title {
+    color: #575756!important;
+}
+
+.cookieConsent__Description {
+    color:#847748!important;
+}
+
+.cookieConsent__Button {
+    background-color: #847748!important;
+    color: #F5F3E4!important;
+}
+
+.cookieConsentOperations__Item label::after {
+    background-color: #847748!important;
+}
+
+.cookieConsentOperations__Item label {
+    color: #575756!important;
+}
+
+.cookieConsentOperations__Item span {
+    color: #847748!important;
+}
+
+.cookieConsentToggle {
+    background-color: #F5F3E4!important;
+}
+
+.cookieConsentToggle svg {
+    fill: #847748!important;
+}

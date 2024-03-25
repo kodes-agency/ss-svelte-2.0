@@ -18,7 +18,7 @@
     <div class="w-full flex flex-col items-center space-y-10">
       <div class="w-full space-y-2 flex flex-col">
         <div class="flex flex-row justify-between w-full">
-          <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.formTitle}</p>
+          <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.formTitle}  <span class="text-xs ">( *{pageData.shop.compulsoryField} )</span></p>
           <div class="flex space-x-2">
             <input
               id="invoice"
@@ -50,7 +50,7 @@
         method="POST"
         class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-8 w-full"
       >
-        <div class="flex flex-col space-y-2 md:space-y-4 w-full">
+        <div class="flex flex-col space-y-2 w-full">
           <Input
             type="text"
             formClass="form-input"
@@ -88,13 +88,13 @@
           ></div>
         </div>
         <div class="hidden md:block h-96 w-1 rounded-full bg-brown"></div>
-        <div class="flex flex-col space-y-2 md:space-y-4 w-full">
+        <div class="flex flex-col space-y-2 w-full">
           <div class="flex flex-col space-y-1 w-full">
             <label
               class="uppercase text-sm font-sansy text-brown"
               for="country"
             >
-              {pageData.shop.country}
+              {pageData.shop.country} *
             </label>
             <select
               on:input={({ target }) => {
@@ -151,10 +151,10 @@
           ></div>
         </div>
         <div class="hidden md:block h-96 w-1 rounded-full bg-brown"></div>
-        <div class="flex flex-col space-y-2 md:space-y-4 w-full">
+        <div class="flex flex-col space-y-2 w-full">
           {#if invoice}
             <div
-              class="flex flex-col space-y-2 md:space-y-4 w-full"
+              class="flex flex-col space-y-2 w-full"
               transition:slide
             >
               <Input
@@ -186,7 +186,7 @@
               <div class="">
                 <label
                   class="uppercase text-sm font-sansy text-brown"
-                  for="remarks">{pageData.shop.companyAddress}</label
+                  for="remarks">{pageData.shop.companyAddress} *</label
                 >
                 <textarea
                   bind:value={companyAddress}

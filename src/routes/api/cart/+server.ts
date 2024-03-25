@@ -5,16 +5,21 @@ export async function GET({ cookies }) {
     "Content-Type": "application/json",
   };
 
-  cookies.getAll().forEach((cookie) => {
-    obj[cookie.name] = cookie.value;
-  });
+  try {
+    cookies.getAll().forEach((cookie) => {
+      obj[cookie.name] = cookie.value;
+    });
 
-  const responseGet = await fetch(`${PUBLIC_SHOP_API_URL}/cart`, {
-    method: "GET",
-    headers: obj,
-  });
+    const responseGet = await fetch(`${PUBLIC_SHOP_API_URL}/cart`, {
+      method: "GET",
+      headers: obj,
+    });
 
-  const dataGet = await responseGet.json();
+    const dataGet = await responseGet.json();
 
-  return json(dataGet);
+    return json(dataGet);
+  } catch (error) {
+    console.log(error);
+    return json({ error: error });
+  }
 }

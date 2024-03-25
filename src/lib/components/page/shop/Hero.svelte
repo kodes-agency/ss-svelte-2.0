@@ -1,12 +1,11 @@
 <script lang="ts">
   import Button from "$lib/components/elements/global/Button.svelte";
-  import type { Maybe } from "../../../../__generated__/graphql";
-  export let src: Maybe<string> | undefined;
-  export let alt: Maybe<string> | undefined;
-  export let heading: Maybe<string> | undefined;
-  export let subHeading: Maybe<string> | undefined;
-  export let paymentInfoButton: Maybe<string> | undefined;
-  export let deliveryInfoButton: Maybe<string> | undefined;
+  export let src: any;
+  export let heading: any;
+  export let subHeading: any;
+  export let paymentInfoButton: any;
+  export let deliveryInfoButton: any;
+  export let alt: any;
 </script>
 
 <section

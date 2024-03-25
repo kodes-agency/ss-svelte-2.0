@@ -10,8 +10,6 @@ export const load = async ({ params, url }) => {
     let Vintage = url.searchParams.getAll("vintage").length === 1 ? [url.searchParams.get("vintage")] : url.searchParams.getAll("vintage")[0];
     let Volume = url.searchParams.getAll("volume").length === 0 ? ["_375", "_750", "_1500", "_0"] : url.searchParams.getAll("volume").map((str) => { return `_${parseInt(str)}` });
 
-    console.log(WineSort, ProductType, Vintage, Volume)
-
     const response = await fetch(PUBLIC_GRAPHQL_URL, {
         method: 'POST',
         headers: {
@@ -25,8 +23,14 @@ export const load = async ({ params, url }) => {
     
     const data = await response.json();
 
-    let productType = productTypes.find((type) => type.locale === params.lang ? params.lang : "bg")
-    let wineCategory = wineTypes.find((type) => type.locale === params.lang ? params.lang : "bg")
+    let productType = productTypes.find((type) => {
+      if(!params.lang) {return type.locale === 'bg'}
+      return type.locale ===  params.lang
+    })
+    let wineCategory = wineTypes.find((type) => {
+      if(!params.lang) {return type.locale === 'bg'}
+      return type.locale ===  params.lang
+    })
     let wineYears = data.data.Products.docs.map((product) => {
       return new Date(product.productBasicInformation.harvestYear).getFullYear();
     })

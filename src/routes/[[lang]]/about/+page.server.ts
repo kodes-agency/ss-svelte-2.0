@@ -16,7 +16,7 @@ export const load = async ({params}) => {
         });
         
         const data = await response.json();
-        
+
         return {
             aboutPageData: data.data.Pages.docs[0]
         }

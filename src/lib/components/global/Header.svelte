@@ -6,6 +6,7 @@
   import Lang from "./Lang.svelte";
   import { goto } from "$app/navigation";
   import { slide } from "svelte/transition";
+  import Button from "../elements/global/Button.svelte";
 
   let isOpen = false;
 
@@ -169,7 +170,7 @@
           </defs>
         </svg>
       </a>
-      <div class="w-full space-y-2 md:space-y-20">
+      <div class="w-full space-y-4 md:space-y-20">
         <div class="grid grid-cols-1 gap-5 md:gap-0 md:grid-cols-3">
           {#if pageData && pageData.header && pageData.header.colums }
             {#each pageData.header.colums as column, i}
@@ -184,7 +185,7 @@
                         class=" w-fit
                           {link.isHeading
                           ? "text-brown font-sansy uppercase text-xl text-center"
-                          : "italic font-serif text-gray text-center"}"
+                          : "italic font-serif text-lg md:text-base text-gray text-center"}"
                         href={$page.params.lang ? "/" +$page.params.lang+link.url : "/bg" + link.url}>{link?.text}</a
                       >
                     {/each}
@@ -195,7 +196,7 @@
           {/if}
         </div>
   
-        <div class="flex flex-row w-full justify-center">
+        <div class="flex flex-row w-full justify-center px-2 md:px-0">
           {#if pageData && pageData.header && pageData.header.colums }
             {#each pageData.header.colums as column, i}
               {#if i == 3}
@@ -223,7 +224,7 @@
                             }}
                             class={link.isHeading
                               ? "text-brown font-sansy uppercase text-xl text-center"
-                              : "italic font-serif text-gray text-center"}
+                              : "italic font-serif text-lg md:text-base text-gray text-center"}
                             href={$page.params.lang ? "/" +$page.params.lang+link.url : "/bg" + link.url}>{link?.text}</a
                           >
                         {/if}
@@ -233,11 +234,20 @@
                 </div>
               {/if}
             {/each}
-          {/if}
+            {/if}
+          </div>
         </div>
-      </div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div                   
+          on:click={() => {
+          isOpen = false;
+        }} 
+          class="flex items-center justify-center">
+          <Button buttonText={pageData.wines.buttonGoToShop} link="/shop" />
+        </div>
       <div class="space-y-5">
-        <div class="flex flex-col">
+        <div class="hidden md:flex flex-col ">
           {#if pageData && pageData.footer && pageData.footer.address }
             {#each pageData.footer.address as address }
               {#if address.url }  
@@ -254,7 +264,7 @@
             {/each}
           {/if}
         </div>
-        <div class="flex flex-row space-x-5">
+        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-5">
           {#if pageData && pageData.footer && pageData.footer.links  }  
             {#each pageData.footer.links as link }
               {#if link.url }                

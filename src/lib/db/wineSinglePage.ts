@@ -4,6 +4,9 @@ export default function (locale: string, slug: string) {
       Products(locale: ${locale}, where:{slug:{equals:"${slug}"}}){
         docs{
           productTitle
+          productType {
+            productPosition
+          }
           slug
           productBasicInformation {
             harvestYear

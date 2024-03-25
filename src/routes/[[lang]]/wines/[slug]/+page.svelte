@@ -23,9 +23,10 @@
     text={data.wine.productBasicInformation.longDescription}
     slug={data.wine.slug}
     buttonText={data.layoutData.wines.buttonGoToShop}
+    position={data.wine.productType.productPosition}
   />
   <WineStats pageData={data.layoutData.wines} wineDetails={data.wine.wineDetails} closingType={data.closingType}/>
-  {#if data.wine.productBasicInformation.wineAwards && data.wine.productBasicInformation.wineAwards.length > 0}
+  {#if data.wine.productBasicInformation?.wineAwards && data.wine.productBasicInformation.wineAwards.length > 0}
       <Awards heading={data.layoutData.wines.rewardsTitle} awards={data.wine.productBasicInformation.wineAwards} />
   {/if}
   <WineDetails
@@ -36,10 +37,12 @@
     vinification={data.layoutData.wines.vinification}
   />
   <div class="flex justify-center">
-    <!-- <Button
-      download={true}
-      buttonText={data.layoutData.wines.buttonWinePassport}
-      link={PUBLIC_IMG_URL + data.wine.productBasicInformation.passport.url}
-    /> -->
+    {#if data.wine.productBasicInformation?.passport?.url }   
+      <Button
+        download={true}
+        buttonText={data.layoutData.wines.buttonWinePassport}
+        link={PUBLIC_IMG_URL + data.wine.productBasicInformation.passport.url}
+      />
+    {/if}
   </div>
 </div>

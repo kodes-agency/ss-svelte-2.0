@@ -1,5 +1,6 @@
 <script lang=ts>
     import { page } from "$app/stores";
+  import { PUBLIC_IMG_URL } from "$env/static/public";
     export let pageData: any
     export let wine: any
 </script>
@@ -14,7 +15,10 @@
     </div>
     {#if wine.productBundle.length > 0}
       <div class="flex flex-col space-y-3 md:space-y-6">
-        <h1 class="font-serif text-center text-3xl md:text-4xl text-gray">{wine.productTitle}</h1>
+        <h1 class="font-serif text-center text-2xl md:text-4xl text-gray">{wine.productTitle}</h1>
+        {#if wine.productImage && wine.productImage.productImage && wine.productImage.productImage.url }
+          <img class="md:hidden" src={PUBLIC_IMG_URL + wine.productImage.productImage.url} alt={wine.productImage.productImage.alt}>
+        {/if}
         <div class="flex flex-col items-center md:space-y-1">
           {#each wine.productBundle as el }
             <p class="text-center font-serif italic md:text-xl text-gray">{el.quantity} x {el.product.productTitle} - {new Date(el.product.productBasicInformation.harvestYear).getFullYear()}</p>

@@ -66,13 +66,13 @@
 
             <!-- Text Section -->
             {#if element.__typename === "TextSection" }
-              <section class="flex flex-col items-center justify-center space-y-10 px-5 md:px-0">
+              <section class="flex flex-col items-center justify-center space-y-10 px-5 lg:px-0">
                 {#if element.anchor }
                   <div id={element.anchor}></div>
                 {/if}
                 {#each element.blocks as block }
                   {#if block.__typename === "ImgBlock" }
-                    <img class="max-w-sm px-10 md:px-0" src="{PUBLIC_IMG_URL+block.image.url}" alt="{block.image.alt}">
+                    <img class="max-w-sm px-10 lg:px-0" src="{PUBLIC_IMG_URL+block.image.url}" alt="{block.image.alt}">
                   {/if}
                   {#if block.__typename === "TitleBlock" }
                     <div class="flex flex-col items-center space-y-4">
@@ -99,7 +99,7 @@
 
             <!-- Image Section -->
             {#if element.__typename === "ImgSection" }
-              <section class="flex flex-col items-center justify-center space-y-2 px-5 md:px-0">
+              <section class="flex flex-col items-center justify-center space-y-2 px-5 lg:px-0">
                 <img class="max-w-2xl w-[90vw] md:w-auto object-cover mix-blend-multiply" src={PUBLIC_IMG_URL + element.img.url} alt={element.img.alt} />
                 <p class="italic font-serif text-sm text-gray max-w-2xl text-center">{element.text}</p>
               </section>
@@ -108,7 +108,7 @@
             <!-- Relationship Section -->
               <!-- Diary Block -->
             {#if element.__typename === "RelationshipSection" }
-              <section class="flex flex-col items-center justify-center space-y-10 px-3 md:px-0">
+              <section class="flex flex-col items-center justify-center space-y-10 px-3 lg:px-0">
                 {#if element.relationTo[0].__typename === "DiaryRelationship" }
                   <div class="space-y-10">
                     <div class="flex flex-col items-center justify-center space-y-3">
@@ -133,7 +133,7 @@
                 
                   <!-- News Block -->
                 {#if element.relationTo[0].__typename === "NewsRelationship" }
-                  <div class="px-5 md:px-0">
+                  <div class="px-5 lg:px-0">
                     <div class="flex items-center justify-center space-x-2 w-full max-w-6xl">
                       <div class="h-px w-full bg-brown" />
                       <a href={$page.params.lang ? "/"+$page.params.lang+"/news" : "/bg/news"}>

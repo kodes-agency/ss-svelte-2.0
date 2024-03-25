@@ -9,6 +9,7 @@
     export let text: any;
     export let slug: any;
     export let buttonText: any;
+    export let position: any;
 </script>
 
 <section class="flex flex-col items-center p-5">
@@ -22,7 +23,9 @@
         <div class="flex flex-col items-center space-y-4">
             <h1 class="font-serif text-center text-gray text-3xl md:text-4xl">{name}</h1>
             <p class="font-sansy text-brown">{new Date(date).getFullYear()}</p>
-            <Button link={`/shop/${slug}`} {buttonText} />
+            {#if position !== "catalog_only" }
+                <Button link={"/shop/"+slug} {buttonText} />
+            {/if}
         </div>
         <div class="h-20 md:h-40 lg:h-40 relative">
             <img class="-translate-y-1/3 -mt-3 w-20  md:w-40 lg:w-40 object-contain rotate-90" {src} {alt}>

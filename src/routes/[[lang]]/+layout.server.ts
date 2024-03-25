@@ -42,7 +42,7 @@ export const load = async ({params, fetch, cookies}) => {
             cookies.set('cart-token', response.headers.get('cart-token') || "", cookieOptions)
         }
     
-        return {
+        return await {
             layoutData: pageData.data.General,
             cartData
         }

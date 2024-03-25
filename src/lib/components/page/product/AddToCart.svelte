@@ -2,6 +2,7 @@
     import ProductItem from "../product/Product.svelte";
     import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/stores";
+  import { PUBLIC_IMG_URL } from "$env/static/public";
 
     export let wine: any;
     export let pageData: any;
@@ -95,20 +96,24 @@
                 disabled={wine.stockManagement.quantity && wine.stockManagement.quantity < 1}
                 on:click={async ()=>{
                     await addToCart()
-                    goto('/shop/checkout')
+                    // goto('/shop/checkout')
                 }}
-                class="uppercase font-sansy disabled:bg-gray disabled:bg-opacity-50 text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 whitespace-nowrap px-5">{pageData.shop.buttonAddToCart}</button>
+                class="uppercase font-sansy disabled:bg-gray disabled:bg-opacity-50 text-white bg-brown bg-opacity-70 hover:bg-opacity-100 transition-all duration-300 text-sm py-px px-1 xl:py-0 xl:text-base xl:px-5">{pageData.shop.buttonAddToCart}</button>
         </div>
-        <ProductItem 
-            wine={wine}
-        />
+        {#if wine.productImage && wine.productImage.productImage && wine.productImage.productImage.url }
+            <img src={PUBLIC_IMG_URL + wine.productImage.productImage.url} alt={wine.productImage.productImage.alt}>
+        {:else}
+            <ProductItem 
+                wine={wine}
+            />
+        {/if}
     </div>
 </div>
 
 <div class="fixed bottom-0 w-full md:hidden">
     <div class="h-10 w-full bg-gradient-to-t from-white to-[rgba(0,0,0,0)]"></div>
     <div class="bg-white w-full flex flex-col space-y-1 items-center justify-center px-3 pb-4">
-        <p class="font-serif italic text-center leading-tight text-gray text-lg">{wine.productTitle}</p>
+        <p class="font-serif italic text-center leading-tight text-gray">{wine.productTitle}</p>
 
         {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
             <div class="flex items-baseline space-x-2">
@@ -125,7 +130,7 @@
             disabled={wine.stockManagement.quantity && wine.stockManagement.quantity < 1}
             on:click={async()=>{
                 await addToCart()
-                goto('/shop/checkout')
+                // goto('/shop/checkout')
             }}
             class="w-full h-12 bg-brown disabled:bg-gray disabled:bg-opacity-50 bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 rounded-md">
             <p class="uppercase font-sansy text-white">{pageData.shop.buttonAddToCart}</p>

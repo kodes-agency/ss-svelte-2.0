@@ -24,6 +24,12 @@ export default function (locale: string) {
             text
             url
           }
+          paymentLogos {
+            logo {
+              url
+              alt
+            }
+          }
         }
         contact {
           pageTitle
@@ -139,6 +145,28 @@ export default function (locale: string) {
           phone
           email
           buttonSend
+        }
+        cookieBanner {
+          heading
+          description
+          buttonAccept
+          buttonReject
+          buttonSettings
+          buttonClose
+          trackingLabel
+          trackingDescription
+          necessaryLabel
+          necessaryDescription
+          marketingLabel
+          marketingDescription
+          analyticLabel
+          analyticDescription
+        }
+        ageVerification {
+          title
+          subtitle
+          buttonAccept
+          buttonReject
         }
       }
     }
