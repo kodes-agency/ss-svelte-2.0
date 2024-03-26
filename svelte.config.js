@@ -15,6 +15,9 @@ const config = {
 	},
 	compilerOptions: {
 		customElement: true
+	},
+	csrf: {
+		checkOrigin: false
 	}
 };
 
