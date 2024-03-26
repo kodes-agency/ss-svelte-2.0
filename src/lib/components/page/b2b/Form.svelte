@@ -144,7 +144,7 @@
                 </div>
 
                 <div class="pt-8">
-                    <button disabled aria-label="Submit form button" class="uppercase font-sansy text-sm text-brown py-1 px-12 border border-brown rounded-sm hover:bg-black hover:text-white hover:bg-brown transition-all duration-500">{formData.b2b.buttonSend}</button>
+                    <button aria-label="Submit form button" class="uppercase font-sansy text-sm text-brown py-1 px-12 border border-brown rounded-sm hover:bg-black hover:text-white hover:bg-brown transition-all duration-500">{formData.b2b.buttonSend}</button>
                 </div>
             </form>
         {/if}

@@ -25,59 +25,73 @@ export const load = async ({params}) => {
     }
 }
 
-// export const actions = {
-//   default: async ({ request }) => {
-//     const data = await request.formData();
+export const actions = {
+  default: async ({ request }) => {
+    const data = await request.formData();
 
-//     const email = data.get("email");
-//     const phoneNumber = data.get("phoneNumber");
-//     // @ts-expect-error
-//     const currentOffering = JSON.parse(data.get("offering"));
-//     // @ts-expect-error
-//     const knowledge = JSON.parse(data.get("knowledge"));
-//     const redWines = data.getAll("redWines");
-//     const whiteWines = data.getAll("whiteWines");
-//     const roseWines = data.getAll("roseWines");
-//     const collectionWines = data.getAll("collectionWines");
-//     const visits = data.getAll("visits");
-//     const businessActivity = data.get("businessActivity");
-//     const companyName = data.get("companyName");
-//     const contactPerson = data.get("contactPerson");
+    const email = data.get("email");
+    const phoneNumber = data.get("phoneNumber");
+    // @ts-expect-error
+    const currentOffering = JSON.parse(data.get("offering"));
+    // @ts-expect-error
+    const knowledge = JSON.parse(data.get("knowledge"));
+    const redWines = data.getAll("redWines");
+    const whiteWines = data.getAll("whiteWines");
+    const roseWines = data.getAll("roseWines");
+    const collectionWines = data.getAll("collectionWines");
+    const visits = data.getAll("visits");
+    const businessActivity = data.get("businessActivity");
+    const companyName = data.get("companyName");
+    const contactPerson = data.get("contactPerson");
 
-//     const interestsArray = [
-//       ...redWines,
-//       ...whiteWines,
-//       ...roseWines,
-//       ...collectionWines,
-//       ...visits,
-//     ];
+    const interestsArray = [
+      ...redWines,
+      ...whiteWines,
+      ...roseWines,
+      ...collectionWines,
+      ...visits,
+    ];
 
-//     const interests = interestsArray.join(", ");
+    const interests = interestsArray.join(", ");
 
-//     const fetchOptions = {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         data: {
-//           email: email,
-//           phoneNumber: phoneNumber,
-//           currentOffering: currentOffering,
-//           knowledge: knowledge,
-//           interests: interests,
-//           businessActivity: businessActivity,
-//           companyName: companyName,
-//           contactPerson: contactPerson,
-//         },
-//       }),
-//     };
+    let formData = {
+              email: email,
+              phoneNumber: phoneNumber,
+              currentOffering: currentOffering,
+              knowledge: knowledge,
+              interests: interests,
+              businessActivity: businessActivity,
+              companyName: companyName,
+              contactPerson: contactPerson,
+            }
 
-//     const response = await fetch(
-//       `${PUBLIC_IMG_URL}/api/messages`,
-//       fetchOptions
-//     );
+    // const fetchOptions = {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     data: {
+    //       email: email,
+    //       phoneNumber: phoneNumber,
+    //       currentOffering: currentOffering,
+    //       knowledge: knowledge,
+    //       interests: interests,
+    //       businessActivity: businessActivity,
+    //       companyName: companyName,
+    //       contactPerson: contactPerson,
+    //     },
+    //   }),
+    // };
 
-//     const json = await response.json();
+    // const response = await fetch(
+    //   `${PUBLIC_IMG_URL}/api/messages`,
+    //   fetchOptions
+    // );
 
-//     return { success: true, message: json.message };
-//   },
-// };
+    // const json = await response.json();
+
+    console.log(formData)
+
+    return formData
+    // { success: true, message: json.message };
+  },
+};
