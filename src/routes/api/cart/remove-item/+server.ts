@@ -21,7 +21,6 @@ export async function POST({ request, cookies, fetch }) {
     });
 
     let data = await response.json();
-    console.log("Remove from cart data:", data)
 
     return json(data);
   } catch (error) {

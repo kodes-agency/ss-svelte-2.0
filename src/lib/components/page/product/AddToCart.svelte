@@ -61,7 +61,7 @@
                 </div>
             {/if}
         </div>
-        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+        {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
             <div>
                 <p class="font-serif text-gray text-2xl">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.salePrice)/2).toFixed(2) +" €"}</p>
                 <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.salePrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.salePrice)) / volume*1000/2).toFixed(2)  +" €/L"} </p>
@@ -115,7 +115,7 @@
     <div class="bg-white w-full flex flex-col space-y-1 items-center justify-center px-3 pb-4">
         <p class="font-serif italic text-center leading-tight text-gray">{wine.productTitle}</p>
 
-        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+        {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
             <div class="flex items-baseline space-x-2">
                 <p class="font-serif text-gray text-lg">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2)+" лв." : (Number(wine.priceManagement.salePrice)/2).toFixed(2) +" €"}</p>
                 <p class="font-serif text-brown text-sm">{$page.params.lang === "bg" ? ((Number(wine.priceManagement.salePrice)) / volume*1000).toFixed(2)+ " лв./л" : ((Number(wine.priceManagement.salePrice)) / volume*1000/2).toFixed(2)  +" €/L"}</p>

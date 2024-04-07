@@ -17,12 +17,10 @@
   let step = 1;
 
   // @ts-ignore
-  $: cart = data;
+  $: cart = data.checkoutData
   $isInverted = false;
 
   // check if the fileds from step:3 are empty
-  let customerDetails = false;
-  $: customerDetails = Boolean(firstName && lastName && email && phone && country && city && region && postCode && address)
 
 
   // STEP:2 Information Consent
@@ -31,23 +29,7 @@
   let policyConsent: string | number | null;
   let marketingConsent: string | number | null;
 
-  // STEP:3 Checkout form
-  let firstName: string | null
-  let lastName: string | null
-  let email: string | null
-  let phone: string | null
-
-  let country: string | null
-  let city: string | null
-  let region: string | null
-  let postCode: string | null 
-  let address: string | null
-
-  let invoice: boolean | null | string
-  let companyName: string | null
-  let companyVat: string | number | null
-  let companyCountry: string | null
-  let companyAddress: string | null
+  let invoice: any;
 
   // STEP:4 Delivery method
   let deliveryMethod: any
@@ -75,36 +57,20 @@
     marketingConsent = window.sessionStorage.getItem('marketingConsent')
     customerNote = window.sessionStorage.getItem('customerNote')
 
-
-    // STEP:3 Checkout form
-    firstName = window.sessionStorage.getItem('firstName')
-    lastName = window.sessionStorage.getItem('lastName')
-    email = window.sessionStorage.getItem('email')
-    phone = window.sessionStorage.getItem('phone')
-    country = window.sessionStorage.getItem('country')
-    city = window.sessionStorage.getItem('city')
-    region = window.sessionStorage.getItem('region')
-    postCode = window.sessionStorage.getItem('postCode')
-    address = window.sessionStorage.getItem('address')
     invoice = window.sessionStorage.getItem('invoice')
-    companyName = window.sessionStorage.getItem('companyName')
-    companyVat = window.sessionStorage.getItem('companyVat')
-    companyCountry = window.sessionStorage.getItem('companyCountry')
-    companyAddress = window.sessionStorage.getItem('companyAddress')
 
     // STEP:4 Delivery & Payment method
     deliveryMethod = window.sessionStorage.getItem('deliveryMethod')
     paymentMethod = window.sessionStorage.getItem('paymentMethod')
     deliveryConsent = window.sessionStorage.getItem('deliveryConsent')
 
-
-    invalidateAll();
+    // invalidateAll();
   });
 </script>
 
 <div class="px-7 min-h-screen">
-  {#if data.items.length > 0}
-    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:customerDetails bind:paymentMethod/>
+  {#if data.checkoutData.items.length > 0}
+    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:paymentMethod/>
 
     {#if step === 1}
       <div transition:slide>
@@ -113,26 +79,13 @@
     {:else if step === 2}
       <div transition:slide>
         <Consent pageData={data.layoutData} bind:marketingConsent bind:customerNote bind:ageConsent bind:policyConsent {toggleSteps} />
-      </div>
+      </div> 
     {:else if step === 3}
       <div transition:slide>
         <OrderForm 
+          invoice={invoice}
           pageData={data.layoutData}
-          bind:firstName
-          bind:lastName
-          bind:email
-          bind:phone
-          bind:country
-          bind:city
-          bind:region
-          bind:postCode
-          bind:address
-          bind:invoice
-          bind:companyName
-          bind:companyVat
-          bind:companyCountry
-          bind:companyAddress
-          bind:customerDetails
+          formData={data.customerDetailsForm}
           {toggleSteps} 
         />
       </div>

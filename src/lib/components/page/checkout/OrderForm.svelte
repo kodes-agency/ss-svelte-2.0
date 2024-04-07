@@ -1,16 +1,20 @@
 <script lang="ts">
-  import Input from "$lib/components/elements/global/Input.svelte";
+  import { superForm } from 'sveltekit-superforms';
   import { countries } from "$lib/store/countries";
-  import { enhance } from "$app/forms";
   import { slide } from "svelte/transition";
   import type { General } from "$lib/types/payloadTypes";
-  export let firstName,lastName,email,phone,country,city,region,postCode,address,companyName,companyVat,companyCountry,companyAddress;
-  export let invoice = true;
-  export let customerDetails: any;
+  export let invoice = false;
   export let pageData: General
   export let toggleSteps: any;
+  export let formData
 
   $: invoice = Boolean(invoice);
+
+  const { form, errors, constraints, message, enhance } = superForm(formData, {
+    validators: 'clear'
+  });
+
+  
 </script>
 
 <section class="pt-20 flex flex-col items-center">
@@ -18,8 +22,11 @@
     <div class="w-full flex flex-col items-center space-y-10">
       <div class="w-full space-y-2 flex flex-col">
         <div class="flex flex-row justify-between w-full">
-          <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.formTitle}  <span class="text-xs ">( *{pageData.shop.compulsoryField} )</span></p>
-          <div class="flex space-x-2">
+          <p class="uppercase text-sm font-sansy text-brown">{pageData.shop.formTitle}  <span class="text-xs ">(*{pageData.shop.compulsoryField})</span></p>
+          {#if $message}
+            <p class="text-red-500 text-2xl font-sansy">{$message}</p>
+          {/if}
+          <div class="flex flex-row-reverse items-center md:flex-row space-x-2">
             <input
               id="invoice"
               bind:checked={invoice}
@@ -51,38 +58,50 @@
         class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-8 w-full"
       >
         <div class="flex flex-col space-y-2 w-full">
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.firstName}
-            bind:value={firstName}
-            required={true}
-            valueStorageLable="firstName"
-          />
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.lastName}
-            bind:value={lastName}
-            required={true}
-            valueStorageLable="lastName"
-          />
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.phone}
-            bind:value={phone}
-            required={true}
-            valueStorageLable="phone"
-          />
-          <Input
-            type="email"
-            formClass="form-input"
-            label={pageData.shop.email}
-            bind:value={email}
-            required={true}
-            valueStorageLable="email"
-          />
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="firstName"> {pageData.shop.firstName} * </label>
+            <input 
+                type="text"
+                id="firstName" 
+                name="first_name"
+                bind:value={$form.first_name}
+                aria-invalid={$errors.first_name ? 'true' : undefined}
+                {...$constraints.first_name}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="lastName"> {pageData.shop.lastName} * </label>
+            <input 
+                type="text"
+                id="lastName" 
+                name="last_name"
+                bind:value={$form.last_name}
+                aria-invalid={$errors.last_name ? 'true' : undefined}
+                {...$constraints.last_name}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="phone"> {pageData.shop.phone} * </label>
+            {#if $errors.phone && $form.phone !== ''}<span class="text-gray text-sm">{$errors.phone}</span>{/if}
+            <input 
+                type="text"
+                id="phone" 
+                name="phone"
+                bind:value={$form.phone}
+                aria-invalid={$errors.phone ? 'true' : undefined}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="email"> {pageData.shop.email} * </label>
+            <input 
+                type="email"
+                id="email" 
+                name="email"
+                bind:value={$form.email}
+                aria-invalid={$errors.email ? 'true' : undefined}
+                {...$constraints.email}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
           <div
             class="w-full md:hidden border-b border-brown border-opacity-30"
           ></div>
@@ -97,15 +116,10 @@
               {pageData.shop.country} *
             </label>
             <select
-              on:input={({ target }) => {
-                window.sessionStorage.setItem(
-                  "country",
-                  target?.value.toString()
-                );
-              }}
               id="country"
-              bind:value={country}
-              required
+              bind:value={$form.country}
+              aria-invalid={$errors.country ? 'true' : undefined}
+              {...$constraints.country}
               name="country"
               class="form-select focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown w-full h-10 rounded-md"
             >
@@ -114,38 +128,39 @@
               {/each}
             </select>
           </div>
-          <Input
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="city"> {pageData.shop.city} * </label>
+            <input 
             type="text"
-            formClass="form-input"
-            label={pageData.shop.region}
-            bind:value={region}
-            required={true}
-            valueStorageLable="region"
-          />
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.city}
-            bind:value={city}
-            required={true}
-            valueStorageLable="city"
-          />
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.zipCode}
-            bind:value={postCode}
-            required={true}
-            valueStorageLable="postCode"
-          />
-          <Input
-            type="text"
-            formClass="form-input"
-            label={pageData.shop.address}
-            bind:value={address}
-            required={true}
-            valueStorageLable="address"
-          />
+            id="city" 
+            name="city"
+            bind:value={$form.city}
+            aria-invalid={$errors.city ? 'true' : undefined}
+            {...$constraints.city}
+            class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="postcode"> {pageData.shop.zipCode} * </label>
+            <input 
+                type="text"
+                id="postcode" 
+                name="postcode"
+                bind:value={$form.postcode}
+                aria-invalid={$errors.postcode ? 'true' : undefined}
+                {...$constraints.postcode}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
+          <div class="flex flex-col space-y-1 w-full">
+            <label class="uppercase text-sm font-sansy text-brown" for="address"> {pageData.shop.address} * </label>
+            <input 
+                type="text"
+                id="address" 
+                name="address_1"
+                bind:value={$form.address_1}
+                aria-invalid={$errors.address_1 ? 'true' : undefined}
+                {...$constraints.address_1}
+                class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+          </div>
           <div
             class="w-full md:hidden border-b border-brown border-opacity-30"
           ></div>
@@ -157,47 +172,48 @@
               class="flex flex-col space-y-2 w-full"
               transition:slide
             >
-              <Input
-                type="text"
-                formClass="form-input"
-                label={pageData.shop.companyName}
-                bind:value={companyName}
-                required={true}
-                valueStorageLable="companyName"
-              />
-              <Input
-                type="text"
-                formClass="form-input"
-                label={pageData.shop.vatNumber}
-                bind:value={companyVat}
-                required={true}
-                valueStorageLable="companyVat"
-              />
-
-              <Input
-                type="text"
-                formClass="form-input"
-                label={pageData.shop.companyCountry}
-                bind:value={companyCountry}
-                required={true}
-                valueStorageLable="companyCountry"
-              />
-
+              <div class="flex flex-col space-y-1 w-full">
+                <label class="uppercase text-sm font-sansy text-brown" for="companyName"> {pageData.shop.companyName} * </label>
+                <input 
+                    type="text"
+                    id="companyName"
+                    name="companyName"
+                    bind:value={$form.companyName}
+                    aria-invalid={$errors.companyName ? 'true' : undefined}
+                    {...$constraints.companyName}
+                    class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+              </div>
+              <div class="flex flex-col space-y-1 w-full">
+                <label class="uppercase text-sm font-sansy text-brown" for="vatNumber"> {pageData.shop.vatNumber} * </label>
+                <input 
+                    type="text"
+                    id="vatNumber" 
+                    name="vatNumber"
+                    bind:value={$form.vatNumber}
+                    aria-invalid={$errors.vatNumber ? 'true' : undefined}
+                    {...$constraints.vatNumber}
+                    class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+              </div>
+              <div class="flex flex-col space-y-1 w-full">
+                <label class="uppercase text-sm font-sansy text-brown" for="companyCountry"> {pageData.shop.companyCountry} * </label>
+                <input 
+                    type="text"
+                    id="companyCountry" 
+                    name="companyCountry"
+                    bind:value={$form.companyCountry}
+                    aria-invalid={$errors.companyCountry ? 'true' : undefined}
+                    {...$constraints.companyCountry}
+                    class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
+              </div>
               <div class="">
                 <label
                   class="uppercase text-sm font-sansy text-brown"
                   for="remarks">{pageData.shop.companyAddress} *</label
                 >
                 <textarea
-                  bind:value={companyAddress}
-                  on:input={({ target }) => {
-                    window.sessionStorage.setItem(
-                      "companyAddress",
-                      target.value.toString()
-                    );
-                    companyAddress = target.value.toString();
-                  }}
-                  required
+                  bind:value={$form.companyAddress}
+                  aria-invalid={$errors.companyAddress ? 'true' : undefined}
+                  {...$constraints.companyAddress}
                   id="remarks"
                   class="form-textarea border text-brown bg-white border-brown rounded-md w-full"
                   rows="3"
@@ -219,10 +235,9 @@
         <button
           type="submit"
           form="customerDetails"
-          disabled={!customerDetails}
           on:click={(e) => {
-            e.preventDefault();
-            toggleSteps("forwards");
+            // e.preventDefault();
+            // toggleSteps("forwards");
           }}
           class=" disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-50 font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
           >{pageData.shop.buttonContinueToCheckout}</button

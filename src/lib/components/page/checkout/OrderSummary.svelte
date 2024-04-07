@@ -9,7 +9,7 @@
   import type { General } from "$lib/types/payloadTypes";
   export let cart: Order;
   export let toggleSteps: any;;
-  export let yourOrderTitle: any = "Вашата поръчка";
+  // export let yourOrderTitle: any = "Вашата поръчка";
 
   export let pageData: General
 </script>
@@ -180,13 +180,13 @@
     {/if}
     <div class="pt-20 flex flex-col space-y-4">
       <button
-        disabled
         class=" font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
+        type="submit"
+        disabled
+        form="order"
         >{pageData.shop.buttonPay}</button
         >
-        <!-- type="submit"
-        form="order" -->
-      <button
+        <button
         on:click={() => {
           toggleSteps("backwards");
         }}
@@ -198,15 +198,15 @@
 </section>
 
 {#if browser }
-    <form class="hidden" id="order" action="?/order" method="POST" use:enhance>
-    <input
+    <form class="hidden" id="order" action="?/order" method="POST">
+    <!-- <input
         hidden
         autocomplete="off"
         aria-hidden="true"
         name="paymentMethod"
         type="text"
         value={window.sessionStorage.getItem("paymentMethod")}
-    />
+    /> -->
     <input
       hidden
       autocomplete="off"
@@ -215,114 +215,5 @@
       type="text"
       value={window.sessionStorage.getItem("customerNote")}
   />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="firstName"
-        type="text"
-        value={window.sessionStorage.getItem("firstName")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="lastName"
-        type="text"
-        value={window.sessionStorage.getItem("lastName")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="email"
-        type="text"
-        value={window.sessionStorage.getItem("email")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="phone"
-        type="text"
-        value={window.sessionStorage.getItem("phone")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="country"
-        type="text"
-        value={window.sessionStorage.getItem("country")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="region"
-        type="text"
-        value={window.sessionStorage.getItem("region")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="postCode"
-        type="text"
-        value={window.sessionStorage.getItem("postCode")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="city"
-        type="text"
-        value={window.sessionStorage.getItem("city")}
-    />
-    <input
-        autocomplete="off"
-        hidden
-        name="address"
-        type="text"
-        value={window.sessionStorage.getItem("address")}
-    />
-
-    {#if window.sessionStorage.getItem("invoice")}
-        <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="companyName"
-        type="text"
-        value={window.sessionStorage.getItem("companyName")}
-        />
-
-        <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="companyVat"
-        type="text"
-        value={window.sessionStorage.getItem("companyVat")}
-        />
-
-        <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="companyCountry"
-        type="text"
-        value={window.sessionStorage.getItem("companyCountry")}
-        />
-
-        <input
-        autocomplete="off"
-        hidden
-        aria-hidden="true"
-        name="companyAddress"
-        type="text"
-        value={window.sessionStorage.getItem("companyAddress")}
-        />
-    {/if}
     </form>
 {/if}

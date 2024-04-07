@@ -1,5 +1,23 @@
 import query from "$lib/db/layoutPages";
-import { PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { PUBLIC_API_URL, PUBLIC_GRAPHQL_URL } from "$env/static/public";
+import { z } from "zod";
+import { superValidate, message } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { fail } from '@sveltejs/kit';
+
+const phoneRegex = new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/);
+
+const b2bFormSchema = z.object({
+  email: z.string().email({message: 'Invalid email address'}),
+  phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number').min(5, {message: 'Invalid phone number'}).refine(value => value != '', 'Phone number is required'),
+  offering: z.string(),
+  knowledge: z.string(),
+  interests: z.enum(['Бели вина', 'Червени вина', 'Розе вина', 'Колекционни вина', 'Посещения']).array(),
+  businessActivity: z.string(),
+  companyName: z.string(),
+  contactPerson: z.string(),
+});
+
 
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({params}) => {
@@ -16,9 +34,12 @@ export const load = async ({params}) => {
         });
         
         const data = await response.json();
+
+        const form = await superValidate(zod(b2bFormSchema))
         
         return {
-            b2bPageData: data.data.Pages.docs[0]
+            b2bPageData: data.data.Pages.docs[0],
+            form
         }
     } catch (error) {
         console.log(error);
@@ -26,72 +47,39 @@ export const load = async ({params}) => {
 }
 
 export const actions = {
-  default: async ({ request }) => {
-    const data = await request.formData();
+  default: async ({ request, fetch }) => {
+    const form = await superValidate(request, zod(b2bFormSchema));
 
-    const email = data.get("email");
-    const phoneNumber = data.get("phoneNumber");
-    // @ts-expect-error
-    const currentOffering = JSON.parse(data.get("offering"));
-    // @ts-expect-error
-    const knowledge = JSON.parse(data.get("knowledge"));
-    const redWines = data.getAll("redWines");
-    const whiteWines = data.getAll("whiteWines");
-    const roseWines = data.getAll("roseWines");
-    const collectionWines = data.getAll("collectionWines");
-    const visits = data.getAll("visits");
-    const businessActivity = data.get("businessActivity");
-    const companyName = data.get("companyName");
-    const contactPerson = data.get("contactPerson");
+    // console.log(form)
 
-    const interestsArray = [
-      ...redWines,
-      ...whiteWines,
-      ...roseWines,
-      ...collectionWines,
-      ...visits,
-    ];
+    if (!form.valid) {
+      // Again, return { form } and things will just work.
+      return fail(400, { form });
+    }
 
-    const interests = interestsArray.join(", ");
+    let message = {
+      email: form.data.email,
+      phone: form.data.phoneNumber,
+      companyName: form.data.companyName,
+      contactName: form.data.contactPerson,
+      message: `Предмет на дейност: ${form.data.businessActivity}
+Интерес към: ${form.data.interests.join(", ")}
+Ниво на познание: ${form.data.knowledge}
+Текущо предлагане: ${form.data.offering}`
+    };
 
-    let formData = {
-              email: email,
-              phoneNumber: phoneNumber,
-              currentOffering: currentOffering,
-              knowledge: knowledge,
-              interests: interests,
-              businessActivity: businessActivity,
-              companyName: companyName,
-              contactPerson: contactPerson,
-            }
+    const req = await fetch(`http://localhost:3001/api/messages`, {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message)
+    });
 
-    // const fetchOptions = {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     data: {
-    //       email: email,
-    //       phoneNumber: phoneNumber,
-    //       currentOffering: currentOffering,
-    //       knowledge: knowledge,
-    //       interests: interests,
-    //       businessActivity: businessActivity,
-    //       companyName: companyName,
-    //       contactPerson: contactPerson,
-    //     },
-    //   }),
-    // };
+    const res = await req.json();
 
-    // const response = await fetch(
-    //   `${PUBLIC_IMG_URL}/api/messages`,
-    //   fetchOptions
-    // );
-
-    // const json = await response.json();
-
-    console.log(formData)
-
-    return formData
-    // { success: true, message: json.message };
+    return
+      {form}
   },
 };

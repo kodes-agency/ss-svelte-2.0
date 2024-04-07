@@ -44,6 +44,9 @@ export default function (locale: string, slug: string) {
           wineRemarks {
             food
           }
+          saleGroup {
+            onSale
+          }
           priceManagement {
             regularPrice
             salePrice

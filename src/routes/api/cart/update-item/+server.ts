@@ -22,7 +22,6 @@ export async function POST({request, cookies, fetch}){
         })
 
         const data = await response.json()
-        console.log("Update cart data:", data)
     
         return json(data)
     } catch (error) {

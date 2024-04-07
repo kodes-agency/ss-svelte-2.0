@@ -42,7 +42,7 @@
                     <h3 class="text-brown italic font-serif text-lg text-center leading-tight">{wine.productTitle}</h3>
                     <p class="text-brown opacity-80 pb-4 font-serif text-center">{new Date(wine.productBasicInformation.harvestYear).getFullYear()}</p>
                     <div class="">
-                        {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                        {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
                             <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                         {:else}
                             <p class="text-gray italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
@@ -76,7 +76,7 @@
                                 {/each}
                             </div>
                             <div>
-                                {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
                                     <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                                 {:else}
                                     <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
@@ -109,7 +109,7 @@
                                 {/each}
                             </div>
                             <div>
-                                {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
                                     <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                                 {:else}
                                     <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>
@@ -143,7 +143,7 @@
                                     {/each}
                                 </div>
                                 <div>
-                                    {#if wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
+                                    {#if wine.saleGroup.onSale == "_1" && wine.priceManagement.salePrice && Number(wine.priceManagement.salePrice) < Number(wine.priceManagement.regularPrice) }
                                         <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.salePrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.salePrice))/2).toFixed(2) +" €"} </p>
                                     {:else}
                                         <p class="text-gray pt-1 italic font-serif text-lg text-center">{$page.params.lang === "bg" ? (Number(wine.priceManagement.regularPrice)).toFixed(2) +" лв." : ((Number(wine.priceManagement.regularPrice))/2).toFixed(2) +" €"} </p>

@@ -8,12 +8,12 @@
   export let price: string;
   export let total: string;
   export let cartItemKey: string;
+  export let type: string
 
   async function handleItem(action: "delete" | "update", updater?: number) {
     if (action === "update" && typeof updater != "undefined") {
       let newQuantity = quantity + updater;
       try {
-        console.log("update");
         const response = await fetch("/api/cart/update-item", {
           method: "POST",
           body: JSON.stringify({
@@ -63,13 +63,17 @@
   </div>
   <div class="grid grid-cols-3 md:flex w-full h-10 md:h-auto md:py-4 md:px-6">
     <div class="hidden md:block md:w-4/12">
-      <a
-        href={$page.params.lang
-          ? "/" + $page.params.lang + "/shop/" + slug
-          : "/bg/shop/" + slug}
-      >
+      {#if type !== "other" }
+        <a
+          href={$page.params.lang
+            ? "/" + $page.params.lang + "/shop/" + slug
+            : "/bg/shop/" + slug}
+        >
+          <p class="font-serif italic text-gray">{name}</p>
+        </a>
+      {:else}
         <p class="font-serif italic text-gray">{name}</p>
-      </a>
+      {/if}
     </div>
     <div class=" md:w-3/12 flex md:block items-center justify-center">
       <div class="flex justify-center items-center">

@@ -6,7 +6,7 @@
 </script>
 
 <section class="h-screen flex flex-col items-center space-y-5 justify-center">
-  <h1 class="italic text-gray font-serif text-2xl">{heading}</h1>
+  <h1 class="italic text-gray text-center font-serif text-2xl">{heading}</h1>
   <Button
     link={"/shop/"}
     {buttonText}

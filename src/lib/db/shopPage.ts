@@ -8,6 +8,7 @@ export default function (locale: string, wineSort: string[], productType: string
           AND: [
             {productBasicInformation__wineSort: {in: [${wineSort}]}},
             {productKind:{in:[${productType}]}},
+            {productType__productType:{not_equals: other }},
             ${year ? `{productBasicInformation__harvestYear:{equals: "${year}-01-01T12:00:00.000Z"}},` : ""}
             {stockManagement__volume:{in: [${volume}]}},
             {visibilityGroup__visibility:{equals:_1}}
@@ -24,6 +25,9 @@ export default function (locale: string, wineSort: string[], productType: string
               url
               alt
             }
+          }
+          saleGroup {
+            onSale
           }
           priceManagement {
             regularPrice

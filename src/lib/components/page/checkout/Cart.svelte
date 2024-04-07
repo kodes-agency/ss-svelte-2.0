@@ -63,6 +63,7 @@
               cartItemKey={el.key}
               slug={el.productSlug}
               total={el.totals.line_total}
+              type={el.productType}
             />
           </div>
           {#if cart.items.length != i + 1}

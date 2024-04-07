@@ -14,7 +14,8 @@
 <div class="flex flex-col space-y-20 md:space-y-32">
   <Layout pageData={data.b2bPageData}/>
   <Form 
-    formData={data.layoutData}
+    pageData={data.layoutData}
+    formData={data.form}
   />
 </div>
 

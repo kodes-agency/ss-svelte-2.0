@@ -27,7 +27,7 @@
       </div>
     {:else}
       <div>
-        <h1 class="font-serif text-3xl md:text-4xl text-gray">{wine.productTitle}</h1>
+        <h1 class="font-serif text-center text-3xl md:text-4xl text-gray">{wine.productTitle}</h1>
         <p class="text-center font-sansy mt-4 text-brown">{new Date(wine.productBasicInformation.harvestYear).getFullYear()}</p>
       </div>
     {/if} 
