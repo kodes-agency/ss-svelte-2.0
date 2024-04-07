@@ -68,7 +68,7 @@ export const actions = {
 Текущо предлагане: ${form.data.offering}`
     };
 
-    const req = await fetch(`http://localhost:3001/api/messages`, {
+    const req = await fetch(`${PUBLIC_API_URL}/messages`, {
       method: 'POST',
       credentials: "include",
       headers: {
