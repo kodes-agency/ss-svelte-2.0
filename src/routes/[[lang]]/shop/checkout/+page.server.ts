@@ -7,6 +7,7 @@ import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
 import { PAYLOAD_SECRET } from "$env/static/private";
+import { sign } from '$lib/functions/sign.js'
 
 const phoneRegex = new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/);
 
@@ -83,8 +84,9 @@ export const load = async ({ params, cookies,request }) => {
       customerDetailsForm = await superValidate(zod(customerDetailsSchema))
     }
     
+    let signitureData = sign()
 
-    return {checkoutData, customerDetailsForm, paymentForm}
+    return {checkoutData, customerDetailsForm, paymentForm, signitureData}
   } catch (error) {
     console.log(error);
   }

@@ -4,11 +4,13 @@
   import { page } from "$app/stores";
   import { slide } from "svelte/transition";
   import SummaryItem from "./SummaryItem.svelte";
+  import BoricaForm from "./BoricaForm.svelte";
   import { enhance } from "$app/forms";
   import { formatPrice } from "$lib/functions/formatPrice";
   import type { General } from "$lib/types/payloadTypes";
   export let cart: Order;
   export let toggleSteps: any;;
+  export let signitureDate: any;
   // export let yourOrderTitle: any = "Вашата поръчка";
 
   export let pageData: General
@@ -196,6 +198,10 @@
     </div>
   </div>
 </section>
+
+<BoricaForm
+  signitureData={signitureDate}
+></BoricaForm>
 
 {#if browser }
     <form class="hidden" id="order" action="?/order" method="POST">

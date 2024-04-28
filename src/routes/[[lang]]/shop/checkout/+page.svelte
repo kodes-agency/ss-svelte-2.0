@@ -14,7 +14,7 @@
 
   export let data;
   let cart: Order;
-  let step = 1;
+  let step = 5;
 
   // @ts-ignore
   $: cart = data.checkoutData
@@ -99,7 +99,7 @@
       </div>
     {:else if step === 5}
       <div transition:slide>
-        <OrderSummary pageData={data.layoutData} {cart} {toggleSteps} />
+        <OrderSummary pageData={data.layoutData} {cart} {toggleSteps} signitureDate={data.signitureData} />
       </div>
     {/if}
   {:else}
