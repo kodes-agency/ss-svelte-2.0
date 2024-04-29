@@ -22,10 +22,8 @@
 
             if(recordRec.ok){
                 console.log('Record added')
-                console.log(recordRes)
             }else{  
                 console.log('Record not added')
-                console.log(recordRes)
             }
         }
 </script>

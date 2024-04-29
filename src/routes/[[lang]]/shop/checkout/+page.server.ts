@@ -125,8 +125,6 @@ export const actions: Actions = {
       phone: customerDetailsForm.data.phone,
     }    
 
-    console.log(billing_address, shipping_address)
-
     let req = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
       method: "POST",
       headers: {
@@ -138,7 +136,6 @@ export const actions: Actions = {
     });
 
     let res = await req.json()
-    console.log(res)
     return {customerDetailsForm};
 
   },
@@ -173,7 +170,6 @@ export const actions: Actions = {
     });
 
     let wooRes = await wooReq.json()
-    console.log(wooRes)
 
     if(wooReq.ok) {
       let payloadOrder = {
@@ -210,7 +206,6 @@ export const actions: Actions = {
       });
 
       let payloadRes = await payloadReq.json()
-      console.log(payloadRes)
       return {success: true}
     }
   }
