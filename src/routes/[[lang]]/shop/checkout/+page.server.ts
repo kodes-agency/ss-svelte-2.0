@@ -84,7 +84,9 @@ export const load = async ({ params, cookies,request }) => {
       customerDetailsForm = await superValidate(zod(customerDetailsSchema))
     }
     
-    let signitureData = sign()
+    // let signitureData = await sign(params.lang == "bg" ? "BGN": "EUR", checkoutData.totals.total_price, checkoutData.id, `Поръчка №${checkoutData.id}`)
+
+    let signitureData = await sign('BGN', (Number(checkoutData.totals.total_price)/100).toFixed(2).toString(), Math.floor(100000 + Math.random() * 900000).toString(), `Поръчка от винарско имение Санта Сара`)
 
     return {checkoutData, customerDetailsForm, paymentForm, signitureData}
   } catch (error) {
@@ -102,29 +104,28 @@ export const actions: Actions = {
     }
     
     let billing_address = {
-      first_name: customerDetailsForm.data.first_name,
-      last_name: customerDetailsForm.data.last_name,    
+      first_name: customerDetailsForm.data.companyName || customerDetailsForm.data.first_name,
+      last_name: customerDetailsForm.data.companyVat || customerDetailsForm.data.last_name,    
       email: customerDetailsForm.data.email, 
-      company: customerDetailsForm.data.companyName ? `Име: ${customerDetailsForm.data.companyName} \n ЕИК: ${customerDetailsForm.data.companyVat} \n Държава на регистрация: ${customerDetailsForm.data.companyCountry}` : "",
       phone: customerDetailsForm.data.phone,
       country: customerDetailsForm.data.country,
+      company: customerDetailsForm.data.companyName ? "yes" : "no", // "yes" or "no
       city: customerDetailsForm.data.city,
-      state: customerDetailsForm.data.state,
       postcode: customerDetailsForm.data.postcode,
-      address_1: customerDetailsForm.data.address_1
+      address_1: customerDetailsForm.data.companyAddress || customerDetailsForm.data.address_1
     }
 
     let shipping_address = {
       first_name: customerDetailsForm.data.first_name,
       last_name: customerDetailsForm.data.last_name,
-      company: customerDetailsForm.data.companyName ? `Име: ${customerDetailsForm.data.companyName} \n ЕИК: ${customerDetailsForm.data.companyVat} \n Държава на регистрация: ${customerDetailsForm.data.companyCountry}` : "",
       country: customerDetailsForm.data.country,
       city: customerDetailsForm.data.city,
-      state: customerDetailsForm.data.state,
       postcode: customerDetailsForm.data.postcode,
       address_1: customerDetailsForm.data.address_1,
       phone: customerDetailsForm.data.phone,
     }    
+
+    console.log(billing_address, shipping_address)
 
     let req = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
       method: "POST",
@@ -137,7 +138,7 @@ export const actions: Actions = {
     });
 
     let res = await req.json()
-
+    console.log(res)
     return {customerDetailsForm};
 
   },
@@ -161,32 +162,33 @@ export const actions: Actions = {
 
     let checkoutRes = await checkoutReq.json();
 
-    // let wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
-    //   method: "POST",
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Nonce': `${cookies.get("nonce") || ""}`,
-    //     'Cart-token': `${cookies.get("cart-token") || ""}`,
-    //   },
-    //   body: JSON.stringify(order)
-    // });
+    let wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Nonce': `${cookies.get("nonce") || ""}`,
+        'Cart-token': `${cookies.get("cart-token") || ""}`,
+      },
+      body: JSON.stringify(order)
+    });
 
-    // let wooRes = await wooReq.json()
+    let wooRes = await wooReq.json()
+    console.log(wooRes)
 
-    if(order) {
+    if(wooReq.ok) {
       let payloadOrder = {
-        orderId: '453',
-        status: 'pending',
-        first_name: checkoutRes.billing_address.first_name,
-        last_name: checkoutRes.billing_address.last_name,
+        orderId: wooRes.order_id,
+        status: wooRes.status,
+        first_name: checkoutRes.shipping_address.first_name,
+        last_name: checkoutRes.shipping_address.last_name,
         email: checkoutRes.billing_address.email,
         phone: checkoutRes.billing_address.phone,
         country: checkoutRes.billing_address.country,
         city: checkoutRes.billing_address.city,
         state: checkoutRes.billing_address.state,
         postcode: checkoutRes.billing_address.postcode,
-        address_1: checkoutRes.billing_address.address_1,
-        customer_note: formData.get('customerNote') + "\n" + checkoutRes.billing_address.company,
+        address_1: checkoutRes.shipping_address.address_1,
+        customer_note: formData.get('customerNote'),
         products: [...checkoutRes.items.map((item:any) => {
           return {
             product: item.description.replace(/<[^>]*>?/gm, ''),
@@ -198,7 +200,7 @@ export const actions: Actions = {
         )]
       }
 
-      let payloadReq = await fetch("http://localhost:3001/api" + "/orders", {
+      let payloadReq = await fetch(PUBLIC_API_URL + "/orders", {
         method: "POST",
         headers: {
           Authorization: `users API-Key ${PAYLOAD_SECRET}`,
@@ -208,6 +210,7 @@ export const actions: Actions = {
       });
 
       let payloadRes = await payloadReq.json()
+      console.log(payloadRes)
       return {success: true}
     }
   }

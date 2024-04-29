@@ -1,19 +1,13 @@
 // Gateway
-import { PUBLIC_API_URL } from '$env/static/public';
 import * as crypto from 'crypto';
 
 // DATA: MAC_GENERAL = TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, DESC, MERCHANT, MERCH_NAME, ADDENDUM, AD.CUST_BOR_ORDER_ID, TIMESTAMP, NONCE, P_SIGN
 let TERMINAL = "V2400709"; // Идентификатор на терминала получен от БОРИКА, Размер: 8
 let TRTYPE = "1"; // Тип на транзацията: 1, 12, 21, 22, 24, 90, Разпер: 1-2
-let AMOUNT =  "50.00"; // Сума на плащането, Формат: xx.xx, Размер: 1-12
-let CURRENCY = "BGN"; // Валута на плащането, Размер: 3, Формат: ISO-4217
-let ORDER = "001213"; // Номер поръчка, Размер: 6 
-let AD_CUST_BOR_ORDER_ID = `${ORDER}@${ORDER}`; // ORDER + 16 символа
 let RFU = "-"; // Резервирано поле за бъдеща употреба
 
 let GATEWAY = "https://3dsgate-dev.borica.bg/cgi-bin/cgi_link"; // Development
 // let GATEWAY = "https://3dsgate.borica.bg/cgi-bin/cgi_link"; // Production
-let DESC = "Наименование на поръчката"; // Наименование на поръчката, Размер: 8-50
 let MERCHANT = "2000000602"; // Идентификатор на търговеца получен от БОРИКА, Размер: 10-15, Тест: $MERCHANT = "1600000001";
 let MERCH_NAME = "VI Santa Sarah AD"; // Наименование на търговеца, Размер: 18
 let ADDENDUM = "AD,TD";
@@ -56,11 +50,15 @@ mA==
 `
 const PASSPHRASE = '96FeTinxMb3f1AhHPH0e';
 
-export const sign = async () => {
+export const sign = async (currency:string, amount:string, order:string, desc:string) => {
     let NONCE = crypto.randomBytes(16).toString('hex').toUpperCase(); // Формиране на сигнатура за подписване, Размер: 1-64
     let TIMESTAMP = new Date().toISOString().replace(/[-T:\.Z]/g, "").substring(0,14); // Формат: YYYYMMDDHHMMSS, UTC, Размер: 14
+    let CURRENCY = currency; // Валута на плащането, Размер: 3, Формат: ISO-4217
+    let AMOUNT = amount; // Сума на плащането, Формат: xx.xx, Размер: 1-12
+    let ORDER = order; // Номер поръчка, Размер: 6 
+    let AD_CUST_BOR_ORDER_ID = `${ORDER}@${ORDER}`; // ORDER + 16 символа
+    let DESC = desc; // Наименование на поръчката, Размер: 8-50
 
-    console.log(TIMESTAMP)
     // SIGN: MAC_GENERAL = TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, TIMESTAMP, NONCE, RFU
     let P_SIGN = 
     `${TERMINAL.length}${TERMINAL}` +

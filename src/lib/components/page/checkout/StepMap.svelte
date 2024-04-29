@@ -5,6 +5,8 @@
     export let ageConsent: any
     export let policyConsent: any
     export let paymentMethod: any
+    export let deliveryConsent: any
+    export let customerDetails: any
 </script>
 
 <section class="flex flex-col items-center pt-32 lg:pt-40">
@@ -38,7 +40,7 @@
             on:click={()=>{
                 step = 4
             }}
-            disabled = {ageConsent == null || policyConsent == null}
+            disabled = {ageConsent == null || policyConsent == null || customerDetails == false}
             class="{step === 4 ? "text-white bg-gray" : "text-gray bg-white"} disabled:cursor-not-allowed disabled:text-opacity-50  transition-all duration-300 p-2 px-3 min-w-[20px] flex items-center justify-center lg:p-1 lg:px-3 font-sansy uppercase text-gray text-sm border border-gray box-content">
             <p class="hidden lg:block">{pageData.shop.stepPaymentMethod}</p>
             <svg class="{step === 4 ? "fill-white" : "fill-gray"} lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512"><path d="M64 32C28.7 32 0 60.7 0 96v32H576V96c0-35.3-28.7-64-64-64H64zM576 224H0V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V224zM112 352h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm112 16c0-8.8 7.2-16 16-16H368c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16z"/></svg>
@@ -47,7 +49,7 @@
             on:click={()=>{
                 step = 5
             }}
-            disabled = {ageConsent == null || policyConsent == null || paymentMethod == null}
+            disabled = {ageConsent == null || policyConsent == null || paymentMethod == null || deliveryConsent == null || customerDetails == false}
             class="{step === 5 ? "text-white bg-gray" : "text-gray bg-white"} disabled:cursor-not-allowed disabled:text-opacity-50 transition-all duration-300 p-2 px-3 min-w-[20px] flex items-center justify-center lg:p-1 lg:px-3 font-sansy uppercase text-gray text-sm border border-gray box-content rounded-r-md">
             <p class="hidden lg:block">{pageData.shop.stepFinilize}</p>
             <svg class="{step === 5 ? "fill-white" : "fill-gray"} lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="12" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>

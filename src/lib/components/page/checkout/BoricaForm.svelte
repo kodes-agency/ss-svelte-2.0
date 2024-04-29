@@ -1,6 +1,7 @@
 <script lang="ts">
         // export let GATEWAY, TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, DESC, MERCHANT, MERCH_NAME, ADDENDUM, AD_CUST_BOR_ORDER_ID, TIMESTAMP, NONCE, RFU, COUNTRY, MERCH_GMT, MERCH_URL, BACKREF, EMAIL, P_SIGN;
         export let signitureData:any
+        export let payButton: any
         
         async function pushRecord(){
             const recordRec = await fetch('/api/cart/add-payment-record', {
@@ -55,12 +56,16 @@
     <input type="hidden" name="EMAIL" value={signitureData.EMAIL} />
     <input type="hidden" name="P_SIGN" value={signitureData.P_SIGN} />
 
-    <button type="submit" on:click={ async(e)=>{
+    <button type="submit"
+        class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
+        on:click={ async(e)=>{
         e.preventDefault()
         console.log('Submit')
         await pushRecord()
         // @ts-ignore
         document.getElementById('card-payment')?.submit();
-    }}>Submit</button>
+    }}>{payButton}</button>
+
+    <!-- <button class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1" type="submit">{payButton}</button> -->
   </form>
 </div>

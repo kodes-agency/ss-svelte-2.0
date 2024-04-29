@@ -2,7 +2,7 @@
   import type { General } from "$lib/types/payloadTypes";
   export let deliveryConsent: any;
   export let toggleSteps: any;
-  export let paymentMethod: any;
+  export let paymentMethod: any; 
 
   export let pageData: General
 </script>
@@ -87,7 +87,7 @@
             on:click={() => {
               toggleSteps("forwards");
             }}
-            disabled={!paymentMethod}
+            disabled={!paymentMethod || !deliveryConsent}
             class="disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-50 font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
             >{pageData.shop.buttonContinueToCheckout}</button
           >

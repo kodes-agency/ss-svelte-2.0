@@ -7,11 +7,20 @@
   export let pageData: General
   export let toggleSteps: any;
   export let formData
+  export let customerDetails: any
 
   $: invoice = Boolean(invoice);
 
   const { form, errors, constraints, message, enhance } = superForm(formData, {
-    validators: 'clear'
+    validators: 'clear',
+    onUpdated({form}) {
+      if(form.valid){
+        customerDetails = true
+        toggleSteps('forwards')
+      } else {
+        customerDetails = false
+      }
+    } 
   });
 
   
@@ -184,14 +193,14 @@
                     class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
               </div>
               <div class="flex flex-col space-y-1 w-full">
-                <label class="uppercase text-sm font-sansy text-brown" for="vatNumber"> {pageData.shop.vatNumber} * </label>
+                <label class="uppercase text-sm font-sansy text-brown" for="companyVat"> {pageData.shop.vatNumber} * </label>
                 <input 
                     type="text"
-                    id="vatNumber" 
-                    name="vatNumber"
-                    bind:value={$form.vatNumber}
-                    aria-invalid={$errors.vatNumber ? 'true' : undefined}
-                    {...$constraints.vatNumber}
+                    id="companyVat" 
+                    name="companyVat"
+                    bind:value={$form.companyVat}
+                    aria-invalid={$errors.companyVat ? 'true' : undefined}
+                    {...$constraints.companyVat}
                     class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
               </div>
               <div class="flex flex-col space-y-1 w-full">
@@ -208,13 +217,14 @@
               <div class="">
                 <label
                   class="uppercase text-sm font-sansy text-brown"
-                  for="remarks">{pageData.shop.companyAddress} *</label
+                  for="companyAddress">{pageData.shop.companyAddress} *</label
                 >
                 <textarea
+                  name="companyAddress"
+                  id="companyAddress"
                   bind:value={$form.companyAddress}
                   aria-invalid={$errors.companyAddress ? 'true' : undefined}
                   {...$constraints.companyAddress}
-                  id="remarks"
                   class="form-textarea border text-brown bg-white border-brown rounded-md w-full"
                   rows="3"
                 />
@@ -235,10 +245,6 @@
         <button
           type="submit"
           form="customerDetails"
-          on:click={(e) => {
-            // e.preventDefault();
-            // toggleSteps("forwards");
-          }}
           class=" disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-50 font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
           >{pageData.shop.buttonContinueToCheckout}</button
         >

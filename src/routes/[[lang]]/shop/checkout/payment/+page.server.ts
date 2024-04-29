@@ -3,5 +3,5 @@
 export const load = async ({ url, params, request }) => {
  console.log(request)
 
- return
+ return request
 }

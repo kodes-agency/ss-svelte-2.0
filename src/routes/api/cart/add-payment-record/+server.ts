@@ -1,9 +1,10 @@
+import { PUBLIC_API_URL } from "$env/static/public";
 import { json } from "@sveltejs/kit";
 
 export async function POST({ request, fetch }) {
   try {
     const record = await request.json();
-    const recordRec = await fetch('http://localhost:3001/api/payments', {
+    const recordRec = await fetch(`${PUBLIC_API_URL}/payments`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

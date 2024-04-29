@@ -5,13 +5,13 @@
   import { slide } from "svelte/transition";
   import SummaryItem from "./SummaryItem.svelte";
   import BoricaForm from "./BoricaForm.svelte";
-  import { enhance } from "$app/forms";
   import { formatPrice } from "$lib/functions/formatPrice";
   import type { General } from "$lib/types/payloadTypes";
   export let cart: Order;
   export let toggleSteps: any;;
   export let signitureDate: any;
-  // export let yourOrderTitle: any = "Вашата поръчка";
+  export let checkoutData: any;
+
 
   export let pageData: General
 </script>
@@ -58,9 +58,11 @@
           <div class="w-full h-px bg-brown"></div>
           <div class="flex flex-row w-full justify-between">
             <p class="text-gray italic font-serif">
-              {window.sessionStorage.getItem("paymentMethod") == "card"
-                ? pageData.shop.buttonCard
-                : pageData.shop.buttonCash}
+              {#if browser }
+                {window.sessionStorage.getItem("paymentMethod") == "card"
+                  ? pageData.shop.buttonCard
+                  : pageData.shop.buttonCash}
+              {/if}
             </p>
           </div>
         </div>
@@ -73,61 +75,55 @@
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.firstName}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("firstName")}
+                {checkoutData.shipping_address.first_name}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.lastName}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("lastName")}
+                {checkoutData.shipping_address.last_name}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.email}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("email")}
+                {checkoutData.billing_address.email}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.phone}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("phone")}
+                {checkoutData.shipping_address.phone}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.country}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("country")}
-              </p>
-            </div>
-            <div class="flex flex-row w-full justify-between">
-              <p class="text-gray italic font-serif">{pageData.shop.region}</p>
-              <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("region")}
+                {checkoutData.billing_address.country}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.zipCode}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("postCode")}
+                {checkoutData.shipping_address.postcode}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.city}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("city")}
+                {checkoutData.billing_address.city}
               </p>
             </div>
             <div class="flex flex-row w-full justify-between">
               <p class="text-gray italic font-serif">{pageData.shop.address}</p>
               <p class="text-gray italic font-serif">
-                {window.sessionStorage.getItem("address")}
+                {checkoutData.shipping_address.address_1}
               </p>
             </div>
           </div>
         </div>
 
-        {#if window && window.sessionStorage.getItem("customerNote")}
+        {#if browser && window.sessionStorage.getItem("customerNote")}
           <div class="w-full space-y-1">
             <p class="uppercase text-sm font-sansy text-brown">
               {pageData.shop.orderNote}
@@ -136,15 +132,14 @@
             <div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">
-                  {window.sessionStorage.getItem("customerNote")}
+                  {window?.sessionStorage.getItem("customerNote")}
                 </p>
               </div>
-
             </div>
           </div>
         {/if}
 
-        {#if window && window.sessionStorage.getItem("invoice")}
+        {#if browser && window.sessionStorage.getItem("invoice")}
           <div class="w-full space-y-1">
             <p class="uppercase text-sm font-sansy text-brown">
               {pageData.shop.formTitle}
@@ -154,25 +149,25 @@
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyName}</p>
                 <p class="text-gray italic font-serif">
-                  {window.sessionStorage.getItem("companyName")}
+                  {checkoutData.billing_address.first_name}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.vatNumber}</p>
                 <p class="text-gray italic font-serif">
-                  {window.sessionStorage.getItem("companyVat")}
+                  {checkoutData.billing_address.last_name}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyCountry}</p>
                 <p class="text-gray italic font-serif">
-                  {window.sessionStorage.getItem("companyCountry")}
+                  {checkoutData.billing_address.country}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyAddress}</p>
                 <p class="text-gray italic font-serif">
-                  {window.sessionStorage.getItem("companyAddress")}
+                  {checkoutData.billing_address.address_1}
                 </p>
               </div>
             </div>
@@ -181,13 +176,19 @@
       </div>
     {/if}
     <div class="pt-20 flex flex-col space-y-4">
-      <button
-        class=" font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
-        type="submit"
-        disabled
-        form="order"
-        >{pageData.shop.buttonPay}</button
-        >
+        {#if browser && window.sessionStorage.getItem('paymentMethod') == 'card'}
+          <BoricaForm
+            payButton={pageData.shop.buttonPay}
+            signitureData={signitureDate}
+          ></BoricaForm>
+        {:else}
+        <button
+          class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
+          type="submit"
+          form="order"
+          >{pageData.shop.buttonPay}</button
+          >
+        {/if}
         <button
         on:click={() => {
           toggleSteps("backwards");
@@ -199,9 +200,6 @@
   </div>
 </section>
 
-<BoricaForm
-  signitureData={signitureDate}
-></BoricaForm>
 
 {#if browser }
     <form class="hidden" id="order" action="?/order" method="POST">

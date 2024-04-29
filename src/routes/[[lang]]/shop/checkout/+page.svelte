@@ -11,10 +11,10 @@
   import { onMount } from "svelte";
   import Consent from "$lib/components/page/checkout/Consent.svelte";
   import type { Order } from "$lib/types/orderTypes";
-
+  
   export let data;
   let cart: Order;
-  let step = 5;
+  let step = 1;
 
   // @ts-ignore
   $: cart = data.checkoutData
@@ -30,6 +30,8 @@
   let marketingConsent: string | number | null;
 
   let invoice: any;
+
+  let customerDetails = false;
 
   // STEP:4 Delivery method
   let deliveryMethod: any
@@ -70,7 +72,7 @@
 
 <div class="px-7 min-h-screen">
   {#if data.checkoutData.items.length > 0}
-    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:paymentMethod/>
+    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:paymentMethod bind:deliveryConsent bind:customerDetails/>
 
     {#if step === 1}
       <div transition:slide>
@@ -86,6 +88,7 @@
           invoice={invoice}
           pageData={data.layoutData}
           formData={data.customerDetailsForm}
+          bind:customerDetails
           {toggleSteps} 
         />
       </div>
@@ -99,7 +102,7 @@
       </div>
     {:else if step === 5}
       <div transition:slide>
-        <OrderSummary pageData={data.layoutData} {cart} {toggleSteps} signitureDate={data.signitureData} />
+        <OrderSummary pageData={data.layoutData} {cart} checkoutData={data.checkoutData} {toggleSteps} signitureDate={data.signitureData} />
       </div>
     {/if}
   {:else}
