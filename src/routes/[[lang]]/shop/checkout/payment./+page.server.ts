@@ -1,8 +1,7 @@
-import { json } from '@sveltejs/kit'
+// import { json } from '@sveltejs/kit'
 
-/** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ url, params, request }) => {
- console.log(request)
+// /** @type {import('@sveltejs/kit').Load} */
+// export const load = async ({ url, params, request }) => {
 
- return request.body
-}
+//  return request.body
+// }
