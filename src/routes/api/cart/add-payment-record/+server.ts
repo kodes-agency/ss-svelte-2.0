@@ -1,7 +1,7 @@
 import { PUBLIC_API_URL } from "$env/static/public";
 import { json } from "@sveltejs/kit";
 
-export async function POST({ request, fetch }) {
+export async function POST({ request, fetch, cookies }) {
   try {
     const record = await request.json();
     const recordRec = await fetch(`${PUBLIC_API_URL}/payments`, {
@@ -16,6 +16,10 @@ export async function POST({ request, fetch }) {
 
   if(recordRec.ok){
       console.log('Record added')
+      cookies.set("orderNumber", record.ORDER, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+  })
   }else{  
       console.log('Record not added')
   }

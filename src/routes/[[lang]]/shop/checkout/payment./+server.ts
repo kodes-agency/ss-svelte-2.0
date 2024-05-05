@@ -1,5 +1,5 @@
 import { json } from "@sveltejs/kit";
-import { PUBLIC_SHOP_API_URL } from "$env/static/public";
+
 
 export async function POST({ request, cookies, fetch }) {
   try {
@@ -13,3 +13,4 @@ export async function POST({ request, cookies, fetch }) {
     return json({ error: error });
   }
 }
+
