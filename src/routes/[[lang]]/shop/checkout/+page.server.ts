@@ -8,7 +8,7 @@ import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { sign } from "$lib/functions/sign.js";
 
 const phoneRegex = new RegExp(
@@ -187,21 +187,21 @@ export const actions: Actions = {
     try {
       const formData = await request.formData();
 
-      let order = {
+      const order = {
         billing_address: {},
         customerNote: formData.get("customerNote"),
         payment_method: "cod",
         create_account: false,
       };
 
-      let checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
+      const checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
         headers: {
           Nonce: `${cookies.get("nonce") || ""}`,
           "Cart-token": `${cookies.get("cart-token") || ""}`,
         },
       });
 
-      let wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
+      const wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,10 +211,17 @@ export const actions: Actions = {
         body: JSON.stringify(order),
       });
 
-      return { success: true };
+      const wooRes = await wooReq.json();
+      console.log(wooRes)
+      
+      if(wooReq.ok && wooRes.order_id){
+        return { success: true }
+      } else {
+        return { success: false }
+      }
     } catch (error) {
       console.error(error);
-      return { success: false, error: "An error occurred during checkout" };
+      return fail(500, { error: "An error occurred during recording the order", success: false });
     }
   },
 };

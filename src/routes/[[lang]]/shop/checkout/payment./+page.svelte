@@ -7,12 +7,16 @@
 
     onMount(async () => {
         if(data.status !== 201) return
+        console.log("Status checked")
         if(!data.cookies?.nounce || !data.cookies.cartToken) return
+        console.log("Cookies checked")
+        if(data.method !== "card") return
+        console.log("Method checked")
 
         try {
             let order = {
                 billing_address: {},
-                customerNote: window.localStorage.getItem("customerNote") || "",
+                customerNote: window.sessionStorage.getItem("customerNote") || "",
                 payment_method: "cod",
                 create_account: false,
             };
@@ -34,21 +38,16 @@
                 body: JSON.stringify(order),
             });
 
-            console.log(wooReq);
-
             return { success: true };
-
         } catch (error) {
             console.error(error);
             return { success: false, error: "An error occurred during checkout" };
         }
     })
-
-
 </script>
 
 <div class=" pt-52 flex flex-col space-y-10 items-center justify-center p-5">
-    {#if data.status === 201 }     
+     {#if data.status === 201 }     
         <div class="p-10 rounded-sm bg-brown max-w-md flex flex-col items-center *:text-white *:text-center space-y-4">
             <svg xmlns="http://www.w3.org/2000/svg" class=" fill-white" height="50" width="50" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/></svg>            
             <h1 class=" font-sansy bold text-2xl">Поръчката беше заплатена успешно!</h1>

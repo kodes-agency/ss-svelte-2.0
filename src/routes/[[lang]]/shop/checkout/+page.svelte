@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { invalidateAll } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
+  import { page } from "$app/stores";
   import { slide } from "svelte/transition";
   import Cart from "$lib/components/page/checkout/Cart.svelte";
   import EmptyCart from "$lib/components/page/checkout/EmptyCart.svelte";
@@ -12,7 +13,17 @@
   import Consent from "$lib/components/page/checkout/Consent.svelte";
   import type { Order } from "$lib/types/orderTypes";
   
-  export let data;
+  export let data
+  export let form
+
+  onMount(()=>{
+    if(form && form.success === true){
+      goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=201` : `/shop/checkout/payment.?method=cod&status=201`)
+    } else if(form && form.success === false){
+      goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=403` : `/shop/checkout/payment.?method=cod&status=403`)
+    }
+  })
+
   let cart: Order;
   let step = 1;
 

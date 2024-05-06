@@ -1,10 +1,8 @@
 import { BORICA_DEV_PASSPHRASE, BORICA_DEV_PRIVATE_KEY, BORICA_DEV_GATEWAY, BORICA_TERMINAL } from "$env/static/private";
-import { PUBLIC_SHOP_API_URL } from "$env/static/public";
-import type { Actions } from "@sveltejs/kit";
 import * as crypto from "crypto";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ cookies, fetch }) => {
+export const load = async ({ cookies, fetch, url }) => {
   const TERMINAL = BORICA_TERMINAL;
   const TRTYPE = "90";
   const ORDER = cookies.get("orderNumber");
@@ -59,6 +57,7 @@ export const load = async ({ cookies, fetch }) => {
         return {
           status: 201,
           success: true,
+          method: "card",
           cookies: {
             nounce: cookies.get("nonce"),
             cartToken: cookies.get("cart-token"),
@@ -77,6 +76,11 @@ export const load = async ({ cookies, fetch }) => {
         success: false,
         message: "Error checking transaction status",
       };
+    }
+  } else if(url.searchParams.get("method") === "cod" && url.searchParams.get("status")==="201") {
+    return {
+      status: 201,
+      success: true,
     }
   } else {
     return {
