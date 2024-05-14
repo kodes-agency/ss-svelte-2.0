@@ -203,21 +203,13 @@
 
 {#if browser }
     <form class="hidden" id="order" action="?/order" method="POST">
-    <!-- <input
-        hidden
-        autocomplete="off"
-        aria-hidden="true"
-        name="paymentMethod"
-        type="text"
-        value={window.sessionStorage.getItem("paymentMethod")}
-    /> -->
-    <input
-      hidden
-      autocomplete="off"
-      aria-hidden="true"
-      name="customerNote"
-      type="text"
-      value={window.sessionStorage.getItem("customerNote")}
-  />
+      <input
+          hidden
+          autocomplete="off"
+          aria-hidden="true"
+          name="customerNote"
+          type="text"
+          value={window.sessionStorage.getItem("customerNote")}
+      />
     </form>
 {/if}

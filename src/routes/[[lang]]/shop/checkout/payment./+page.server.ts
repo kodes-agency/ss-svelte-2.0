@@ -1,4 +1,11 @@
-import { BORICA_DEV_PASSPHRASE, BORICA_DEV_PRIVATE_KEY, BORICA_DEV_GATEWAY, BORICA_TERMINAL } from "$env/static/private";
+import {
+  BORICA_DEV_PASSPHRASE,
+  BORICA_DEV_PRIVATE_KEY,
+  BORICA_DEV_GATEWAY,
+  BORICA_TERMINAL,
+} from "$env/static/private";
+import { PUBLIC_SHOP_API_URL } from "$env/static/public";
+import { fail, type Actions } from "@sveltejs/kit";
 import * as crypto from "crypto";
 
 /** @type {import('@sveltejs/kit').Load} */
@@ -36,16 +43,13 @@ export const load = async ({ cookies, fetch, url }) => {
       P_SIGN: signature.toUpperCase(),
     };
 
-    const request = await fetch(
-      BORICA_DEV_GATEWAY,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(data),
-      }
-    );
+    const request = await fetch(BORICA_DEV_GATEWAY, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(data),
+    });
 
     if (request.ok) {
       cookies.delete("orderNumber", {
@@ -57,16 +61,14 @@ export const load = async ({ cookies, fetch, url }) => {
         return {
           status: 201,
           success: true,
+          lang: transactionData.LANG,
           method: "card",
-          cookies: {
-            nounce: cookies.get("nonce"),
-            cartToken: cookies.get("cart-token"),
-          }
         };
       } else {
         return {
           status: 402,
           success: false,
+          lang: transactionData.LANG,
           message: transactionData.STATUSMSG,
         };
       }
@@ -77,11 +79,14 @@ export const load = async ({ cookies, fetch, url }) => {
         message: "Error checking transaction status",
       };
     }
-  } else if(url.searchParams.get("method") === "cod" && url.searchParams.get("status")==="201") {
+  } else if (
+    url.searchParams.get("method") === "cod" &&
+    url.searchParams.get("status") === "201"
+  ) {
     return {
       status: 201,
       success: true,
-    }
+    };
   } else {
     return {
       status: 403,
@@ -89,4 +94,44 @@ export const load = async ({ cookies, fetch, url }) => {
       message: "No order number",
     };
   }
+};
+
+export const actions: Actions = {
+  order: async ({ cookies, request }) => {
+    try {
+      const formData = await request.formData();
+
+      const order = {
+        billing_address: {},
+        customerNote: formData.get("customerNote"),
+        payment_method: "cod",
+        create_account: false,
+      };
+
+      const wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Nonce: `${cookies.get("nonce") || ""}`,
+          "Cart-token": `${cookies.get("cart-token") || ""}`,
+        },
+        body: JSON.stringify(order),
+      });
+
+      const wooRes = await wooReq.json();
+      console.log(wooRes);
+
+      if (wooReq.ok && wooRes.order_id) {
+        return { success: true };
+      } else {
+        return { success: false };
+      }
+    } catch (error) {
+      console.error(error);
+      return fail(500, {
+        error: "An error occurred during recording the order",
+        success: false,
+      });
+    }
+  },
 };

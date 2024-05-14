@@ -1,44 +1,23 @@
 
 <script lang='ts'>
+  import { browser } from '$app/environment';
     import { page } from '$app/stores';
     import { PUBLIC_SHOP_API_URL } from '$env/static/public';
     import { onMount } from 'svelte';
     export let data
+    export let form
 
     onMount(async () => {
+        if(form?.success === true) return
         if(data.status !== 201) return
         console.log("Status checked")
-        if(!data.cookies?.nounce || !data.cookies.cartToken) return
-        console.log("Cookies checked")
         if(data.method !== "card") return
         console.log("Method checked")
 
         try {
-            let order = {
-                billing_address: {},
-                customerNote: window.sessionStorage.getItem("customerNote") || "",
-                payment_method: "cod",
-                create_account: false,
-            };
-
-            let checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
-                headers: {
-                Nonce: `${data.cookies?.nounce}`,
-                "Cart-token": `${data.cookies?.cartToken}`,
-                },
-            });
-
-            let wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                Nonce: `${data.cookies?.nounce}`,
-                "Cart-token": `${data.cookies?.cartToken}`,
-                },
-                body: JSON.stringify(order),
-            });
-
-            return { success: true };
+            let orderForm = document.forms.namedItem("order")
+            if(orderForm) orderForm.submit()
+            return { success: false, error: "An error occurred during checkout" };
         } catch (error) {
             console.error(error);
             return { success: false, error: "An error occurred during checkout" };
@@ -87,3 +66,16 @@
         </div>
     {/if}
 </div>
+
+{#if browser }
+    <form class="hidden" id="order" action="?/order" method="POST">
+        <input
+            hidden
+            autocomplete="off"
+            aria-hidden="true"
+            name="customerNote"
+            type="text"
+            value={window.sessionStorage.getItem("customerNote")}
+        />
+    </form>
+{/if}

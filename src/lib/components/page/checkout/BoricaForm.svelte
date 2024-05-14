@@ -1,4 +1,5 @@
 <script lang="ts">
+        import { page } from "$app/stores"
         // export let GATEWAY, TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, DESC, MERCHANT, MERCH_NAME, ADDENDUM, AD_CUST_BOR_ORDER_ID, TIMESTAMP, NONCE, RFU, COUNTRY, MERCH_GMT, MERCH_URL, BACKREF, EMAIL, P_SIGN;
         export let signitureData:any
         export let payButton: any
@@ -26,6 +27,7 @@
                 console.log('Record not added')
             }
         }
+        console.log($page.params.lang)
 </script>
 
 <div>
@@ -44,6 +46,7 @@
       name="AD.CUST_BOR_ORDER_ID"
       value={signitureData.AD_CUST_BOR_ORDER_ID}
     />
+    <input type="hidden" name="LANG" value={!$page.params.lang ? "BG" : $page.params.lang == "bg" ? "BG" : "EN" } />
     <input type="hidden" name="TIMESTAMP" value={signitureData.TIMESTAMP} />
     <input type="hidden" name="NONCE" value={signitureData.NONCE} />
     <input type="hidden" name="RFU" value={signitureData.RFU} />
