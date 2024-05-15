@@ -55,20 +55,28 @@ export const load = async ({ cookies, fetch, url, params }) => {
     if (request.ok) {
     let transactionData = await request.json();
 
+    const year = transactionData.TIMESTAMP.slice(0, 4);
+    const month = transactionData.TIMESTAMP.slice(4, 6);
+    const day = transactionData.TIMESTAMP.slice(6, 8);
+    const hour = transactionData.TIMESTAMP.slice(8, 10);
+    const minute = transactionData.TIMESTAMP.slice(10, 12);
+    const second = transactionData.TIMESTAMP.slice(12, 14);
+    const formattedTimestamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
+
     await fetch('/api/cart/add-payment-record', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            STATUS: transactionData.ACTION,
+            ACTION: transactionData.ACTION,
             STATUSMSG: transactionData.STATUSMSG,
             RC: transactionData.RC,
             AMOUNT: transactionData.AMOUNT,
             CURRENCY: transactionData.CURRENCY,
             ORDER: transactionData.ORDER,
             DESC: transactionData.DESC,  
-            TIMESTAMP: transactionData.TIMESTAMP,
+            TIMESTAMP: formattedTimestamp, 
             LANG: transactionData.LANG,
             TRAN_TRTYPE: transactionData.TRAN_TRTYPE,
             RRN: transactionData.RRN,
