@@ -103,7 +103,7 @@ export const actions: Actions = {
       const order = {
         billing_address: {},
         customerNote: formData.get("customerNote"),
-        payment_method: "bacs",
+        payment_method: "other_payment",
         create_account: false,
       };
 

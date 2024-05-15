@@ -38,7 +38,10 @@
     }
     function initNecessary () {
         // do something with segment.io or google analytics etc
+
     }
+
+    console.log(data.cartData)
 </script>
 
 <svelte:head>
@@ -49,6 +52,7 @@
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"> -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-73K1X6NXFY"></script>
 </svelte:head>
+
 
 <Header
     cart={data.cartData}
