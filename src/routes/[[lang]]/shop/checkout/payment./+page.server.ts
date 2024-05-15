@@ -58,7 +58,7 @@ export const load = async ({ cookies, fetch, url, params }) => {
           status: 201,
           success: true,
           lang: transactionData.LANG,
-          method: "card",
+          method: "other_method",
         };
       } else {
         return {
