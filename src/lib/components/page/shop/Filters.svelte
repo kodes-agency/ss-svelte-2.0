@@ -32,14 +32,15 @@
           {#each productTypes as el}
             <button
             on:click={()=>{
+              
               if($page.url.searchParams.getAll('category').includes(el.value)){
                 $page.url.searchParams.delete('category', el.value)
               } else {
                 $page.url.searchParams.append('category', el.value)
               }
     
-              goto(`?${$page.url.searchParams.toString()}`, {
-                noScroll: true,
+              goto(`?${$page.url.searchParams.toString()}#shop`, {
+                noScroll: false,
                 invalidateAll: true
               })
     
@@ -70,8 +71,8 @@
                 $page.url.searchParams.append('wineType', el.filterName)
               }
     
-              goto(`?${$page.url.searchParams.toString()}`, {
-                noScroll: true,
+              goto(`?${$page.url.searchParams.toString()}#shop`, {
+                noScroll: false,
                 invalidateAll: true
               })
     
@@ -97,8 +98,8 @@
                 $page.url.searchParams.append('vintage', String(el))
               }
     
-              goto(`?${$page.url.searchParams.toString()}`, {
-                noScroll: true,
+              goto(`?${$page.url.searchParams.toString()}#shop`, {
+                noScroll: false,
                 invalidateAll: true
               })
     
@@ -125,8 +126,8 @@
                     $page.url.searchParams.append('volume', encodeURI(el.value))
                 }
     
-                goto(`?${$page.url.searchParams.toString()}`, {
-                    noScroll: true,
+                goto(`?${$page.url.searchParams.toString()}#shop`, {
+                    noScroll: false,
                     invalidateAll: true
                 })
         

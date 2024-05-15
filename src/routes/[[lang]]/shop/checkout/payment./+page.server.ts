@@ -9,7 +9,7 @@ import { fail, type Actions } from "@sveltejs/kit";
 import * as crypto from "crypto";
 
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ cookies, fetch, url }) => {
+export const load = async ({ cookies, fetch, url, params }) => {
   const TERMINAL = BORICA_TERMINAL;
   const TRTYPE = "90";
   const ORDER = cookies.get("orderNumber");
@@ -76,6 +76,7 @@ export const load = async ({ cookies, fetch, url }) => {
       return {
         status: 400,
         success: false,
+        lang: params.lang === "en" ? "EN" : params.lang === "de" ? "EN" : "BG",
         message: "Error checking transaction status",
       };
     }
@@ -86,11 +87,13 @@ export const load = async ({ cookies, fetch, url }) => {
     return {
       status: 201,
       success: true,
+      lang: params.lang === "en" ? "EN" : params.lang === "de" ? "EN" : "BG",
     };
   } else {
     return {
       status: 403,
       success: false,
+      lang: params.lang === "en" ? "EN" : params.lang === "de" ? "EN" : "BG",
       message: "No order number",
     };
   }

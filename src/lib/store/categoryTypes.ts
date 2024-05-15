@@ -171,15 +171,15 @@ export const productTypes = [
       locale: "de",
       productTypes: [
         {
-          label: "Special compilation",
+          label: "Sonderangebote",
           value: "special"
         },
         {
-          label: "Wine bundles",
+          label: "Weinprobierpakete",
           value: "bundle"
         },
         {
-          label: "Invidivual bottles",
+          label: "Einzelflaschen",
           value: "bottle"
         },
       ]
