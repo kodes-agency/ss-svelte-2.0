@@ -139,21 +139,15 @@ export const actions: Actions = {
       }
 
       let billing_address = {
-        first_name:
-          customerDetailsForm.data.companyName ||
-          customerDetailsForm.data.first_name,
-        last_name:
-          customerDetailsForm.data.companyVat ||
-          customerDetailsForm.data.last_name,
+        first_name: customerDetailsForm.data.first_name,
+        last_name: customerDetailsForm.data.last_name,
         email: customerDetailsForm.data.email,
         phone: customerDetailsForm.data.phone,
         country: customerDetailsForm.data.country,
-        company: customerDetailsForm.data.companyName ? "yes" : "no", // "yes" or "no
         city: customerDetailsForm.data.city,
         postcode: customerDetailsForm.data.postcode,
-        address_1:
-          customerDetailsForm.data.companyAddress ||
-          customerDetailsForm.data.address_1,
+        address_1: customerDetailsForm.data.address_1,
+        address_2: customerDetailsForm.data.companyName ? `Фирма: ${customerDetailsForm.data.companyName},\n ЕИК: ${customerDetailsForm.data.companyVat},\n Адрес: ${customerDetailsForm.data.companyCountry}, ${customerDetailsForm.data.companyCity}, ${customerDetailsForm.data.companyAddress}` : ""
       };
 
       let shipping_address = {

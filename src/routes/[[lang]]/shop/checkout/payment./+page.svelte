@@ -1,7 +1,7 @@
 
 <script lang='ts'>
-  import { browser } from '$app/environment';
-  import { enhance } from '$app/forms';
+    import { browser } from '$app/environment';
+    import { enhance } from '$app/forms';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     export let data
@@ -61,7 +61,7 @@
         if(form?.success === true) return
         if(data.status !== 201) return
         console.log("Status checked")
-        if(data.method !== "card") return
+        if(data.method !== "other_method") return
         console.log("Method checked")
 
         try {
