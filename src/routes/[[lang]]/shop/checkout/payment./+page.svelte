@@ -1,6 +1,7 @@
 
 <script lang='ts'>
   import { browser } from '$app/environment';
+  import { enhance } from '$app/forms';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     export let data
@@ -126,7 +127,7 @@
 </div>
 
 {#if browser }
-    <form class="hidden" id="order" action="?/order" method="POST">
+    <form use:enhance class="hidden" id="order" action="?/order" method="POST">
         <input
             hidden
             autocomplete="off"
