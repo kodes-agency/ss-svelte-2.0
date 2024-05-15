@@ -3,6 +3,7 @@ import {
   BORICA_DEV_PRIVATE_KEY,
   BORICA_DEV_GATEWAY,
   BORICA_TERMINAL,
+  LANG,
 } from "$env/static/private";
 import { PUBLIC_SHOP_API_URL } from "$env/static/public";
 import { fail, type Actions } from "@sveltejs/kit";
@@ -52,7 +53,36 @@ export const load = async ({ cookies, fetch, url, params }) => {
     });
 
     if (request.ok) {
-      let transactionData = await request.json();
+    let transactionData = await request.json();
+
+    await fetch('/api/cart/add-payment-record', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            STATUS: transactionData.ACTION,
+            STATUSMSG: transactionData.STATUSMSG,
+            RC: transactionData.RC,
+            AMOUNT: transactionData.AMOUNT,
+            CURRENCY: transactionData.CURRENCY,
+            ORDER: transactionData.ORDER,
+            DESC: transactionData.DESC,  
+            TIMESTAMP: transactionData.TIMESTAMP,
+            LANG: transactionData.LANG,
+            TRAN_TRTYPE: transactionData.TRAN_TRTYPE,
+            RRN: transactionData.RRN,
+            INT_REF: transactionData.INT_REF,
+            PARES_STATUS: transactionData.PARES_STATUS,
+            AUTH_STEP_RES: transactionData.AUTH_STEP_RES,
+            CARDHOLDERINFO: transactionData.CARDHOLDERINFO,
+            ECI: transactionData.ECI,
+            CARD: transactionData.CARD,
+            CARD_BRAND: transactionData.CARD_BRAND,
+        })
+    })
+  
+
       if (transactionData.RC === "00") {
         return {
           status: 201,
