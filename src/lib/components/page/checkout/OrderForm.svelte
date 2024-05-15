@@ -238,6 +238,7 @@
           on:click={(e) => {
             e.preventDefault();
             toggleSteps("backwards");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-brown bg-white px-6 py-1"
           >{pageData.shop.buttonBack}</button
@@ -245,6 +246,9 @@
         <button
           type="submit"
           form="customerDetails"
+          on:click={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
           class=" disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-50 font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
           >{pageData.shop.buttonContinueToCheckout}</button
         >

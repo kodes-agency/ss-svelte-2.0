@@ -75,6 +75,7 @@
         <button
           on:click={() => {
             toggleSteps("forwards");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
           >{pageData.shop.buttonContinueToCheckout}
