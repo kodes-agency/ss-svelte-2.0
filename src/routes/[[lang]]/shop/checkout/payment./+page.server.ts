@@ -52,9 +52,6 @@ export const load = async ({ cookies, fetch, url, params }) => {
     });
 
     if (request.ok) {
-      cookies.delete("orderNumber", {
-        path: "/",
-      });
 
       let transactionData = await request.json();
       if (transactionData.RC === "00") {
@@ -125,6 +122,9 @@ export const actions: Actions = {
       console.log(wooRes);
 
       if (wooReq.ok && wooRes.order_id) {
+        cookies.delete("orderNumber", {
+          path: "/",
+        });
         return { success: true };
       } else {
         return { success: false };
