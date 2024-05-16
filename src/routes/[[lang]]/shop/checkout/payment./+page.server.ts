@@ -56,40 +56,40 @@ export const load = async ({ cookies, fetch, url, params }) => {
     let transactionData = await request.json();
     console.log(transactionData)
 
-    const year = transactionData.TIMESTAMP.slice(0, 4);
-    const month = transactionData.TIMESTAMP.slice(4, 6);
-    const day = transactionData.TIMESTAMP.slice(6, 8);
-    const hour = transactionData.TIMESTAMP.slice(8, 10);
-    const minute = transactionData.TIMESTAMP.slice(10, 12);
-    const second = transactionData.TIMESTAMP.slice(12, 14);
-    const formattedTimestamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
+    // const year = transactionData.TIMESTAMP.slice(0, 4);
+    // const month = transactionData.TIMESTAMP.slice(4, 6);
+    // const day = transactionData.TIMESTAMP.slice(6, 8);
+    // const hour = transactionData.TIMESTAMP.slice(8, 10);
+    // const minute = transactionData.TIMESTAMP.slice(10, 12);
+    // const second = transactionData.TIMESTAMP.slice(12, 14);
+    // const formattedTimestamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
 
-    await fetch('/api/cart/add-payment-record', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            ACTION: transactionData.ACTION,
-            STATUSMSG: transactionData.STATUSMSG,
-            RC: transactionData.RC,
-            AMOUNT: transactionData.AMOUNT,
-            CURRENCY: transactionData.CURRENCY,
-            ORDER: transactionData.ORDER,
-            DESC: transactionData.DESC,  
-            TIMESTAMP: formattedTimestamp, 
-            LANG: transactionData.LANG,
-            TRAN_TRTYPE: transactionData.TRAN_TRTYPE,
-            RRN: transactionData.RRN,
-            INT_REF: transactionData.INT_REF,
-            PARES_STATUS: transactionData.PARES_STATUS,
-            AUTH_STEP_RES: transactionData.AUTH_STEP_RES,
-            CARDHOLDERINFO: transactionData.CARDHOLDERINFO,
-            ECI: transactionData.ECI,
-            CARD: transactionData.CARD,
-            CARD_BRAND: transactionData.CARD_BRAND,
-        })
-    })
+    // await fetch('/api/cart/add-payment-record', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         ACTION: transactionData.ACTION,
+    //         STATUSMSG: transactionData.STATUSMSG,
+    //         RC: transactionData.RC,
+    //         AMOUNT: transactionData.AMOUNT,
+    //         CURRENCY: transactionData.CURRENCY,
+    //         ORDER: transactionData.ORDER,
+    //         DESC: transactionData.DESC,  
+    //         TIMESTAMP: formattedTimestamp, 
+    //         LANG: transactionData.LANG,
+    //         TRAN_TRTYPE: transactionData.TRAN_TRTYPE,
+    //         RRN: transactionData.RRN,
+    //         INT_REF: transactionData.INT_REF,
+    //         PARES_STATUS: transactionData.PARES_STATUS,
+    //         AUTH_STEP_RES: transactionData.AUTH_STEP_RES,
+    //         CARDHOLDERINFO: transactionData.CARDHOLDERINFO,
+    //         ECI: transactionData.ECI,
+    //         CARD: transactionData.CARD,
+    //         CARD_BRAND: transactionData.CARD_BRAND,
+    //     })
+    // })
   
 
       if (transactionData.RC === "00") {

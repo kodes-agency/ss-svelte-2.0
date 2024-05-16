@@ -42,7 +42,7 @@
         <div class="w-full h-px bg-brown"></div>
 
         <div class=" space-y-4 py-4">
-          <div class="flex justify-between items-center px-4">
+          <!-- <div class="flex justify-between items-center px-4">
             <label for="cod" class="italic font-serif text-gray">{pageData.shop.buttonCash}</label>
             <input 
               id="cod" 
@@ -55,7 +55,7 @@
                   paymentMethod = target.value.toString()
                 }}
               class="form-radio focus:ring-gray rounded-none caret-brown bg-white focus:outline-none focus:border-gray border text-base text-brown font-sansy border-brown">
-          </div>
+          </div> -->
           <div class="flex justify-between items-center px-4">
             <label for="card" class="italic font-serif text-gray">{pageData.shop.buttonCard}</label>
             <input 
