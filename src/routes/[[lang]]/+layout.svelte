@@ -41,7 +41,6 @@
 
     }
 
-    console.log(data.cartData)
 </script>
 
 <svelte:head>

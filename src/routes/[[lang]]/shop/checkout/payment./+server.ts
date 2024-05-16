@@ -5,7 +5,6 @@ export async function POST({ request, cookies, fetch }) {
   try {
     const req = await request.json();
 
-    console.log(req);
 
     return json(req);
   } catch (error) {

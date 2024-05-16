@@ -54,7 +54,6 @@ export const load = async ({ cookies, fetch, url, params }) => {
 
     if (request.ok) {
     let transactionData = await request.json();
-    console.log(transactionData)
 
     // const year = transactionData.TIMESTAMP.slice(0, 4);
     // const month = transactionData.TIMESTAMP.slice(4, 6);
@@ -93,7 +92,6 @@ export const load = async ({ cookies, fetch, url, params }) => {
   
 
       if (transactionData.RC === "00") {
-        console.log(transactionData)
         return {
           status: 201,
           success: true,
@@ -158,7 +156,6 @@ export const actions: Actions = {
       });
 
       const wooRes = await wooReq.json();
-      console.log(wooRes);
 
       if (wooReq.ok && wooRes.order_id) {
         return { success: true };

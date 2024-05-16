@@ -6,7 +6,6 @@
     import { onMount } from 'svelte';
     export let data
     export let form
-    console.log(data)
     console.log(form)
 
     const translations = {

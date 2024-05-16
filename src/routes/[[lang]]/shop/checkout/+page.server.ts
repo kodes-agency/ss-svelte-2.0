@@ -206,7 +206,6 @@ export const actions: Actions = {
       });
 
       const wooRes = await wooReq.json();
-      console.log(wooRes)
       
       if(wooReq.ok && wooRes.order_id){
         return { success: true }
