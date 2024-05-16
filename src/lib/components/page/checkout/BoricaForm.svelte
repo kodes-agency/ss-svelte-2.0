@@ -62,7 +62,7 @@
         on:click={ async(e)=>{
         e.preventDefault()
         console.log('Submit')
-        await pushRecord()
+        // await pushRecord()
         // @ts-ignore
         document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>
