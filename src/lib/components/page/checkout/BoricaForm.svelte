@@ -4,29 +4,29 @@
         export let signitureData:any
         export let payButton: any
         
-        // async function pushRecord(){
-        //     const recordRec = await fetch('/api/cart/add-payment-record', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             AMOUNT: signitureData.AMOUNT,
-        //             CURRENCY: signitureData.CURRENCY,
-        //             ORDER: signitureData.ORDER,
-        //             DESC: signitureData.DESC,  
-        //             TIMESTAMP: signitureData.TIMESTAMP,
-        //         })
-        //     })
+        async function pushRecord(){
+            const recordRec = await fetch('/api/cart/add-payment-record', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    AMOUNT: signitureData.AMOUNT,
+                    CURRENCY: signitureData.CURRENCY,
+                    ORDER: signitureData.ORDER,
+                    DESC: signitureData.DESC,  
+                    TIMESTAMP: signitureData.TIMESTAMP,
+                })
+            })
 
-        //     let recordRes = await recordRec.json()
+            let recordRes = await recordRec.json()
 
-        //     if(recordRec.ok){
-        //         console.log('Record added')
-        //     }else{  
-        //         console.log('Record not added')
-        //     }
-        // }
+            if(recordRec.ok){
+                console.log('Record added')
+            }else{  
+                console.log('Record not added')
+            }
+        }
         // console.log($page.params.lang)
 </script>
 
@@ -62,8 +62,7 @@
         on:click={ async(e)=>{
         e.preventDefault()
         console.log('Submit')
-        // await pushRecord()
-        // @ts-ignore
+        await pushRecord()
         document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>
 
