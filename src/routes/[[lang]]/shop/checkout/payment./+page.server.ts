@@ -54,6 +54,7 @@ export const load = async ({ cookies, fetch, url, params }) => {
 
     if (request.ok) {
     let transactionData = await request.json();
+    console.log(transactionData)
 
     const year = transactionData.TIMESTAMP.slice(0, 4);
     const month = transactionData.TIMESTAMP.slice(4, 6);

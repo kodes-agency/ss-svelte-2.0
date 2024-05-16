@@ -59,7 +59,7 @@
     }
 
     onMount(async () => {
-        if(form?.success === true) return
+        if(form?.success === false) return
         if(data.status !== 201) return
         console.log("Status checked")
         if(data.method !== "other_method") return
