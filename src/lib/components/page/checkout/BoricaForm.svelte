@@ -46,7 +46,7 @@
       name="AD.CUST_BOR_ORDER_ID"
       value={signitureData.AD_CUST_BOR_ORDER_ID}
     />
-    <input type="hidden" name="LANG" value={!$page.params.lang ? "BG" : $page.params.lang == "bg" ? "BG" : "EN" } />
+    <input type="hidden" name="LANG" value={$page.params.lang == undefined ? "BG" : $page.params.lang == "bg" ? "BG" : "EN" } />
     <input type="hidden" name="TIMESTAMP" value={signitureData.TIMESTAMP} />
     <input type="hidden" name="NONCE" value={signitureData.NONCE} />
     <input type="hidden" name="RFU" value={signitureData.RFU} />

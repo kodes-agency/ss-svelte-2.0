@@ -93,6 +93,7 @@ export const load = async ({ cookies, fetch, url, params }) => {
   
 
       if (transactionData.RC === "00") {
+        console.log(transactionData)
         return {
           status: 201,
           success: true,
