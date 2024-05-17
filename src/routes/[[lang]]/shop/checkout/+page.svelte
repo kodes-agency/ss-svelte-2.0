@@ -68,7 +68,7 @@
     ageConsent = window.sessionStorage.getItem('ageConsent')
     policyConsent = window.sessionStorage.getItem('policyConsent')
     marketingConsent = window.sessionStorage.getItem('marketingConsent')
-    customerNote = window.sessionStorage.getItem('customerNote')
+    customerNote = window.localStorage.getItem('customerNote')
 
     invoice = window.sessionStorage.getItem('invoice')
 

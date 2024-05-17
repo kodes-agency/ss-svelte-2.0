@@ -135,7 +135,7 @@
             aria-hidden="true"
             name="customerNote"
             type="text"
-            value={window.sessionStorage.getItem("customerNote")}
+            value={window.localStorage.getItem("customerNote")}
         />
     </form>
 {/if}

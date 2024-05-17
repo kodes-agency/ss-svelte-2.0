@@ -14,6 +14,8 @@ export async function POST({ request, fetch, cookies }) {
 
   let recordRes = await recordRec.json()
 
+  console.log(recordRes)
+
   if(recordRec.ok){
       console.log('Record added')
       cookies.set("orderNumber", record.ORDER, {
@@ -23,7 +25,6 @@ export async function POST({ request, fetch, cookies }) {
   }else{  
       console.log('Record not added')
   }
-
     return json(recordRes);
   } catch (error) {
     console.log(error);

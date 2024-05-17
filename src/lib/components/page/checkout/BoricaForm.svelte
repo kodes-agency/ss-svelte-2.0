@@ -61,7 +61,6 @@
         class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
         on:click={ async(e)=>{
         e.preventDefault()
-        console.log('Submit')
         await pushRecord()
         document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>

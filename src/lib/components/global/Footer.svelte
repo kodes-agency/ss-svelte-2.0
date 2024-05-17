@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
-  import { PUBLIC_API_URL, PUBLIC_IMG_URL } from "$env/static/public";
+    import {  PUBLIC_IMG_URL } from "$env/static/public";
     import type { General } from "$lib/types/payloadTypes";
     export let pageData: General
 </script>
