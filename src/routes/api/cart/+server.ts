@@ -10,14 +10,14 @@ export async function GET({ cookies }) {
       obj[cookie.name] = cookie.value;
     });
 
-    const responseGet = await fetch(`${PUBLIC_SHOP_API_URL}/cart`, {
+    const getCartReq = await fetch(`${PUBLIC_SHOP_API_URL}/cart`, {
       method: "GET",
       headers: obj,
     });
 
-    const dataGet = await responseGet.json();
+    const getCartRes = await getCartReq.json();
 
-    return json(dataGet);
+    return json(getCartRes);
   } catch (error) {
     console.log(error);
     return json({ error: error });
