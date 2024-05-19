@@ -24,8 +24,12 @@ export async function POST({ request, fetch, cookies }) {
       "Content-Type": "application/json",
       },
       body: JSON.stringify({
-      ...record,
-      orderData: getCartRes
+        ...record,
+        orderData: {
+          ...getCartRes,
+          nonce: cookies.get("nonce"),
+          cartToken: cookies.get("cart-token"),
+        },
       }),
     });
 

@@ -17,6 +17,8 @@ export async function GET({ cookies }) {
 
     const getCartRes = await getCartReq.json();
 
+    console.log(getCartRes);
+
     return json(getCartRes);
   } catch (error) {
     console.log(error);

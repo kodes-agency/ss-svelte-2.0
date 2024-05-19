@@ -64,15 +64,15 @@
         if(data.method !== "other_method") return
         console.log("Method checked")
 
-        try {
-            console.log("Submitting order form!!!")
-            let orderForm = document.forms.namedItem("order")
-            if(orderForm) orderForm.submit()
-            return { success: false, error: "An error occurred during checkout" };
-        } catch (error) {
-            console.error(error);
-            return { success: false, error: "An error occurred during checkout" };
-        }
+        // try {
+        //     console.log("Submitting order form!!!")
+        //     let orderForm = document.forms.namedItem("order")
+        //     if(orderForm) orderForm.submit()
+        //     return { success: false, error: "An error occurred during checkout" };
+        // } catch (error) {
+        //     console.error(error);
+        //     return { success: false, error: "An error occurred during checkout" };
+        // }
     })
 </script>
 

@@ -121,7 +121,7 @@ export const actions: Actions = {
 
       const wooRes = await wooReq.json();
 
-      if (wooReq.ok && wooRes.order_id) {
+      if (wooReq.ok && wooRes.order_id) { 
         return { success: true };
       } else {
         return { success: false };

@@ -34,6 +34,8 @@ export const load = async ({params, fetch, cookies}) => {
 
         let cartData = await response.json()
 
+        console.log(cartData)
+
         // @ts-expect-error
         cookies.set('nonce', response.headers.get('nonce') || "", cookieOptions)
         
