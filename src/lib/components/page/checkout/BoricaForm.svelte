@@ -16,10 +16,9 @@
                     ORDER: signitureData.ORDER,
                     DESC: signitureData.DESC,  
                     TIMESTAMP: signitureData.TIMESTAMP,
+                    LANG: $page.params.lang ? $page.params.lang : "bg",
                 })
             })
-
-            let recordRes = await recordRec.json()
 
             if(recordRec.ok){
                 console.log('Record added')
