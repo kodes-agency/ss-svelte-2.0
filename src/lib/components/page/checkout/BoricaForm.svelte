@@ -17,7 +17,7 @@
                     DESC: signitureData.DESC,  
                     TIMESTAMP: signitureData.TIMESTAMP,
                     LANG: $page.params.lang ? $page.params.lang : "bg",
-                    customerNote: window.localStorage.getItem('customerNote'),
+                    customerNote: window.sessionStorage.getItem('customerNote'),
                 })
             })
 
