@@ -56,6 +56,9 @@ export const load = async ({ cookies, fetch, url }) => {
     let transactionData = await request.json();
 
       if (transactionData.RC === "00") {
+        cookies.delete("cart-token", { path: "/" });
+        cookies.delete("nonce", { path: "/" });
+
         return {
           status: 201,
           success: true,
