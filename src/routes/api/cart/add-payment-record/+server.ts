@@ -18,6 +18,8 @@ export async function POST({ request, fetch, cookies }) {
     const getCartRes = await getCartReq.json();
 
     const record = await request.json();
+
+    console.log("This is the customerNote:" + record.customerNote)
     const recordRec = await fetch(`${PUBLIC_API_URL}/payments`, {
       method: "POST",
       headers: {
