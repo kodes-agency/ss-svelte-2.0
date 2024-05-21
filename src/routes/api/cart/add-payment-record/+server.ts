@@ -35,8 +35,6 @@ export async function POST({ request, fetch, cookies }) {
 
     let recordRes = await recordRec.json();
 
-    console.log(recordRes);
-
     if (recordRec.ok) {
       console.log("Record added");
       cookies.set("orderNumber", record.ORDER, {

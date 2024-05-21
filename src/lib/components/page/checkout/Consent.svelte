@@ -26,7 +26,7 @@
         <textarea
           bind:value={customerNote}
           on:input={({ target }) => {
-            window.localStorage.setItem(
+            window.sessionStorage.setItem(
               "customerNote",
               target.value.toString()
             );

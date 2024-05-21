@@ -7,7 +7,7 @@
   import BoricaForm from "./BoricaForm.svelte";
   import { formatPrice } from "$lib/functions/formatPrice";
   import type { General } from "$lib/types/payloadTypes";
-  export let cart: Order;
+  export let cart: any;
   export let toggleSteps: any;;
   export let signitureDate: any;
   export let checkoutData: any;
@@ -149,25 +149,25 @@
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyName}</p>
                 <p class="text-gray italic font-serif">
-                  {checkoutData.billing_address.first_name}
+                  {checkoutData.billing_address.address_2}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.vatNumber}</p>
                 <p class="text-gray italic font-serif">
-                  {checkoutData.billing_address.last_name}
+                  {checkoutData.billing_address.company}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyCountry}</p>
                 <p class="text-gray italic font-serif">
-                  {checkoutData.billing_address.country}
+                  {checkoutData.shipping_address.address_2}
                 </p>
               </div>
               <div class="flex flex-row w-full justify-between">
                 <p class="text-gray italic font-serif">{pageData.shop.companyAddress}</p>
                 <p class="text-gray italic font-serif">
-                  {checkoutData.billing_address.address_1}
+                  {checkoutData.shipping_address.company}
                 </p>
               </div>
             </div>

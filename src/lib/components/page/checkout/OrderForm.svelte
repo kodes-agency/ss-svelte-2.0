@@ -9,8 +9,6 @@
   export let formData
   export let customerDetails: any
 
-  $: invoice = Boolean(invoice);
-
   const { form, errors, constraints, message, enhance } = superForm(formData, {
     validators: 'clear',
     onUpdated({form}) {
@@ -39,15 +37,14 @@
             <input
               id="invoice"
               bind:checked={invoice}
-              on:change={({ target }) => {
-                if (target.checked) {
-                  window.sessionStorage.setItem(
-                    "invoice",
-                    target.checked.toString()
-                  );
+              on:change={({target}) => {
+                // @ts-ignore
+                if (target.checked) { window.sessionStorage.setItem("invoice", "1");
                 } else {
                   window.sessionStorage.removeItem("invoice");
                 }
+
+                console.log(window.sessionStorage.getItem("invoice"))
               }}
               type="checkbox"
               class="focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown"
@@ -182,49 +179,49 @@
               transition:slide
             >
               <div class="flex flex-col space-y-1 w-full">
-                <label class="uppercase text-sm font-sansy text-brown" for="companyName"> {pageData.shop.companyName} * </label>
+                <label class="uppercase text-sm font-sansy text-brown" for="billingAddress_2"> {pageData.shop.companyName} * </label>
                 <input 
                     type="text"
-                    id="companyName"
-                    name="companyName"
-                    bind:value={$form.companyName}
-                    aria-invalid={$errors.companyName ? 'true' : undefined}
-                    {...$constraints.companyName}
+                    id="billingAddress_2"
+                    name="billingAddress_2"
+                    bind:value={$form.billingAddress_2}
+                    aria-invalid={$errors.billingAddress_2 ? 'true' : undefined}
+                    {...$constraints.billingAddress_2}
                     class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
               </div>
               <div class="flex flex-col space-y-1 w-full">
-                <label class="uppercase text-sm font-sansy text-brown" for="companyVat"> {pageData.shop.vatNumber} * </label>
+                <label class="uppercase text-sm font-sansy text-brown" for="billingCompany"> {pageData.shop.vatNumber} * </label>
                 <input 
                     type="text"
-                    id="companyVat" 
-                    name="companyVat"
-                    bind:value={$form.companyVat}
-                    aria-invalid={$errors.companyVat ? 'true' : undefined}
-                    {...$constraints.companyVat}
+                    id="billingCompany" 
+                    name="billingCompany"
+                    bind:value={$form.billingCompany}
+                    aria-invalid={$errors.billingCompany ? 'true' : undefined}
+                    {...$constraints.billingCompany}
                     class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
               </div>
               <div class="flex flex-col space-y-1 w-full">
-                <label class="uppercase text-sm font-sansy text-brown" for="companyCountry"> {pageData.shop.companyCountry} * </label>
+                <label class="uppercase text-sm font-sansy text-brown" for="shippingAddress_2"> {pageData.shop.companyCountry} * </label>
                 <input 
                     type="text"
-                    id="companyCountry" 
-                    name="companyCountry"
-                    bind:value={$form.companyCountry}
-                    aria-invalid={$errors.companyCountry ? 'true' : undefined}
-                    {...$constraints.companyCountry}
+                    id="shippingAddress_2" 
+                    name="shippingAddress_2"
+                    bind:value={$form.shippingAddress_2}
+                    aria-invalid={$errors.shippingAddress_2 ? 'true' : undefined}
+                    {...$constraints.shippingAddress_2}
                     class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
               </div>
               <div class="">
                 <label
                   class="uppercase text-sm font-sansy text-brown"
-                  for="companyAddress">{pageData.shop.companyAddress} *</label
+                  for="shippingCompany">{pageData.shop.companyAddress} *</label
                 >
                 <textarea
-                  name="companyAddress"
-                  id="companyAddress"
-                  bind:value={$form.companyAddress}
-                  aria-invalid={$errors.companyAddress ? 'true' : undefined}
-                  {...$constraints.companyAddress}
+                  name="shippingCompany"
+                  id="shippingCompany"
+                  bind:value={$form.shippingCompany}
+                  aria-invalid={$errors.shippingCompany ? 'true' : undefined}
+                  {...$constraints.shippingCompany}
                   class="form-textarea border text-brown bg-white border-brown rounded-md w-full"
                   rows="3"
                 />

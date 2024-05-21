@@ -57,14 +57,14 @@ export const actions = {
       return fail(400, { form });
     }
 
-    let message = {
+    let data = {
       email: form.data.email,
       phone: form.data.phoneNumber,
       companyName: form.data.companyName,
       contactName: form.data.contactPerson,
-      message: `Предмет на дейност: ${form.data.businessActivity}
-Интерес към: ${form.data.interests.join(", ")}
-Ниво на познание: ${form.data.knowledge}
+      message: `Предмет на дейност: ${form.data.businessActivity} | \n
+Интерес към: ${form.data.interests.join(", ")}| \n
+Ниво на познание: ${form.data.knowledge}| \n
 Текущо предлагане: ${form.data.offering}`
     };
 
@@ -74,12 +74,15 @@ export const actions = {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(message)
+      body: JSON.stringify(data)
     });
 
     const res = await req.json();
 
-    return
-      {form}
+    if(!req.ok){
+      return message(form, {success: false})
+    }
+
+    return message(form, {success: true})
   },
 };

@@ -14,15 +14,15 @@
   import type { Order } from "$lib/types/orderTypes";
   
   export let data
-  export let form
+  // export let form
 
-  onMount(()=>{
-    if(form && form.success === true){
-      goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=201` : `/shop/checkout/payment.?method=cod&status=201`)
-    } else if(form && form.success === false){
-      goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=403` : `/shop/checkout/payment.?method=cod&status=403`)
-    }
-  })
+  // onMount(()=>{
+  //   if(form && form.success === true){
+  //     goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=201` : `/shop/checkout/payment.?method=cod&status=201`)
+  //   } else if(form && form.success === false){
+  //     goto($page.params.lang ? `/${$page.params.lang}/shop/checkout/payment.?method=cod&status=403` : `/shop/checkout/payment.?method=cod&status=403`)
+  //   }
+  // })
 
   let cart: Order;
   let step = 1;
@@ -60,6 +60,8 @@
     if (direction === "backwards" && step > 1) {
       step -= 1;
     }
+
+    invalidateAll()
   }
 
 
@@ -68,7 +70,7 @@
     ageConsent = window.sessionStorage.getItem('ageConsent')
     policyConsent = window.sessionStorage.getItem('policyConsent')
     marketingConsent = window.sessionStorage.getItem('marketingConsent')
-    customerNote = window.localStorage.getItem('customerNote')
+    customerNote = window.sessionStorage.getItem('customerNote')
 
     invoice = window.sessionStorage.getItem('invoice')
 
@@ -76,8 +78,6 @@
     deliveryMethod = window.sessionStorage.getItem('deliveryMethod')
     paymentMethod = window.sessionStorage.getItem('paymentMethod')
     deliveryConsent = window.sessionStorage.getItem('deliveryConsent')
-
-    // invalidateAll();
   });
 </script>
 

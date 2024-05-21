@@ -29,11 +29,10 @@ const customerDetailsSchema = z.object({
   state: z.string(),
   postcode: z.string(),
   address_1: z.string(),
-  companyName: z.string(),
-  companyVat: z.string(),
-  companyCountry: z.string(),
-  companyCity: z.string(),
-  companyAddress: z.string(),
+  billingAddress_2: z.string(),
+  billingCompany: z.string(),
+  shippingAddress_2: z.string(),
+  shippingCompany: z.string(),
   customerNote: z.string(),
 });
 
@@ -44,6 +43,7 @@ const paymentSchema = z.object({
 /** @type {import('@sveltejs/kit').Load} */
 export const load = async ({ params, cookies, request }) => {
   try {
+    // Get cart items
     let checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
       headers: {
         Nonce: `${cookies.get("nonce") || ""}`,
@@ -53,6 +53,7 @@ export const load = async ({ params, cookies, request }) => {
 
     let checkoutData = await checkoutReq.json();
 
+    // Get cart items data
     let cartItemsIds = await checkoutData.items.map((item: any) => {
       return `"${item.id}"`;
     });
@@ -70,6 +71,8 @@ export const load = async ({ params, cookies, request }) => {
 
     const data = await payloadReq.json();
 
+
+    // Add product name and slug to cart items
     checkoutData.items.forEach((item: any) => {
       let productId = item.id;
 
@@ -91,8 +94,29 @@ export const load = async ({ params, cookies, request }) => {
       item.productType = correspondingProduct.productKind;
     });
 
+
+    // Validate payment forms
     let customerDetailsForm;
     const paymentForm = await superValidate(zod(paymentSchema));
+
+  
+    // Validate customer details form
+
+    const customerDetails = {
+      first_name: checkoutData.billing_address.first_name,
+      last_name: checkoutData.billing_address.last_name,
+      email: checkoutData.billing_address.email,
+      phone: checkoutData.billing_address.phone,
+      country: checkoutData.billing_address.country,
+      city: checkoutData.billing_address.city,
+      postcode: checkoutData.billing_address.postcode,
+      address_1: checkoutData.billing_address.address_1,
+      billingAddress_2: checkoutData.billing_address.address_2,
+      billingCompany: checkoutData.billing_address.company,
+      shippingAddress_2: checkoutData.shipping_address.address_2,
+      shippingCompany: checkoutData.shipping_address.company,
+    };
+    
 
     if (
       checkoutData.billing_address.first_name !== "" ||
@@ -104,7 +128,7 @@ export const load = async ({ params, cookies, request }) => {
       checkoutData.billing_address.address_1 !== ""
     ) {
       customerDetailsForm = await superValidate(
-        checkoutData.billing_address,
+        customerDetails,
         zod(customerDetailsSchema)
       );
     } else {
@@ -147,7 +171,8 @@ export const actions: Actions = {
         city: customerDetailsForm.data.city,
         postcode: customerDetailsForm.data.postcode,
         address_1: customerDetailsForm.data.address_1,
-        address_2: customerDetailsForm.data.companyName ? `Фирма: ${customerDetailsForm.data.companyName},\n ЕИК: ${customerDetailsForm.data.companyVat},\n Адрес: ${customerDetailsForm.data.companyCountry}, ${customerDetailsForm.data.companyCity}, ${customerDetailsForm.data.companyAddress}` : ""
+        address_2: customerDetailsForm.data.billingAddress_2,
+        company: customerDetailsForm.data.billingCompany,
       };
 
       let shipping_address = {
@@ -156,8 +181,10 @@ export const actions: Actions = {
         country: customerDetailsForm.data.country,
         city: customerDetailsForm.data.city,
         postcode: customerDetailsForm.data.postcode,
-        address_1: customerDetailsForm.data.address_1,
         phone: customerDetailsForm.data.phone,
+        address_1: customerDetailsForm.data.address_1,
+        address_2: customerDetailsForm.data.shippingAddress_2,
+        company: customerDetailsForm.data.shippingCompany,
       };
 
       let req = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
@@ -177,44 +204,44 @@ export const actions: Actions = {
     }
   },
 
-  order: async ({ cookies, request }) => {
-    try {
-      const formData = await request.formData();
+  // order: async ({ cookies, request }) => {
+  //   try {
+  //     const formData = await request.formData();
 
-      const order = {
-        billing_address: {},
-        customerNote: formData.get("customerNote"),
-        payment_method: "cod",
-        create_account: false,
-      };
+  //     const order = {
+  //       billing_address: {},
+  //       customerNote: formData.get("customerNote"),
+  //       payment_method: "cod",
+  //       create_account: false,
+  //     };
 
-      const checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
-        headers: {
-          Nonce: `${cookies.get("nonce") || ""}`,
-          "Cart-token": `${cookies.get("cart-token") || ""}`,
-        },
-      });
+  //     const checkoutReq = await fetch(PUBLIC_SHOP_API_URL + "/cart", {
+  //       headers: {
+  //         Nonce: `${cookies.get("nonce") || ""}`,
+  //         "Cart-token": `${cookies.get("cart-token") || ""}`,
+  //       },
+  //     });
 
-      const wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Nonce: `${cookies.get("nonce") || ""}`,
-          "Cart-token": `${cookies.get("cart-token") || ""}`,
-        },
-        body: JSON.stringify(order),
-      });
+  //     const wooReq = await fetch(PUBLIC_SHOP_API_URL + "/checkout", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Nonce: `${cookies.get("nonce") || ""}`,
+  //         "Cart-token": `${cookies.get("cart-token") || ""}`,
+  //       },
+  //       body: JSON.stringify(order),
+  //     });
 
-      const wooRes = await wooReq.json();
+  //     const wooRes = await wooReq.json();
       
-      if(wooReq.ok && wooRes.order_id){
-        return { success: true }
-      } else {
-        return { success: false }
-      }
-    } catch (error) {
-      console.error(error);
-      return fail(500, { error: "An error occurred during recording the order", success: false });
-    }
-  },
+  //     if(wooReq.ok && wooRes.order_id){
+  //       return { success: true }
+  //     } else {
+  //       return { success: false }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     return fail(500, { error: "An error occurred during recording the order", success: false });
+  //   }
+  // },
 };
