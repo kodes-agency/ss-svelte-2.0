@@ -2,7 +2,13 @@
 <script lang='ts'>
     import { browser } from '$app/environment';
     import { enhance } from '$app/forms';
+    import { invalidateAll } from '$app/navigation';
+    import { onMount } from 'svelte';
     export let data
+
+    onMount(() => {
+        invalidateAll()
+    })
 
     const translations = {
         bg: [
