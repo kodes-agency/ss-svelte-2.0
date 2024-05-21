@@ -27,7 +27,7 @@ export async function POST({ request, fetch, cookies }) {
         ...record,
         orderData: {
           ...getCartRes,
-          customerRemark: record.customerNote,
+          customerNote: record.customerNote,
           nonce: cookies.get("nonce"),
           cartToken: cookies.get("cart-token"),
         },
