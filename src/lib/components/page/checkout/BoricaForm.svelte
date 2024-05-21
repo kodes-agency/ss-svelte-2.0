@@ -17,6 +17,7 @@
                     DESC: signitureData.DESC,  
                     TIMESTAMP: signitureData.TIMESTAMP,
                     LANG: $page.params.lang ? $page.params.lang : "bg",
+                    customerNote: window.localStorage.getItem('customerNote'),
                 })
             })
 
@@ -26,7 +27,6 @@
                 console.log('Record not added')
             }
         }
-        // console.log($page.params.lang)
 </script>
 
 <div>
@@ -61,6 +61,7 @@
         on:click={ async(e)=>{
         e.preventDefault()
         await pushRecord()
+        // @ts-ignore
         document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>
 
