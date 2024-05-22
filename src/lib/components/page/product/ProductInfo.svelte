@@ -15,6 +15,7 @@
     let closingType = closingTypes.find((el:any)=>el.value === wine.wineDetails.bottleClosingType)
 
     let isOpen: boolean = false 
+
 </script>
 
 <article class="max-w-4xl flex flex-col space-y-10 p-5">
@@ -76,6 +77,12 @@
                 <div class="flex flex-col items-center space-y-2">
                     <h2 class="font-serif italic text-center text-2xl text-gray">{pageData.wines.food}</h2>
                     <p class="text-center italic text-gray font-serif max-w-2xl">{wine.wineRemarks.food}</p>
+                </div>
+            {/if} 
+            {#if wine.wineRemarks.degustation }   
+                <div class="flex flex-col items-center space-y-2">
+                    <h2 class="font-serif italic text-center text-2xl text-gray">{pageData.wines.degustation}</h2>
+                    <p class="text-center italic text-gray font-serif max-w-2xl">{wine.wineRemarks.degustation}</p>
                 </div>
             {/if} 
             {#if wine.productType.productPosition == 'catalog_shop'}

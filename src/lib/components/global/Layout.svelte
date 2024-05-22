@@ -65,7 +65,7 @@
             {/if}
 
             <!-- Text Section -->
-            {#if element.__typename === "TextSection" }
+            {#if element.__typename === "TextSection" && element.anchor !== "package"}
               <section class="flex flex-col items-center justify-center space-y-10 px-5 lg:px-0">
                 {#if element.anchor }
                   <div id={element.anchor}></div>

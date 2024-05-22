@@ -101,6 +101,7 @@
             window.sessionStorage.setItem("marketingConsent", "1");
             marketingConsent =
               window.sessionStorage.getItem("marketingConsent");
+
           }}
           type="checkbox"
           id="marketing-consent"

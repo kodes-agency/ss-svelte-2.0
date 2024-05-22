@@ -13,7 +13,7 @@
 >
   <img class="h-full absolute w-full object-cover object-center" {src} {alt} />
   <h1
-    class="relative text-center text-white uppercase font-sansy font-bold text-4xl mx-5 md:text-6xl"
+    class="relative text-center text-white font-serif text-4xl mx-5 md:text-6xl"
   >
     {@html heading}
   </h1>

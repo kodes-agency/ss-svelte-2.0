@@ -10,6 +10,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { fail, redirect } from "@sveltejs/kit";
 import { sign } from "$lib/functions/sign.js";
+import { subscribe } from "diagnostics_channel";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -34,6 +35,7 @@ const customerDetailsSchema = z.object({
   shippingAddress_2: z.string(),
   shippingCompany: z.string(),
   customerNote: z.string(),
+  subscribe: z.boolean(),
 });
 
 const paymentSchema = z.object({
@@ -197,6 +199,11 @@ export const actions: Actions = {
         body: JSON.stringify({ shipping_address, billing_address }),
       });
 
+
+      // if(customerDetailsForm.data.subscribe){
+      //   registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
+      // }
+
       return { customerDetailsForm };
     } catch (error) {
       console.error(error);
@@ -245,3 +252,7 @@ export const actions: Actions = {
   //   }
   // },
 };
+function registerSubscriber(email: string, phone: string, arg2: string, country: string, city: string) {
+  throw new Error("Function not implemented.");
+}
+

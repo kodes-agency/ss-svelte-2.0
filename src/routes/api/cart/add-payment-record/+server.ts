@@ -19,7 +19,6 @@ export async function POST({ request, fetch, cookies }) {
 
     const record = await request.json();
 
-    console.log("This is the customerNote:" + record.customerNote)
     const recordRec = await fetch(`${PUBLIC_API_URL}/payments`, {
       method: "POST",
       headers: {

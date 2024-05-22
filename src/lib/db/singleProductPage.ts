@@ -43,6 +43,7 @@ export default function (locale: string, slug: string) {
           }
           wineRemarks {
             food
+            degustation
           }
           saleGroup {
             onSale

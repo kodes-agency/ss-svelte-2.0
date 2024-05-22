@@ -43,8 +43,6 @@
                 } else {
                   window.sessionStorage.removeItem("invoice");
                 }
-
-                console.log(window.sessionStorage.getItem("invoice"))
               }}
               type="checkbox"
               class="focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown"
@@ -167,6 +165,13 @@
                 {...$constraints.address_1}
                 class="form-input w-full h-10 rounded-md focus:ring-gray caret-brown focus:outline-none focus:border-gray border bg-white text-base text-brown font-sansy border-brown">
           </div>
+          <input 
+            type="radio"  
+            name="subscribe"
+            class="hidden pointer-events-none absolute"
+            id="subscribe"
+            checked={Boolean(window.sessionStorage.getItem("marketingConsent"))}
+          >
           <div
             class="w-full md:hidden border-b border-brown border-opacity-30"
           ></div>

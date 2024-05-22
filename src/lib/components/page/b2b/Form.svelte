@@ -14,8 +14,6 @@
 
     const { form, errors, constraints, message, enhance } = superForm(formData, {validators: 'clear'});
     
-    console.log($message)
-
 </script>
 
 
