@@ -7,6 +7,7 @@
     import '@beyonk/gdpr-cookie-consent-banner/banner.css' // optional, you can also define your own styles
     import GdprBanner from '@beyonk/gdpr-cookie-consent-banner'
     import type { General } from "$lib/types/payloadTypes";
+    import AgeVerification from "$lib/components/global/AgeVerification.svelte";
 
     export let data
     let layoutData: General
@@ -57,6 +58,12 @@
     cart={data.cartData}
     pageData={data.layoutData}
 />
+<AgeVerification
+    verified={data.verified}
+    pageData={data.layoutData}
+>
+</AgeVerification>
+
 <main class="bg-white">
     <slot/>
 </main>

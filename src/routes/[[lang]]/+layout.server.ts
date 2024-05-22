@@ -42,9 +42,10 @@ export const load = async ({params, fetch, cookies}) => {
             cookies.set('cart-token', response.headers.get('cart-token') || "", cookieOptions)
         }
     
-        return await {
+        return {
             layoutData: pageData.data.General,
-            cartData
+            cartData,
+            verified: cookies.get('verified'),
         }
     } catch (error) {
         console.log(error)
