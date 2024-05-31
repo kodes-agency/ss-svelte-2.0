@@ -15,7 +15,7 @@ let ADDENDUM = "AD,TD";
 let COUNTRY = "BG"; // Страна, Размер: 2
 let MERCH_GMT = "+03"; // Часова зона на търговеца: GMT 3
 let MERCH_URL = "https://santa-sarah.com"; // Линк на страницата на търговеца, Размер: 1-250
-let BACKREF = "https://santa-sarah.com/shop/checkout/payment"; // Линк при връщане след плащане, Размер: 1-250
+let BACKREF = "https://santa-sarah.com/shop/checkout/payment."; // Линк при връщане след плащане, Размер: 1-250
 let EMAIL = "denev@kodes.agency"; // Електронна поща, Размер: 26
 
 export const sign = async (currency:string, amount:string, order:string, desc:string) => {
@@ -45,7 +45,7 @@ export const sign = async (currency:string, amount:string, order:string, desc:st
     sign.update(P_SIGN);
 
     // Sign the data and convert it to a hex string
-    const signature = sign.sign({ key: BORICA_DEV_PRIVATE_KEY, passphrase: BORICA_DEV_PASSPHRASE }, "hex");
+    const signature = sign.sign({ key: BORICA_PRODUCTION_PRIVATE_KEY, passphrase: BORICA_PRODUCTION_PASSPHRASE }, "hex");
 
     let data = {
         GATEWAY,
