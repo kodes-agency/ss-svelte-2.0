@@ -4,7 +4,8 @@ import {
   BORICA_DEV_GATEWAY,
   BORICA_TERMINAL,
   BORICA_PRODUCTION_PASSPHRASE,
-  BORICA_PRODUCTION_PRIVATE_KEY
+  BORICA_PRODUCTION_PRIVATE_KEY,
+  BORICA_PRODUCTION_GATEWAY,
 } from "$env/static/private";
 import { PUBLIC_SHOP_API_URL } from "$env/static/public";
 import { fail, type Actions } from "@sveltejs/kit";
@@ -45,7 +46,7 @@ export const load = async ({ cookies, fetch, url }) => {
       P_SIGN: signature.toUpperCase(),
     };
 
-    const request = await fetch(BORICA_DEV_GATEWAY, {
+    const request = await fetch(BORICA_PRODUCTION_GATEWAY, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
