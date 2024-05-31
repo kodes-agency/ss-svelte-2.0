@@ -46,7 +46,7 @@ export const load = async ({ cookies, fetch, url }) => {
       P_SIGN: signature.toUpperCase(),
     };
 
-    const request = await fetch(BORICA_PRODUCTION_GATEWAY, {
+    const request = await fetch(BORICA_DEV_GATEWAY, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
