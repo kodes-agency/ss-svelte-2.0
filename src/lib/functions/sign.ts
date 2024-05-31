@@ -45,7 +45,7 @@ export const sign = async (currency:string, amount:string, order:string, desc:st
     sign.update(P_SIGN);
 
     // Sign the data and convert it to a hex string
-    const signature = sign.sign({ key: BORICA_PRODUCTION_PRIVATE_KEY, passphrase: BORICA_PRODUCTION_PASSPHRASE }, "hex");
+    const signature = sign.sign({ key: BORICA_DEV_PRIVATE_KEY, passphrase: BORICA_DEV_PASSPHRASE }, "hex");
 
     let data = {
         GATEWAY,

@@ -3,7 +3,6 @@ import {
   BORICA_DEV_PRIVATE_KEY,
   BORICA_DEV_GATEWAY,
   BORICA_TERMINAL,
-  BORICA_PRODUCTION_GATEWAY,
   BORICA_PRODUCTION_PASSPHRASE,
   BORICA_PRODUCTION_PRIVATE_KEY
 } from "$env/static/private";
@@ -33,7 +32,7 @@ export const load = async ({ cookies, fetch, url }) => {
 
     // Sign the data and convert it to a hex string
     const signature = sign.sign(
-      { key: BORICA_PRODUCTION_PRIVATE_KEY, passphrase: BORICA_PRODUCTION_PASSPHRASE },
+      { key: BORICA_DEV_PRIVATE_KEY, passphrase: BORICA_DEV_PASSPHRASE },
       "hex"
     );
 
