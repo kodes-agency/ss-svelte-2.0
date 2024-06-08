@@ -12,7 +12,7 @@
 
     let volume: number = 0
     let quantity: number = 1
-    let maxQuantity: number = 10
+    let maxQuantity: number = 1000
 
     // @ts-ignore
     $:maxQuantity

@@ -13,6 +13,9 @@ export default function (locale: string, productId: string) {
           productBasicInformation {
             harvestYear
           }
+          productBundle {
+            quantity
+          }
         }
       }
     }

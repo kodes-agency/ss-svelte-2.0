@@ -7,6 +7,8 @@
     export let paymentMethod: any
     export let deliveryConsent: any
     export let customerDetails: any
+    export let numberOfItems: number
+
 </script>
 
 <section class="flex flex-col items-center pt-32 lg:pt-40">
@@ -20,10 +22,11 @@
             <svg class="{step === 1 ? "fill-white" : "fill-gray"} lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
         </button>
         <button
+            disabled = {numberOfItems < 6}
             on:click={()=>{
                 step = 2
             }}
-            class="{step === 2 ? "text-white bg-gray" : "text-gray bg-white"} transition-all duration-300 p-2 px-3 min-w-[20px] flex items-center justify-center lg:p-1 lg:px-3 font-sansy uppercase text-gray text-sm border border-gray box-content">
+            class="{step === 2 ? "text-white bg-gray" : "text-gray bg-white"} disabled:cursor-not-allowed disabled:text-opacity-50 transition-all duration-300 p-2 px-3 min-w-[20px] flex items-center justify-center lg:p-1 lg:px-3 font-sansy uppercase text-gray text-sm border border-gray box-content">
             <p class="hidden lg:block">{pageData.shop.stepConsent}</p>
             <svg class="{step === 2 ? "fill-white" : "fill-gray"} lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
         </button>

@@ -8,10 +8,16 @@
   export let toggleSteps: any;
   export let cart: Order;
   export let pageData: General
+  export let numberOfItems: number
 </script>
 
 <section class="flex flex-col items-center py-10 md:py-20">
   <div class="flex flex-col items-center space-y-10 md:space-y-20 max-w-5xl w-full">
+    {#if numberOfItems < 6 }
+      <div class=" rounded-md bg-brown text-white p-8" transition:slide>
+        <p class="text-lg"> <strong>Важно: </strong>За да завършите успешно вашата поръчка е необходимо да поръчате минимум 6 бутилки вино</p>
+      </div>
+    {/if}
     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10">
       <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-6" >
         <h1 class="font-serif text-2xl md:text-3xl italic text-gray">
@@ -73,11 +79,13 @@
       </div>
       <div class="w-full flex flex-col items-end md:pt-10">
         <button
-          on:click={() => {
+        on:click={() => {
+            // disabled={numberOfItems < 6}
+            // if(numberOfItems < 6) return
             toggleSteps("forwards");
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          class=" font-sansy uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
+          class=" font-sansy uppercase disabled:bg-gray disabled:bg-opacity-50 disabled:text-opacity-70 disabled:cursor-not-allowed text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-6 py-1"
           >{pageData.shop.buttonContinueToCheckout}
         </button>
       </div>

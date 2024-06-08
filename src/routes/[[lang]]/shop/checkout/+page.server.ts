@@ -94,8 +94,16 @@ export const load = async ({ params, cookies, request }) => {
           : correspondingProduct.productTitle;
       item.productSlug = correspondingProduct.slug;
       item.productType = correspondingProduct.productKind;
-    });
+      item.q = 1 * item.quantity;
+      if(correspondingProduct.productBundle && correspondingProduct.productBundle?.length > 0){
+        item.q = correspondingProduct.productBundle.reduce((sum, value) => sum + value.quantity, 0) * item.quantity;
+      }
+    })
 
+    const numberOfItems = checkoutData.items.reduce(
+      (acc: number, item: any) => acc + item.q,
+      0
+    );
 
     // Validate payment forms
     let customerDetailsForm;
@@ -146,7 +154,7 @@ export const load = async ({ params, cookies, request }) => {
       `Поръчка от винарско имение Санта Сара`
     );
 
-    return { checkoutData, customerDetailsForm, paymentForm, signitureData };
+    return { checkoutData, customerDetailsForm, paymentForm, signitureData, numberOfItems };
   } catch (error) {
     console.log(error);
   }

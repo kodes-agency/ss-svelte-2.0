@@ -31,6 +31,8 @@
   $: cart = data.checkoutData
   $isInverted = false;
 
+  // $:console.log(cart)
+
   // check if the fileds from step:3 are empty
 
 
@@ -83,11 +85,11 @@
 
 <div class="px-7 min-h-screen">
   {#if data.checkoutData.items.length > 0}
-    <StepMap pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:paymentMethod bind:deliveryConsent bind:customerDetails/>
+    <StepMap numberOfItems={data.numberOfItems} pageData={data.layoutData} bind:step bind:ageConsent bind:policyConsent bind:paymentMethod bind:deliveryConsent bind:customerDetails/>
 
     {#if step === 1}
       <div transition:slide>
-        <Cart pageData={data.layoutData} {cart} {toggleSteps} />
+        <Cart pageData={data.layoutData} {cart} {toggleSteps} numberOfItems={data.numberOfItems} />
       </div>
     {:else if step === 2}
       <div transition:slide>
