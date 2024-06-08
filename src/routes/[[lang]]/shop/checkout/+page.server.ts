@@ -3,6 +3,7 @@ import {
   PUBLIC_GRAPHQL_URL,
   PUBLIC_SHOP_API_URL,
 } from "$env/static/public";
+import { EMAIL_API_URL } from "$env/static/private";
 import type { Product } from "$lib/types/payloadTypes.js";
 import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
@@ -10,7 +11,6 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { fail, redirect } from "@sveltejs/kit";
 import { sign } from "$lib/functions/sign.js";
-import { subscribe } from "diagnostics_channel";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -208,9 +208,9 @@ export const actions: Actions = {
       });
 
 
-      // if(customerDetailsForm.data.subscribe){
-      //   registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
-      // }
+      if(customerDetailsForm.data.subscribe){
+        registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
+      }
 
       return { customerDetailsForm };
     } catch (error) {
@@ -260,7 +260,22 @@ export const actions: Actions = {
   //   }
   // },
 };
-function registerSubscriber(email: string, phone: string, arg2: string, country: string, city: string) {
-  throw new Error("Function not implemented.");
+async function registerSubscriber(email: string, phone: string, name: string, country: string, city: string) {
+  try {
+    const params = new URLSearchParams();
+    params.append("email", email);
+    params.append("phone", phone);
+    params.append("name", name);
+    params.append("country", country);
+    params.append("city", city);
+  
+    const req = await fetch(EMAIL_API_URL + `&${params.toString()}`, {
+      method: "POST",
+    });
+    
+    const res = await req.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 

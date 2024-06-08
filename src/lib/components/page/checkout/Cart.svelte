@@ -15,7 +15,7 @@
   <div class="flex flex-col items-center space-y-10 md:space-y-20 max-w-5xl w-full">
     {#if numberOfItems < 6 }
       <div class=" rounded-md bg-brown text-white p-8" transition:slide>
-        <p class="text-lg"> <strong>Важно: </strong>За да завършите успешно вашата поръчка е необходимо да поръчате минимум 6 бутилки вино</p>
+        <p class="text-lg">{pageData.shop.minumumItemsText}</p>
       </div>
     {/if}
     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10">

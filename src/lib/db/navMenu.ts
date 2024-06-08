@@ -122,6 +122,7 @@ export default function (locale: string) {
           stepPaymentMethod
           stepFinilize
           orderTitle
+          minumumItemsText
         }
         b2b {
           formTitle
