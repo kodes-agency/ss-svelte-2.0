@@ -7,7 +7,7 @@ let TERMINAL = BORICA_TERMINAL; // Идентификатор на термин�
 let TRTYPE = "1"; // Тип на транзацията: 1, 12, 21, 22, 24, 90, Разпер: 1-2
 let RFU = "-"; // Резервирано поле за бъдеща употреба
 
-let GATEWAY = BORICA_DEV_GATEWAY; // Development
+let GATEWAY = BORICA_PRODUCTION_GATEWAY; // Development
 // let GATEWAY = "https://3dsgate.borica.bg/cgi-bin/cgi_link"; // Production
 let MERCHANT = BORICA_MERCHANT; // Идентификатор на търговеца получен от БОРИКА, Размер: 10-15, Тест: $MERCHANT = "1600000001";
 let MERCH_NAME = "Family Wine Estate Santa Sarah AD"; // Наименование на търговеца, Размер: 18
@@ -25,7 +25,7 @@ export const sign = async (amount:string) => {
     let AMOUNT = amount; // Сума на плащането, Формат: xx.xx, Размер: 1-12
     let ORDER = Math.floor(100000 + Math.random() * 900000).toString(); // Номер поръчка, Размер: 6 
     let AD_CUST_BOR_ORDER_ID = `${ORDER}@${ORDER}`; // ORDER + 16 символа
-    let DESC = `Поръчка от винарско имение Санта Сара #${ORDER}`; // Наименование на поръчката, Размер: 8-50
+    let DESC = `Wine Estate Santa Sarah order #${ORDER}`; // Наименование на поръчката, Размер: 8-50
 
     // SIGN: MAC_GENERAL = TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, TIMESTAMP, NONCE, RFU
     let P_SIGN = 
@@ -45,7 +45,7 @@ export const sign = async (amount:string) => {
     sign.update(P_SIGN);
 
     // Sign the data and convert it to a hex string
-    const signature = sign.sign({ key: BORICA_DEV_PRIVATE_KEY, passphrase: BORICA_DEV_PASSPHRASE }, "hex");
+    const signature = sign.sign({ key: BORICA_PRODUCTION_PRIVATE_KEY, passphrase: BORICA_PRODUCTION_PASSPHRASE }, "hex");
 
     let data = {
         GATEWAY,
