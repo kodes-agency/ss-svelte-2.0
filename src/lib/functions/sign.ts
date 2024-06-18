@@ -10,7 +10,7 @@ let RFU = "-"; // Резервирано поле за бъдеща употре
 let GATEWAY = BORICA_PRODUCTION_GATEWAY; // Development
 // let GATEWAY = "https://3dsgate.borica.bg/cgi-bin/cgi_link"; // Production
 let MERCHANT = BORICA_MERCHANT; // Идентификатор на търговеца получен от БОРИКА, Размер: 10-15, Тест: $MERCHANT = "1600000001";
-let MERCH_NAME = "VI Santa Sarah AD"; // Наименование на търговеца, Размер: 18
+let MERCH_NAME = "Family Wine Estate Santa Sarah AD"; // Наименование на търговеца, Размер: 18
 let ADDENDUM = "AD,TD";
 let COUNTRY = "BG"; // Страна, Размер: 2
 let MERCH_GMT = "+03"; // Часова зона на търговеца: GMT 3
