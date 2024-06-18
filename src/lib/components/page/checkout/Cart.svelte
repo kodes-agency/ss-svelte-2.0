@@ -79,9 +79,9 @@
       </div>
       <div class="w-full flex flex-col items-end md:pt-10">
         <button
+        disabled={numberOfItems < 6}
         on:click={() => {
-          // disabled={numberOfItems < 6}
-            // if(numberOfItems < 6) return
+            if(numberOfItems < 6) return
             toggleSteps("forwards");
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
