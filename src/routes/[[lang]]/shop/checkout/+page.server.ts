@@ -148,10 +148,7 @@ export const load = async ({ params, cookies, request }) => {
     // let signitureData = await sign(params.lang == "bg" ? "BGN": "EUR", checkoutData.totals.total_price, checkoutData.id, `Поръчка №${checkoutData.id}`)
 
     let signitureData = await sign(
-      "BGN",
-      (Number(checkoutData.totals.total_price) / 100).toFixed(2).toString(),
-      Math.floor(100000 + Math.random() * 900000).toString(),
-      `Поръчка от винарско имение Санта Сара`
+      (Number(checkoutData.totals.total_price) / 100).toFixed(2).toString()
     );
 
     return { checkoutData, customerDetailsForm, paymentForm, signitureData, numberOfItems };

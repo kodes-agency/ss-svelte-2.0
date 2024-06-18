@@ -18,14 +18,14 @@ let MERCH_URL = "https://santa-sarah.com"; // Линк на страницата
 let BACKREF = "https://santa-sarah.com/shop/checkout/payment."; // Линк при връщане след плащане, Размер: 1-250
 let EMAIL = "denev@kodes.agency"; // Електронна поща, Размер: 26
 
-export const sign = async (currency:string, amount:string, order:string, desc:string) => {
+export const sign = async (amount:string) => {
     let NONCE = crypto.randomBytes(16).toString("hex").toUpperCase(); // Формиране на сигнатура за подписване, Размер: 1-64
     let TIMESTAMP = new Date().toISOString().replace(/[-T:\.Z]/g, "").substring(0,14); // Формат: YYYYMMDDHHMMSS, UTC, Размер: 14
-    let CURRENCY = currency; // Валута на плащането, Размер: 3, Формат: ISO-4217
+    let CURRENCY = "BGN"; // Валута на плащането, Размер: 3, Формат: ISO-4217
     let AMOUNT = amount; // Сума на плащането, Формат: xx.xx, Размер: 1-12
-    let ORDER = order; // Номер поръчка, Размер: 6 
+    let ORDER = Math.floor(100000 + Math.random() * 900000).toString(); // Номер поръчка, Размер: 6 
     let AD_CUST_BOR_ORDER_ID = `${ORDER}@${ORDER}`; // ORDER + 16 символа
-    let DESC = desc; // Наименование на поръчката, Размер: 8-50
+    let DESC = `Поръчка от винарско имение Санта Сара #${ORDER}`; // Наименование на поръчката, Размер: 8-50
 
     // SIGN: MAC_GENERAL = TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, TIMESTAMP, NONCE, RFU
     let P_SIGN = 
