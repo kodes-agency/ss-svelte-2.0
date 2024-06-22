@@ -70,10 +70,11 @@
         class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
         on:click={ async(e)=>{
             e.preventDefault()
+            console.log('clicked')
             const apiResult = await pushRecord()
             if(apiResult.success === false) return errors = {success: false, error: apiResult.error} 
-        // @ts-ignore
-        // document.getElementById('card-payment')?.submit();
+            // @ts-ignore
+            document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>
 
     <!-- <button class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1" type="submit">{payButton}</button> -->
