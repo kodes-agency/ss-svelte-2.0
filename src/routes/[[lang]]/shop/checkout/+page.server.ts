@@ -7,9 +7,9 @@ import { EMAIL_API_URL } from "$env/static/private";
 import type { Product } from "$lib/types/payloadTypes.js";
 import type { Actions } from "@sveltejs/kit";
 import { z } from "zod";
-import { superValidate } from "sveltekit-superforms";
+import { superValidate, setError, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { sign } from "$lib/functions/sign.js";
 
 const phoneRegex = new RegExp(
@@ -166,7 +166,11 @@ export const actions: Actions = {
       );
       if (!customerDetailsForm.valid) {
         // Again, return { customerDetailsForm } and things will just work.
-        return fail(400, { customerDetailsForm });
+        return fail(400, { customerDetailsForm, error: "Invalid form data"});
+      }
+      
+      if(customerDetailsForm.data.subscribe){
+        registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
       }
 
       let billing_address = {
@@ -194,25 +198,32 @@ export const actions: Actions = {
         company: customerDetailsForm.data.shippingCompany,
       };
 
-      let req = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
+      const wooUpdateCustomerRequest = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Nonce: `${cookies.get("nonce") || ""}`,
-          "Cart-token": `${cookies.get("cart-token") || ""}`,
+          Nonce: `${cookies.get("nonce")}`,
+          "Cart-token": `${cookies.get("cart-token")}`,
         },
         body: JSON.stringify({ shipping_address, billing_address }),
       });
+      // return setError(customerDetailsForm, "first_name", "Invalid form data");
 
-
-      if(customerDetailsForm.data.subscribe){
-        registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
+      if(!wooUpdateCustomerRequest.ok) return setError(customerDetailsForm, "first_name" ,"Sorry, an error occurred during customer details update. Please try again later.");
+      const wooUpdateCustomerResponse = await wooUpdateCustomerRequest.json();
+      if(wooUpdateCustomerResponse.code && wooUpdateCustomerResponse.data.status) return setError(customerDetailsForm, 'first_name', "Sorry, an error occurred during customer details update. Please try again later.");
+      if(wooUpdateCustomerResponse.billing_address.first_name.length < 1
+       || wooUpdateCustomerResponse.billing_address.last_name.length < 1
+        || wooUpdateCustomerResponse.billing_address.email.length < 1
+        || wooUpdateCustomerResponse.billing_address.phone.length < 1
+      ) {
+        return fail(402, { customerDetailsForm, error: "Sorry, an error occurred during sending your billing address to the server. Please try again later."});
       }
 
       return { customerDetailsForm };
     } catch (error) {
       console.error(error);
-      return fail(500, { error: "An error occurred during customer details update" });
+      return fail(500, { error: "Sorry, an error occurred during customer details update. Please try again later." });
     }
   },
 

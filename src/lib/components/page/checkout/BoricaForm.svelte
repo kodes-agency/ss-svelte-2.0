@@ -1,11 +1,17 @@
 <script lang="ts">
         import { page } from "$app/stores"
+        import { slide } from "svelte/transition";
         // export let GATEWAY, TERMINAL, TRTYPE, AMOUNT, CURRENCY, ORDER, DESC, MERCHANT, MERCH_NAME, ADDENDUM, AD_CUST_BOR_ORDER_ID, TIMESTAMP, NONCE, RFU, COUNTRY, MERCH_GMT, MERCH_URL, BACKREF, EMAIL, P_SIGN;
         export let signitureData:any
         export let payButton: any
+
+        let errors = {
+            success: false,
+            error: null
+        }
         
         async function pushRecord(){
-            const recordRec = await fetch('/api/cart/add-payment-record', {
+            const paymentRecordRequest = await fetch('/api/cart/add-payment-record', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -21,16 +27,15 @@
                 })
             })
 
-            if(recordRec.ok){
-                console.log('Record added')
-            }else{  
-                console.log('Record not added')
-            }
+            const paymentRecordResponse = await paymentRecordRequest.json()
+            if(!paymentRecordRequest.ok) return {success:false, error: "Error while sending payment record to the internal API."}
+            if(paymentRecordResponse.success === false) return {success:false, error: paymentRecordResponse.error}
+            return {success: true, error: null}
         }
 </script>
 
 <div>
-  <form action={signitureData.GATEWAY} method="post" id="card-payment">
+  <form class="flex flex-col items-center justify-center" action={signitureData.GATEWAY} method="post" id="card-payment">
     <input type="hidden" name="TERMINAL" value={signitureData.TERMINAL} />
     <input type="hidden" name="TRTYPE" value={signitureData.TRTYPE} />
     <input type="hidden" name="AMOUNT" value={signitureData.AMOUNT} />
@@ -56,13 +61,19 @@
     <input type="hidden" name="EMAIL" value={signitureData.EMAIL} />
     <input type="hidden" name="P_SIGN" value={signitureData.P_SIGN} />
 
+    {#if errors.error }
+        <p class="p-3 bg-brown text-white m-3 rounded-lg" transition:slide>
+            {errors.error}
+        </p>
+    {/if}
     <button type="submit"
         class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1"
         on:click={ async(e)=>{
-        e.preventDefault()
-        await pushRecord()
+            e.preventDefault()
+            const apiResult = await pushRecord()
+            if(apiResult.success === false) return errors = {success: false, error: apiResult.error} 
         // @ts-ignore
-        document.getElementById('card-payment')?.submit();
+        // document.getElementById('card-payment')?.submit();
     }}>{payButton}</button>
 
     <!-- <button class="font-sansy disabled:cursor-not-allowed disabled:bg-gray disabled:bg-opacity-30 uppercase text-sm bg-opacity-80 hover:bg-opacity-100 rounded-sm transition-all duration-300 text-white bg-brown px-10 py-1" type="submit">{payButton}</button> -->
