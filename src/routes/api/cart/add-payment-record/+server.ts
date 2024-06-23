@@ -100,7 +100,7 @@ export async function POST({ request, fetch, cookies }) {
       });
     }
 
-    if(payloadPaymentRecordResponse.errors.length > 0) {
+    if(payloadPaymentRecordResponse.errors && payloadPaymentRecordResponse.errors.length > 0) {
       console.log(
         "Problem with sending payment record. Please try again later."
       );
