@@ -93,7 +93,11 @@ export const load = async ({ cookies, fetch, url }) => {
     };
   }
 
-  return
+  return fail(500, {
+    sucess: false,
+    message: "An error occurred during the transaction",
+    lang: cookies.get("locale"),
+  });
 };
 
 // export const actions: Actions = {
