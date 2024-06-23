@@ -61,6 +61,7 @@ export const load = async ({ cookies, fetch, url }) => {
   });
 
   if (!request.ok) {
+    console.log('Error checking transaction status')
     return fail(400, {
       success: false,
       message: "Error checking transaction status",
@@ -72,6 +73,7 @@ export const load = async ({ cookies, fetch, url }) => {
   const transactionData = await request.json();
 
   if (transactionData.RC !== "00" && transactionData.ACTION !== "0") {
+    console.log('Transaction failed')
     return fail(402, {
       success: false,
       message: transactionData.STATUSMSG,
@@ -84,6 +86,7 @@ export const load = async ({ cookies, fetch, url }) => {
     cookies.delete("cart-token", { path: "/" });
     cookies.delete("nonce", { path: "/" });
 
+    console.log('Transaction successful')
     return {
       status: 201,
       success: true,
@@ -93,11 +96,8 @@ export const load = async ({ cookies, fetch, url }) => {
     };
   }
 
-  return fail(500, {
-    sucess: false,
-    message: "An error occurred during the transaction",
-    lang: cookies.get("locale"),
-  });
+  console.log('Last return statement in load function in page.server.ts')
+  return fail(500, {});
 };
 
 // export const actions: Actions = {
