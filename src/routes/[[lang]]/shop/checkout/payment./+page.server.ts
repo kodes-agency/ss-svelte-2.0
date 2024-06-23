@@ -21,7 +21,7 @@ export const load = async ({ cookies, fetch, url }) => {
 
   if (!ORDER) {
     return {
-      code: 403,
+      status: 403,
       error: "No order number found",
       lang: cookies.get("locale"),
       success: false,
@@ -64,7 +64,7 @@ export const load = async ({ cookies, fetch, url }) => {
 
   if (!request.ok) {
     return  {
-      code: 400,
+      status: 400,
       success: false,
       lang: cookies.get("locale"),
       orderNumber: ORDER,
@@ -75,7 +75,7 @@ export const load = async ({ cookies, fetch, url }) => {
 
   if (transactionData.RC !== "00" && transactionData.ACTION !== "0") {
     return {
-      code: 402,
+      status: 402,
       success: false,
       lang: cookies.get("locale"),
       orderNumber: ORDER.toString(),
@@ -94,11 +94,11 @@ export const load = async ({ cookies, fetch, url }) => {
     };
   }
 
-  return fail(500, {
+  return {
     status: 402,
     success: false,
     lang: cookies.get("locale"),
-  });
+  };
 };
 
 // export const actions: Actions = {
