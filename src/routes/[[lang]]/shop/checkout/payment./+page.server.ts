@@ -76,9 +76,9 @@ export const load = async ({ cookies, fetch, url }) => {
     console.log('Transaction failed')
     return fail(402, {
       success: false,
-      message: transactionData.STATUSMSG,
+      message: transactionData.STATUSMSG.toISOString(),
       lang: cookies.get("locale"),
-      orderNumber: ORDER,
+      orderNumber: ORDER.toString(),
     });
   }
 
