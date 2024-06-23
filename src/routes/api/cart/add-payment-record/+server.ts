@@ -95,7 +95,18 @@ export async function POST({ request, fetch, cookies }) {
         "Problem with sending payment record. Please try again later."
       );
       return json({
+        success: false,
         error: "Problem with sending payment record. Please try again later.",
+      });
+    }
+
+    if(payloadPaymentRecordResponse.errors.length > 0) {
+      console.log(
+        "Problem with sending payment record. Please try again later."
+      );
+      return json({
+        success: false,
+        error: payloadPaymentRecordResponse.errors[0].message
       });
     }
 
