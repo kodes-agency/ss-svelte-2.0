@@ -21,7 +21,7 @@
     src={PUBLIC_IMG_URL + data.wine?.productBasicInformation.img.url}
     alt={data.wine?.productBasicInformation.img.alt}
     text={data.wine?.productBasicInformation.longDescription}
-    slug={data.wine.slug}
+    slug={data.wine?.slug}
     buttonText={data.layoutData.wines.buttonGoToShop}
     position={data.wine?.productType.productPosition}
   />
