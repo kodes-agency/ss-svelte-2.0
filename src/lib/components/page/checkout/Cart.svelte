@@ -60,22 +60,24 @@
         <div class="w-1/12"></div>
       </div>
       <div class="flex flex-col border-y border-brown">
-        {#each cart.items as el, i}
-          <div transition:slide>
-            <CheckoutItem
-              name={el.productName}
-              price={el.prices.price}
-              quantity={el.quantity}
-              cartItemKey={el.key}
-              slug={el.productSlug}
-              total={el.totals.line_total}
-              type={el.productType}
-            />
-          </div>
-          {#if cart.items.length != i + 1}
-            <div class="w-full bg-brown bg-opacity-40 h-px"></div>
-          {/if}
-        {/each}
+        {#if cart.items }
+          {#each cart.items as el, i}
+            <div transition:slide>
+              <CheckoutItem
+                name={el.productName}
+                price={el.prices.price}
+                quantity={el.quantity}
+                cartItemKey={el.key}
+                slug={el.productSlug}
+                total={el.totals.line_total}
+                type={el.productType}
+              />
+            </div>
+            {#if cart.items.length != i + 1}
+              <div class="w-full bg-brown bg-opacity-40 h-px"></div>
+            {/if}
+          {/each}
+        {/if}
       </div>
       <div class="w-full flex flex-col items-end md:pt-10">
         <button

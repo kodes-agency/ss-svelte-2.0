@@ -16,14 +16,14 @@
 <div class="flex flex-col pt-40 space-y-5 min-h-screen">
   <Hero
     heading={data.layoutData.wines.pageTitle}
-    name={data.wine.productTitle}
-    date={data.wine.productBasicInformation.harvestYear}
-    src={PUBLIC_IMG_URL + data.wine.productBasicInformation.img.url}
-    alt={data.wine.productBasicInformation.img.alt}
-    text={data.wine.productBasicInformation.longDescription}
-    slug={data.wine.slug}
+    name={data.wine?.productTitle}
+    date={data.wine?.productBasicInformation.harvestYear}
+    src={PUBLIC_IMG_URL + data.wine?.productBasicInformation.img.url}
+    alt={data.wine?.productBasicInformation.img.alt}
+    text={data.wine?.productBasicInformation.longDescription}
+    slug={data.wine?.slug}
     buttonText={data.layoutData.wines.buttonGoToShop}
-    position={data.wine.productType.productPosition}
+    position={data.wine?.productType.productPosition}
   />
   <WineStats pageData={data.layoutData.wines} wineDetails={data.wine.wineDetails} closingType={data.closingType}/>
   {#if data.wine.productBasicInformation?.wineAwards && data.wine.productBasicInformation.wineAwards.length > 0}

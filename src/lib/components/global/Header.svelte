@@ -70,7 +70,7 @@
               }
             }}
           >
-            {#if cart.items.length > 0}
+            {#if cart.items && cart.items.length > 0}
               <div
                 transition:slide
                 class="bg-brown rounded-full h-5 w-5 p-2 flex items-center justify-center absolute -right-1 -top-1"

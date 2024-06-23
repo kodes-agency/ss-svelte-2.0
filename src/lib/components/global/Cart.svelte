@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="flex flex-col border-y border-brown">
-                {#if cart.items.length > 0 }
+                {#if cart.items && cart.items.length > 0 }
                     {#each cart.items as el, i }
                         <CheckoutItem 
                             name={el.name}
