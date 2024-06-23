@@ -45,14 +45,11 @@
 </script>
 
 <svelte:head>
-    <!-- <title>{data.menu.seo.data.attributes.seoTitle}</title>
-    <meta name="title" content="{data.menu.seo.data.attributes.seoTitle}">
-    <meta name="description" content="{data.menu.seo.data.attributes.seoDescription}">
-    <meta name="keywords" content="{data.menu.seo.data.attributes.seoKeywords}">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"> -->
+    <title>Family Wine Estate Santa Sarah - High quality Bulgarian wine</title>
+    <meta name="description" content="Santa Sarah - a family wine estate in Bulgaria, crafting high-quality wines with rich flavors. Experience the tradition and passion of winemaking now.">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-73K1X6NXFY"></script>
 </svelte:head>
-
 
 <Header
     cart={data.cartData}

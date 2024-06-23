@@ -49,6 +49,10 @@ export const load = async ({params, fetch, cookies}) => {
         }
     } catch (error) {
         console.log(error)
+        return {
+            status: 500,
+            error
+        }
     }
 }
 

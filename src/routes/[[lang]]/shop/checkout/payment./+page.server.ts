@@ -92,6 +92,8 @@ export const load = async ({ cookies, fetch, url }) => {
       orderNumber: ORDER,
     };
   }
+
+  return
 };
 
 // export const actions: Actions = {
