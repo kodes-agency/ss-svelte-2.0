@@ -20,10 +20,12 @@ export const load = async ({ cookies, fetch, url }) => {
   const NONCE = crypto.randomBytes(16).toString("hex").toUpperCase(); // Формиране на сигнатура за подписване, Размер: 1-64
 
   if (!ORDER) {
-    return fail(403, {
+    return {
+      code: 403,
       error: "No order number found",
+      lang: cookies.get("locale"),
       success: false,
-    });
+    };
   }
 
   const P_SIGN =
@@ -61,43 +63,42 @@ export const load = async ({ cookies, fetch, url }) => {
   });
 
   if (!request.ok) {
-    console.log('Error checking transaction status')
-    return fail(400, {
+    return  {
+      code: 400,
       success: false,
-      message: "Error checking transaction status",
       lang: cookies.get("locale"),
       orderNumber: ORDER,
-    });
+    };
   }
 
   const transactionData = await request.json();
 
   if (transactionData.RC !== "00" && transactionData.ACTION !== "0") {
-    console.log('Transaction failed')
-    return fail(402, {
+    return {
+      code: 402,
       success: false,
-      message: transactionData.STATUSMSG.toISOString(),
       lang: cookies.get("locale"),
       orderNumber: ORDER.toString(),
-    });
+    };
   }
 
   if (transactionData.RC === "00" && transactionData.ACTION === "0") {
     cookies.delete("cart-token", { path: "/" });
     cookies.delete("nonce", { path: "/" });
 
-    console.log('Transaction successful')
     return {
       status: 201,
       success: true,
-      message: transactionData.STATUSMSG,
       lang: cookies.get("locale"),
       orderNumber: ORDER,
     };
   }
 
-  console.log('Last return statement in load function in page.server.ts')
-  return fail(500, {});
+  return fail(500, {
+    status: 402,
+    success: false,
+    lang: cookies.get("locale"),
+  });
 };
 
 // export const actions: Actions = {
