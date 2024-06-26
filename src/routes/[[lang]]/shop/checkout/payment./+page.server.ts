@@ -41,7 +41,7 @@ export const load = async ({ cookies, fetch, url }) => {
 
   // Sign the data and convert it to a hex string
   const signature = sign.sign(
-    { key: BORICA_DEV_PRIVATE_KEY, passphrase: BORICA_DEV_PASSPHRASE },
+    { key: BORICA_PRODUCTION_PRIVATE_KEY, passphrase: BORICA_PRODUCTION_PASSPHRASE },
     "hex"
   );
 
@@ -54,7 +54,7 @@ export const load = async ({ cookies, fetch, url }) => {
     P_SIGN: signature.toUpperCase(),
   };
 
-  const request = await fetch(BORICA_DEV_GATEWAY, {
+  const request = await fetch(BORICA_PRODUCTION_GATEWAY, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
