@@ -164,6 +164,7 @@ export const actions: Actions = {
         request,
         zod(customerDetailsSchema)
       );
+      console.log("running")
       if (!customerDetailsForm.valid) {
         // Again, return { customerDetailsForm } and things will just work.
         return fail(400, { customerDetailsForm, error: "Invalid form data"});
@@ -180,6 +181,7 @@ export const actions: Actions = {
         phone: customerDetailsForm.data.phone,
         country: customerDetailsForm.data.country,
         city: customerDetailsForm.data.city,
+        state: "",
         postcode: customerDetailsForm.data.postcode,
         address_1: customerDetailsForm.data.address_1,
         address_2: customerDetailsForm.data.billingAddress_2,
@@ -192,11 +194,13 @@ export const actions: Actions = {
         country: customerDetailsForm.data.country,
         city: customerDetailsForm.data.city,
         postcode: customerDetailsForm.data.postcode,
+        state: "",
         phone: customerDetailsForm.data.phone,
         address_1: customerDetailsForm.data.address_1,
         address_2: customerDetailsForm.data.shippingAddress_2,
         company: customerDetailsForm.data.shippingCompany,
       };
+
 
       const wooUpdateCustomerRequest = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
         method: "POST",
@@ -209,8 +213,12 @@ export const actions: Actions = {
       });
       // return setError(customerDetailsForm, "first_name", "Invalid form data");
 
-      if(!wooUpdateCustomerRequest.ok) return setError(customerDetailsForm, "first_name" ,"Sorry, an error occurred during customer details update. Please try again later.");
+      // console.log(await wooUpdateCustomerRequest.json());
+
+
       const wooUpdateCustomerResponse = await wooUpdateCustomerRequest.json();
+      console.log(wooUpdateCustomerResponse.data.details.billing_address.code);
+      if(!wooUpdateCustomerRequest.ok) return setError(customerDetailsForm, "first_name" ,`Sorry, an error has occured${wooUpdateCustomerResponse?.data?.details?.billing_address?.code ? ": "+wooUpdateCustomerResponse.data.details.billing_address.code.replace("_"," ") : ""}.`);
       if(wooUpdateCustomerResponse.code && wooUpdateCustomerResponse.data.status) return setError(customerDetailsForm, 'first_name', "Sorry, an error occurred during customer details update. Please try again later.");
       if(wooUpdateCustomerResponse.billing_address.first_name.length < 1
        || wooUpdateCustomerResponse.billing_address.last_name.length < 1
