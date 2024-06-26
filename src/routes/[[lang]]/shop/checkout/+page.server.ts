@@ -217,7 +217,6 @@ export const actions: Actions = {
 
 
       const wooUpdateCustomerResponse = await wooUpdateCustomerRequest.json();
-      console.log(wooUpdateCustomerResponse.data.details.billing_address.code);
       if(!wooUpdateCustomerRequest.ok) return setError(customerDetailsForm, "first_name" ,`Sorry, an error has occured${wooUpdateCustomerResponse?.data?.details?.billing_address?.code ? ": "+wooUpdateCustomerResponse.data.details.billing_address.code.replace("_"," ") : ""}.`);
       if(wooUpdateCustomerResponse.code && wooUpdateCustomerResponse.data.status) return setError(customerDetailsForm, 'first_name', "Sorry, an error occurred during customer details update. Please try again later.");
       if(wooUpdateCustomerResponse.billing_address.first_name.length < 1
