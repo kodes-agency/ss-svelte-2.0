@@ -1,8 +1,5 @@
 import query from "$lib/db/checkoutPage";
-import {
-  PUBLIC_GRAPHQL_URL,
-  PUBLIC_SHOP_API_URL,
-} from "$env/static/public";
+import { PUBLIC_GRAPHQL_URL, PUBLIC_SHOP_API_URL } from "$env/static/public";
 import { EMAIL_API_URL } from "$env/static/private";
 import type { Product } from "$lib/types/payloadTypes.js";
 import type { Actions } from "@sveltejs/kit";
@@ -73,15 +70,14 @@ export const load = async ({ params, cookies, request }) => {
 
     const data = await payloadReq.json();
 
-
     // Add product name and slug to cart items
     checkoutData.items.forEach((item: any) => {
       let productId = item.id;
 
       const correspondingProduct: Product = data.data.Products.docs.find(
         (product: Product) => productId === Number(product.productId)
-      );  
-  
+      );
+
       item.productName =
         correspondingProduct.productKind === "bottle"
           ? `${correspondingProduct.productTitle} ${new Date(
@@ -95,21 +91,35 @@ export const load = async ({ params, cookies, request }) => {
       item.productSlug = correspondingProduct.slug;
       item.productType = correspondingProduct.productKind;
       item.q = 1 * item.quantity;
-      if(correspondingProduct.productBundle && correspondingProduct.productBundle?.length > 0){
-        item.q = correspondingProduct.productBundle.reduce((sum, value) => sum + value.quantity, 0) * item.quantity;
+      if (
+        correspondingProduct.productBundle &&
+        correspondingProduct.productBundle?.length > 0
+      ) {
+        item.q =
+          correspondingProduct.productBundle.reduce(
+            (sum, value) => sum + value.quantity,
+            0
+          ) * item.quantity;
       }
-    })
+    });
 
-    const numberOfItems = checkoutData.items.reduce(
+    let numberOfItems = checkoutData.items.reduce(
       (acc: number, item: any) => acc + item.q,
       0
     );
+
+    checkoutData.items.forEach((item: any) => {
+      if (item.productType === "other") {
+        numberOfItems = 6;
+      }
+    });
+
+    console.log(checkoutData.items);
 
     // Validate payment forms
     let customerDetailsForm;
     const paymentForm = await superValidate(zod(paymentSchema));
 
-  
     // Validate customer details form
 
     const customerDetails = {
@@ -126,7 +136,6 @@ export const load = async ({ params, cookies, request }) => {
       shippingAddress_2: checkoutData.shipping_address.address_2,
       shippingCompany: checkoutData.shipping_address.company,
     };
-    
 
     if (
       checkoutData.billing_address.first_name !== "" ||
@@ -151,7 +160,13 @@ export const load = async ({ params, cookies, request }) => {
       (Number(checkoutData.totals.total_price) / 100).toFixed(2).toString()
     );
 
-    return { checkoutData, customerDetailsForm, paymentForm, signitureData, numberOfItems };
+    return {
+      checkoutData,
+      customerDetailsForm,
+      paymentForm,
+      signitureData,
+      numberOfItems,
+    };
   } catch (error) {
     console.log(error);
   }
@@ -164,14 +179,20 @@ export const actions: Actions = {
         request,
         zod(customerDetailsSchema)
       );
-      console.log("running")
+      console.log("running");
       if (!customerDetailsForm.valid) {
         // Again, return { customerDetailsForm } and things will just work.
-        return fail(400, { customerDetailsForm, error: "Invalid form data"});
+        return fail(400, { customerDetailsForm, error: "Invalid form data" });
       }
-      
-      if(customerDetailsForm.data.subscribe){
-        registerSubscriber(customerDetailsForm.data.email, customerDetailsForm.data.phone, `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`, customerDetailsForm.data.country, customerDetailsForm.data.city)
+
+      if (customerDetailsForm.data.subscribe) {
+        registerSubscriber(
+          customerDetailsForm.data.email,
+          customerDetailsForm.data.phone,
+          `${customerDetailsForm.data.first_name} ${customerDetailsForm.data.last_name}`,
+          customerDetailsForm.data.country,
+          customerDetailsForm.data.city
+        );
       }
 
       let billing_address = {
@@ -201,36 +222,66 @@ export const actions: Actions = {
         company: customerDetailsForm.data.shippingCompany,
       };
 
-
-      const wooUpdateCustomerRequest = await fetch(PUBLIC_SHOP_API_URL + "/cart/update-customer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Nonce: `${cookies.get("nonce")}`,
-          "Cart-token": `${cookies.get("cart-token")}`,
-        },
-        body: JSON.stringify({ shipping_address, billing_address }),
-      });
+      const wooUpdateCustomerRequest = await fetch(
+        PUBLIC_SHOP_API_URL + "/cart/update-customer",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Nonce: `${cookies.get("nonce")}`,
+            "Cart-token": `${cookies.get("cart-token")}`,
+          },
+          body: JSON.stringify({ shipping_address, billing_address }),
+        }
+      );
       // return setError(customerDetailsForm, "first_name", "Invalid form data");
 
       // console.log(await wooUpdateCustomerRequest.json());
 
-
       const wooUpdateCustomerResponse = await wooUpdateCustomerRequest.json();
-      if(!wooUpdateCustomerRequest.ok) return setError(customerDetailsForm, "first_name" ,`Sorry, an error has occured${wooUpdateCustomerResponse?.data?.details?.billing_address?.code ? ": "+wooUpdateCustomerResponse.data.details.billing_address.code.replace("_"," ") : ""}.`);
-      if(wooUpdateCustomerResponse.code && wooUpdateCustomerResponse.data.status) return setError(customerDetailsForm, 'first_name', "Sorry, an error occurred during customer details update. Please try again later.");
-      if(wooUpdateCustomerResponse.billing_address.first_name.length < 1
-       || wooUpdateCustomerResponse.billing_address.last_name.length < 1
-        || wooUpdateCustomerResponse.billing_address.email.length < 1
-        || wooUpdateCustomerResponse.billing_address.phone.length < 1
+      if (!wooUpdateCustomerRequest.ok)
+        return setError(
+          customerDetailsForm,
+          "first_name",
+          `Sorry, an error has occured${
+            wooUpdateCustomerResponse?.data?.details?.billing_address?.code
+              ? ": " +
+                wooUpdateCustomerResponse.data.details.billing_address.code.replace(
+                  "_",
+                  " "
+                )
+              : ""
+          }.`
+        );
+      if (
+        wooUpdateCustomerResponse.code &&
+        wooUpdateCustomerResponse.data.status
+      )
+        return setError(
+          customerDetailsForm,
+          "first_name",
+          "Sorry, an error occurred during customer details update. Please try again later."
+        );
+      if (
+        wooUpdateCustomerResponse.billing_address.first_name.length < 1 ||
+        wooUpdateCustomerResponse.billing_address.last_name.length < 1 ||
+        wooUpdateCustomerResponse.billing_address.email.length < 1 ||
+        wooUpdateCustomerResponse.billing_address.phone.length < 1
       ) {
-        return fail(402, { customerDetailsForm, error: "Sorry, an error occurred during sending your billing address to the server. Please try again later."});
+        return fail(402, {
+          customerDetailsForm,
+          error:
+            "Sorry, an error occurred during sending your billing address to the server. Please try again later.",
+        });
       }
 
       return { customerDetailsForm };
     } catch (error) {
       console.error(error);
-      return fail(500, { error: "Sorry, an error occurred during customer details update. Please try again later." });
+      return fail(500, {
+        error:
+          "Sorry, an error occurred during customer details update. Please try again later.",
+      });
     }
   },
 
@@ -263,7 +314,7 @@ export const actions: Actions = {
   //     });
 
   //     const wooRes = await wooReq.json();
-      
+
   //     if(wooReq.ok && wooRes.order_id){
   //       return { success: true }
   //     } else {
@@ -275,7 +326,13 @@ export const actions: Actions = {
   //   }
   // },
 };
-async function registerSubscriber(email: string, phone: string, name: string, country: string, city: string) {
+async function registerSubscriber(
+  email: string,
+  phone: string,
+  name: string,
+  country: string,
+  city: string
+) {
   try {
     const params = new URLSearchParams();
     params.append("email", email);
@@ -283,14 +340,13 @@ async function registerSubscriber(email: string, phone: string, name: string, co
     params.append("name", name);
     params.append("country", country);
     params.append("city", city);
-  
+
     const req = await fetch(EMAIL_API_URL + `&${params.toString()}`, {
       method: "POST",
     });
-    
+
     const res = await req.json();
   } catch (error) {
     console.error(error);
   }
 }
-
